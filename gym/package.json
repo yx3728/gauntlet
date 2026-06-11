@@ -1,0 +1,15 @@
+{
+  "name": "gauntlet-gym",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lib1 — the gym: pluggable forward-computable tasks behind a task-agnostic interface, an in-process JS policy runner, and a black-box arena builder.",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node tests/run_tests.js",
+    "build:arena": "node arena/build_arena.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.24.2"
+  }
+}
