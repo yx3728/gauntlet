@@ -56,3 +56,32 @@ load-bearing lessons adopted into the design:
 - Decision: Lib1 = plain CommonJS + JSDoc (not TS) — policies/agents write CJS, arenas run on
   bare node with zero deps, the contract is enforced by a conformance suite; esbuild only at
   arena build time. Names: `gym/` (Lib1), `evalkit/` (Lib2; `evalkit.agents`, `evalkit.eval`).
+
+## 2026-06-11 — Lib1 core + Lib2 + both games built; mock e2e green
+
+- **Lib1 core** (commit 325c4ba): `core/prng.js` (ported), `core/episode.js` (proven step-loop
+  semantics), `core/aggregate.js` (aggregation by introspection of the metrics envelope),
+  `core/CONTRACT.md` (the task-interface law), generic `runner/run_policy.js` (single-JSON-line
+  batch protocol; dynamic requires so arena bundles leak no source), `arena/build_arena.js`
+  (esbuild minified task bundle + bundled readable runner + assembled INTERFACE.md + sha256
+  manifest as the version pin), `tasks/registry.js`, zero-dep test harness, conformance suite
+  (16 checks × every task), minitask fixture. 31/31 green in 57ms.
+- **Lib2 evalkit** (commit dce70d8): `boundary.py` (per-batch subprocess, tolerant single-line
+  JSON parse), `seeds.py` (disjoint split, held-out ≥2000), `agents/` (AgentNode seam;
+  MockNode writes policy + synthetic trace; ClaudeCodeNode = the hardened recipe; `develop()`
+  pass-through shim collects deliverables-from-disk), `eval/` (`run`/`analyze`, summarize,
+  baselines, diagnostic probe = generalization gap + failure breakdown + baseline position,
+  audit = trace scan on path/command fields only + workspace re-hash vs manifest). 24 unit
+  tests green (e2e skipped pending games).
+- **Games** (commit 487601f) — built by two parallel subagents against CONTRACT.md, verified
+  independently: `gridrun` (spatial: 9×9 ×3 floors, key/exit/gems/patrol hazards, boon
+  pending-decision; noop can never die → timeout/score 0; greedy wins 7/8 training and 43/50
+  held-out) and `forge` (economic: 60-day market/craft/upgrade loop, trader-offer
+  pending-decisions; noop pinned at start value; greedy wins 5/8 training, 17/30 held-out —
+  real headroom left for smart policies). Goldens pinned on seeds 2000/2001 for both.
+  Full suites: **91/91 JS, 29/29 Python** — mock-node e2e passes on BOTH games through the
+  identical pipeline + prompt (first generality proof).
+- Notable catch by the conformance-first flow: gridrun's win-step progress initially computed
+  1.167 (>1) — caught by the builder's own win-path test before integration.
+- Next: real `claude -p` e2e (one node per game, sequential — limits: ≤8 concurrent, ≪1000
+  total), then the adversarial review pass.
