@@ -106,3 +106,46 @@ The real run immediately caught two audit bugs (the point of a sparing real e2e)
    extra workspace file → now an expected file; test updated.
 After the fix the gridrun trial re-audits **clean** (audit.json re-persisted); forge was
 clean from the start. Total `claude -p` usage this session: 2 calls, sequential.
+
+## 2026-06-11 — Adversarial review (41 agents) + fix round; final state green
+
+Ran a 5-dimension review workflow (spec compliance / gym correctness / evalkit correctness
+/ seams+black-box / test adequacy), every finding then attacked by adversarial verifiers:
+**23 confirmed, 7 refuted** (refuted included two inflated "majors": the keyword-denylist
+exfil claim — out of the framework's threat model, score integrity rests on canonical-arena
+scoring + manifest re-hash; and the develop() seam claim — disproven by a working
+multi-node topology behind the unchanged signature). Spec-compliance baseline: every
+in-scope SPEC requirement verified met, zero task-specific leakage into core/Lib2.
+
+Confirmed majors, all fixed (3 parallel fixers on disjoint file sets + one integration fix):
+1. **gridrun unsolvable floors** (~36/3000 seeds, moving patrols could permanently block
+   the only corridor; held-out 2016 was one — explains a real-e2e death there). Generation
+   now proves each floor winnable via a time-expanded BFS over (cell × hazard phase ×
+   has-key) mirroring exact collision semantics, zero PRNG draws, redraw on failure.
+   3000-seed sweep: 0 unsolvable. gridrun → 1.1.0; goldens re-pinned (values unchanged);
+   greedy held-out 43/50 → 44/50.
+2. **Held-out blindness**: the predictable 2000..2029 block let a policy recover its seed
+   by enumerating the shipped bundle (oracle of all future randomness). Held-out seeds now
+   drawn per-trial via SystemRandom from [10_000, 2³¹), recorded in trial.json;
+   `heldout_seeds=` override for reproducible sets.
+3. **Cross-instance isolation untested** → new interleaved two-env conformance test
+   (verified to catch a deliberate module-state violator).
+4. **ClaudeCodeNode hard budgets untested** → fake-binary tests: wall-clock SIGKILL kills
+   the whole process group (-9, on-budget timing), nonzero exit recorded, prompt via stdin.
+
+Confirmed minors fixed (selection): init()-throw now contained per-seed like policy()
+throws; terminal steps return fresh clones (no aliasing) + mutation-resistant idempotency
+test; true median in JS aggregate (parity test vs Python summarize across the real
+boundary); arena `--help` prints embedded usage (was esbuild preamble after bundling);
+parseSeeds/parseArgs fail fast on junk; harness result fields can't be clobbered by task
+metrics (+ reserved-keys contract clause); vacuous JSON-serializability test replaced by a
+recursive walk; canonical-arena **tamper e2e test** (TamperNode overwrites its workspace
+bundle → audit flags it AND held-out scores are byte-identical to the honest run); audit
+containment via resolve+is_relative_to (sibling-prefix/symlink edge cases); audit rules
+added: bundle_read, credential_access (high), no_tool_events (non-claude trace shapes no
+longer silently audit clean), base64/xxd/od/hexdump/strings + bundle = deobfuscation;
+speed bound aligned to the contract (<50ms); arena builder gained a direct unit test;
+score_policy() wrapper exported as DESIGN advertises.
+
+**Final state: gym 105/105, evalkit 46/46, mock e2e + tamper e2e + 2 real `claude -p`
+trials green. STOPPING here per spec — the big roguelike is deliberately not wired.**

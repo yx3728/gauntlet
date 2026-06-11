@@ -83,10 +83,11 @@ audit also re-hashes workspace files against the manifest.
 - **Node-type seam:** `AgentNode.run(workspace, prompt, budgets) -> NodeResult{status,
   policy_path, report, trace_path, wall_ms, meta}`. MVP nodes: `MockNode` (writes a fixed
   policy + synthetic trace; the e2e workhorse) and `ClaudeCodeNode` (the hardened proven
-  recipe: `claude -p --output-format stream-json --permission-mode default --allowedTools
-  Bash Read Write Edit Glob Grep --strict-mcp-config --disallowedTools WebFetch WebSearch
-  Task --max-turns N`, prompt via stdin, cwd=workspace, process-group SIGKILL at
-  wall-clock). Future node kinds (local-agent harness, API loop) implement the same method.
+  recipe: `claude -p --model <model> --effort <effort> --output-format stream-json
+  --verbose --permission-mode default --allowedTools Bash Read Write Edit Glob Grep
+  --strict-mcp-config --disallowedTools WebFetch WebSearch Task --max-turns N`, prompt via
+  stdin, cwd=workspace, process-group SIGKILL at wall-clock). Future node kinds
+  (local-agent harness, API loop) implement the same method.
 - **Coordination seam:** `agents.develop(workspace, prompt, node, budgets) -> NodeResult`
   is the pass-through shim (one node). Future topologies (instruction scaffold, multi-agent
   with on-disk reports) keep the same signature; `eval` is indifferent to what happens
@@ -104,8 +105,12 @@ persist `trial.json` + artifacts under `runs/`. `analyze` = distributions + base
 comparison + the **diagnostic probe**: generalization gap (train vs held-out),
 failure breakdown (done_reason rates, progress quartiles, policy_error count), and
 baseline position ((policy − noop) / (greedy − noop)).
-Seeds: training seeds come from task meta (visible, baked into arena docs); held-out
-default `2000..2029`, disjointness asserted, never written into any workspace.
+Seeds: training seeds come from task meta (visible, baked into arena docs; always
+`< 10_000`); held-out seeds are drawn fresh per trial via `SystemRandom` from
+`[10_000, 2**31-1]` (30 by default; explicit `heldout_seeds=` for reproducible sets) —
+never a predictable block an in-arena policy could enumerate against the shipped bundle.
+Disjointness asserted, the drawn split recorded in `trial.json`, never written into any
+workspace.
 
 ## Out of scope (the seams accommodate them; do not build)
 

@@ -72,7 +72,9 @@ function createEnv() {
     },
 
     step(action) {
-      if (st.done) return st.terminal; // idempotent terminal step
+      // Idempotent terminal step: fresh deep clone per call (no aliasing — mutating
+      // a returned obs must never affect later terminal returns).
+      if (st.done) return JSON.parse(JSON.stringify(st.terminal));
       const a = action && typeof action === "object" ? action : {};
       let event = null;
 

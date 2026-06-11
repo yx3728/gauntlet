@@ -35,7 +35,8 @@ module.exports = { meta, createEnv };
   - `max_steps_default: int` — every episode MUST terminate (done=true) within this
     many steps under ANY policy,
   - `training_seeds: int[]` — the seeds agents may practise on (visible in the arena);
-    held-out seeds live orchestrator-side only and are ≥ 2000 by convention, so
+    held-out seeds live orchestrator-side only and are drawn unpredictably from a large
+    integer range (>= 10000), so
     **generate content from the seed in a way that works for any 32-bit int/string**,
   - `example_actions: object[]` — 3–8 representative valid actions (JSON values).
     Used by the conformance fuzzer to exercise real code paths deterministically.
@@ -49,7 +50,8 @@ let { obs } = env.reset(seed, config);        // start an episode
 let { obs, done, event } = env.step(action);  // advance one decision step
 ```
 
-- `reset(seed, config) -> { obs }` — `seed` is an int or string. The episode is a
+- `reset(seed, config) -> { obs }` — `seed` is an int or string in-process; the batch
+  runner CLI and the Python boundary carry **integer** seeds only. The episode is a
   **pure function of (seed, action sequence)**: same seed + same actions ⇒ identical
   trajectory, every time, across instances and processes.
 - `config` — optional object. `max_steps` is the one standard key (cap the episode; the
@@ -57,7 +59,8 @@ let { obs, done, event } = env.step(action);  // advance one decision step
   allowed; they are passed through Lib2 opaquely.
 - `step(action) -> { obs, done, event }`
   - `done` — boolean. After `done`, further `step()` calls are idempotent no-ops returning
-    the terminal state.
+    the terminal state (a fresh copy each call — mutating a returned obs must never
+    affect later returns).
   - `event` — `null` or ONE object `{ kind, ... }` per step (if several things happen,
     surface the highest-priority one). A final `{ kind: "game_over", reason }` event is
     mandatory when the episode ends.
@@ -75,6 +78,10 @@ obs.metrics = {
   // ... any task-specific numbers/booleans (aggregated generically by introspection)
 }
 ```
+
+`obs.metrics` must not use the keys `seed`, `steps`, `events`, `policy_error`, or
+`_gamelog` — they are reserved for the episode harness's per-episode result envelope
+(harness fields win on collision; conformance enforces the no-collision rule).
 
 Everything else in `obs` is task-specific, but:
 

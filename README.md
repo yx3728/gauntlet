@@ -18,16 +18,16 @@ evalkit/    Lib2 (Python)  — evalkit.agents: the black-box node layer (mock + 
 ```
 
 The Lib1↔Lib2 boundary is **per-batch**: Python invokes the JS runner once per
-policy×seed-batch (`node run_policy.js --policy p.js --seeds 2000..2029 --json` → one JSON
+policy×seed-batch (`node run_policy.js --policy p.js --seeds 1,2,5..9 --json` → one JSON
 line). Lib2 depends on the interface contract (`gym/core/CONTRACT.md`), never on a task's
 specifics.
 
 ## Quickstart
 
 ```bash
-cd gym && npm install && npm test          # 91 tests: contract conformance, determinism,
-                                           # golden trajectories, runner semantics
-cd ../evalkit && python3 -m pytest -q      # 29 tests incl. the mock-node e2e on both games
+cd gym && npm install && npm test          # 105 tests: contract conformance, determinism,
+                                           # golden trajectories, runner semantics, arena build
+cd ../evalkit && python3 -m pytest -q      # 46 tests incl. mock-node e2e + tamper test on both games
 ```
 
 Run a trial from Python (no CLI — a few API functions):
@@ -47,6 +47,8 @@ no source, no held-out seeds), copies it into an isolated workspace, lets the no
 `policy.js` under hard budgets (wall-clock process-group kill, max-turns, strict tool
 allowlist), audits the trace + workspace integrity, then scores the final policy on
 held-out AND training seeds **in the canonical arena** and runs the task's baselines.
+Held-out seeds are drawn unpredictably per trial from `[10_000, 2³¹)` (recorded in
+`trial.json`), so an in-arena policy cannot enumerate them against the shipped bundle.
 
 ## The two MVP tasks (e2e fixtures + generality proof)
 

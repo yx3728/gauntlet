@@ -37,9 +37,11 @@ function aggregate(results) {
   for (const k of numeric) {
     const v = results.map((r) => Number(r[k]) || 0).sort((a, b) => a - b);
     const sum = v.reduce((a, b) => a + b, 0);
+    const mid = v.length >> 1;
     agg[k] = {
       mean: round4(sum / v.length),
-      median: v[Math.floor((v.length - 1) / 2)],
+      // True median (matches evalkit's statistics.median): average the middle pair for even n.
+      median: v.length % 2 ? v[mid] : round4((v[mid - 1] + v[mid]) / 2),
       min: v[0],
       max: v[v.length - 1],
     };

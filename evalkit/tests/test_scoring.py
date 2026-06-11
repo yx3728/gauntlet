@@ -1,3 +1,6 @@
+import pytest
+
+import evalkit
 from evalkit.eval.probe import baseline_position, diagnostic_probe, failure_breakdown, generalization_gap
 from evalkit.eval.scoring import summarize
 
@@ -54,3 +57,29 @@ def test_baseline_position_normalization():
 def test_diagnostic_probe_shape():
     p = diagnostic_probe(RESULTS, [{"score": 100, "progress": 0.5}], {"noop": [{"score": 10}]})
     assert set(p) == {"generalization_gap", "failure_breakdown", "baseline_position"}
+
+
+def test_summarize_agrees_with_js_aggregate(minitask_path, tmp_policy):
+    """Parity: Python summarize() over a REAL batch must agree with the JS
+    runner's aggregate on every distribution and rate it shares (even seed
+    count so the median check exercises the true even-n median)."""
+    br = evalkit.score_policy(tmp_policy(), [1, 2, 3, 4, 5, 6], task=str(minitask_path))
+    assert br.ok, br.error
+    s = summarize(br.results)
+    agg = br.aggregate
+    assert s["n"] == agg["n"] == 6
+
+    dist_keys = {k for k, v in agg.items() if isinstance(v, dict) and "mean" in v}
+    assert {"score", "progress"} <= dist_keys
+    assert dist_keys == {k for k, v in s.items() if isinstance(v, dict) and "mean" in v}
+    for k in sorted(dist_keys):
+        assert s[k]["mean"] == pytest.approx(agg[k]["mean"], abs=2e-4), k
+        assert s[k]["min"] == agg[k]["min"], k
+        assert s[k]["max"] == agg[k]["max"], k
+        assert s[k]["median"] == pytest.approx(agg[k]["median"], abs=2e-4), k
+
+    rate_keys = {k for k in agg if k.endswith("_rate")}
+    assert rate_keys == {k for k in s if k.endswith("_rate")}
+    for k in sorted(rate_keys):
+        assert s[k] == pytest.approx(agg[k], abs=2e-4), k
+    assert s["done_reason_rates"] == pytest.approx(agg["done_reason_rates"], abs=2e-4)

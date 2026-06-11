@@ -105,7 +105,9 @@ function replay(seed, actions) {
 
 test("[gridrun] generation: every entered floor is well-formed and solvable", () => {
   let floorsValidated = 0;
-  for (const seed of [...gridrun.meta.training_seeds, 2000, 2001, "heldout-x"]) {
+  // 63, 120, 2016: regression seeds — pre-1.1.0 their moving patrols could
+  // permanently block the only corridor (no time-expanded solvability check).
+  for (const seed of [...gridrun.meta.training_seeds, 63, 120, 2000, 2001, 2016, "heldout-x"]) {
     const env = gridrun.createEnv();
     let mem = greedy.init();
     let last = { obs: env.reset(seed, {}).obs, done: false, event: null };
@@ -299,8 +301,10 @@ test("[gridrun] interface sufficiency: greedy mean score clearly beats noop", ()
   assert(g >= n + 100, `greedy (${g}) should beat noop (${n}) by a wide margin`);
 });
 
-// Golden state-only hashes for gridrun@1.0.0, captured via:
+// Golden state-only hashes for gridrun@1.1.0, captured via:
 //   node tools/capture_golden.js --task gridrun --seeds 2000,2001
+// (Unchanged from 1.0.0: these two seeds' layouts already passed the stronger
+// time-expanded solvability check, so their content is identical.)
 // Re-pinning these is a deliberate, reviewed act and REQUIRES a meta.version bump.
 const GOLDEN = {
   s2000: "94b092184fed26b6b075bf8897dbf405392d6093", // 400 steps
@@ -308,6 +312,7 @@ const GOLDEN = {
 };
 
 test("[gridrun] golden state-only trajectory hashes (seeds 2000, 2001)", () => {
+  assertEqual(gridrun.meta.version, "1.1.0", "goldens pinned for gridrun@1.1.0 — version changed, re-pin deliberately");
   assertEqual(stateOnlyHash(gridrun, 2000).hash, GOLDEN.s2000, "golden hash seed 2000");
   assertEqual(stateOnlyHash(gridrun, 2001).hash, GOLDEN.s2001, "golden hash seed 2001");
 });

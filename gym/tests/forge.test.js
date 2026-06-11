@@ -182,9 +182,9 @@ test("[forge] trader offer: accepting a bulk_buy applies the offer-time unit pri
 });
 
 test("[forge] market_shift: at least one per episode, and the jump is visible in obs prices", () => {
-  let seen = 0;
   for (const s of [1, 2, 3]) {
     const { steps } = runFixed(s, { op: "rest" });
+    let seen = 0;
     for (const t of steps) {
       if (t.event && t.event.kind === "market_shift") {
         seen += 1;
@@ -192,8 +192,10 @@ test("[forge] market_shift: at least one per episode, and the jump is visible in
         assert(t.event.from !== t.event.to, "shift actually moved the price");
       }
     }
+    // The env schedules 2-4 shifts per season; even with trader_offer events
+    // masking same-day shifts, every episode must surface at least one.
+    assert(seen >= 1, `no market_shift event in the seed ${s} noop episode`);
   }
-  assert(seen >= 1, "no market_shift event across seeds 1..3 noop episodes");
 });
 
 // ---------------------------------------------------------------------------

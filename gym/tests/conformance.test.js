@@ -19,6 +19,11 @@ for (const id of registry.list()) {
   try {
     TASK_MODS.push({ label: id, mod: registry.resolve(id) });
   } catch (e) {
+    // GAUNTLET_ALLOW_MISSING_TASKS is an escape hatch for INCREMENTAL TASK
+    // DEVELOPMENT only: while a task is being scaffolded (registered but its
+    // env.js not yet written/loadable), set it to skip that task instead of
+    // failing the whole suite. It must NEVER be set in CI or for release runs —
+    // a registered task that doesn't resolve is otherwise a hard failure.
     if (process.env.GAUNTLET_ALLOW_MISSING_TASKS) {
       console.log(`  (conformance: skipping unavailable task "${id}": ${e.message})`);
     } else {
@@ -92,11 +97,48 @@ for (const { label, mod } of TASK_MODS) {
     assert(m.done_reason === null, "metrics.done_reason null at reset");
   });
 
-  test(`[${label}] obs is JSON-serializable and stable through round-trip`, () => {
-    const { last } = runScripted(mod, seed0());
-    const s1 = JSON.stringify(last.obs);
-    const s2 = JSON.stringify(JSON.parse(s1));
-    assertEqual(s2, s1, "obs JSON round-trip");
+  test(`[${label}] obs values are strictly JSON-safe (reset, mid-episode, terminal)`, () => {
+    // A stringify/parse round-trip can only catch circularity; walk the tree instead
+    // and reject anything JSON would silently drop or mangle (undefined, NaN,
+    // Infinity, functions, class instances, Dates, ...).
+    function walk(v, p) {
+      if (v === null) return;
+      const t = typeof v;
+      if (t === "boolean" || t === "string") return;
+      if (t === "number") {
+        assert(Number.isFinite(v), `${p}: non-finite number ${v}`);
+        return;
+      }
+      if (Array.isArray(v)) {
+        v.forEach((x, i) => walk(x, `${p}[${i}]`));
+        return;
+      }
+      if (t === "object") {
+        const proto = Object.getPrototypeOf(v);
+        assert(proto === Object.prototype || proto === null, `${p}: non-plain object`);
+        for (const [k, x] of Object.entries(v)) walk(x, `${p}.${k}`);
+        return;
+      }
+      assert(false, `${p}: non-JSON value of type "${t}"`);
+    }
+    const env = mod.createEnv();
+    walk(env.reset(seed0(), {}).obs, "reset.obs");
+    const { trajectory, last } = runScripted(mod, seed0(), { collect: true });
+    walk(trajectory[Math.floor(trajectory.length / 2)].obs, "mid.obs");
+    walk(last.obs, "terminal.obs");
+  });
+
+  test(`[${label}] obs.metrics never uses reserved harness result keys`, () => {
+    // The episode harness merges obs.metrics into its result envelope; these keys
+    // are reserved by CONTRACT.md §3 and must not appear as task metrics.
+    const RESERVED = ["seed", "steps", "events", "policy_error", "_gamelog"];
+    const check = (obs, where) => {
+      for (const k of RESERVED) assert(!(k in obs.metrics), `reserved key "${k}" in obs.metrics (${where})`);
+    };
+    const env = mod.createEnv();
+    check(env.reset(seed0(), {}).obs, "reset");
+    const { trajectory } = runScripted(mod, seed0(), { collect: true });
+    trajectory.forEach((t, i) => check(t.obs, `step ${i + 1}`));
   });
 
   test(`[${label}] determinism: closed-loop rerun (same instance, reseeded)`, () => {
@@ -116,6 +158,45 @@ for (const { label, mod } of TASK_MODS) {
     const b = replayLog(mod, seed0(), a.log);
     assertEqual(b.hash, a.hash, "open-loop replay hash");
     assertEqual(b.steps, a.steps, "open-loop replay steps");
+  });
+
+  test(`[${label}] determinism: cross-instance isolation (interleaved envs don't interact)`, () => {
+    // Two envs in one process, different seeds, steps interleaved: each trajectory
+    // must hash identically to replaying its (seed, action log) alone. Any
+    // module-level mutable state in the env makes the interleaved run diverge.
+    const sA = seed0();
+    const sB = sA + 1;
+    const envA = mod.createEnv();
+    const envB = mod.createEnv();
+    const polA = makeScriptedPolicy(mod);
+    const polB = makeScriptedPolicy(mod);
+    let memA = polA.init();
+    let memB = polB.init();
+    let lastA = { obs: envA.reset(sA, {}).obs, done: false, event: null };
+    let lastB = { obs: envB.reset(sB, {}).obs, done: false, event: null };
+    const hA = crypto.createHash("sha1");
+    const hB = crypto.createHash("sha1");
+    const logA = [];
+    const logB = [];
+    const cap = mod.meta.max_steps_default + 5;
+    for (let i = 0; (!lastA.done || !lastB.done) && i < cap; i += 1) {
+      if (!lastA.done) {
+        const out = polA.policy(lastA.obs, memA);
+        memA = out.mem;
+        logA.push(out.action);
+        lastA = envA.step(out.action);
+        hA.update(JSON.stringify({ o: lastA.obs, e: lastA.event, d: lastA.done }));
+      }
+      if (!lastB.done) {
+        const out = polB.policy(lastB.obs, memB);
+        memB = out.mem;
+        logB.push(out.action);
+        lastB = envB.step(out.action);
+        hB.update(JSON.stringify({ o: lastB.obs, e: lastB.event, d: lastB.done }));
+      }
+    }
+    assertEqual(hA.digest("hex"), replayLog(mod, sA, logA).hash, "interleaved env A == solo (seed, action log) replay");
+    assertEqual(hB.digest("hex"), replayLog(mod, sB, logB).hash, "interleaved env B == solo (seed, action log) replay");
   });
 
   test(`[${label}] determinism: different seeds produce different trajectories`, () => {
@@ -163,7 +244,7 @@ for (const { label, mod } of TASK_MODS) {
     assertEqual(lastStep.event.reason, lastStep.obs.metrics.done_reason, "event.reason == metrics.done_reason");
   });
 
-  test(`[${label}] terminal step is idempotent`, () => {
+  test(`[${label}] terminal step is idempotent and returns fresh, unaliased obs`, () => {
     const a = runScripted(mod, seed0());
     const env = a.env;
     const h0 = crypto.createHash("sha1").update(JSON.stringify(a.last.obs)).digest("hex");
@@ -172,6 +253,10 @@ for (const { label, mod } of TASK_MODS) {
       assert(r.done === true, "done stays true after terminal");
       const h = crypto.createHash("sha1").update(JSON.stringify(r.obs)).digest("hex");
       assertEqual(h, h0, "terminal obs stable");
+      // Mutate the returned obs: the NEXT terminal step must be unaffected
+      // (post-done steps must return fresh copies, never an aliased cache).
+      r.obs.metrics.score = -999999;
+      r.obs.__mutated_by_test = true;
     }
   });
 
@@ -198,16 +283,20 @@ for (const { label, mod } of TASK_MODS) {
     void seen;
   });
 
-  test(`[${label}] obs freshness: earlier obs not mutated by later steps`, () => {
+  test(`[${label}] obs freshness: earlier obs (reset AND mid-episode) not mutated by later steps`, () => {
     const env = mod.createEnv();
     let last = { obs: env.reset(seed0(), {}).obs };
-    const snapshot = JSON.stringify(last.obs);
-    const kept = last.obs;
-    for (let i = 0; i < 5; i += 1) env.step(mod.meta.example_actions[i % mod.meta.example_actions.length]);
-    assertEqual(JSON.stringify(kept), snapshot, "previously returned obs changed");
+    const resetSnapshot = JSON.stringify(last.obs);
+    const resetKept = last.obs;
+    for (let i = 0; i < 3; i += 1) last = env.step(mod.meta.example_actions[i % mod.meta.example_actions.length]);
+    const midSnapshot = JSON.stringify(last.obs);
+    const midKept = last.obs;
+    for (let i = 3; i < 8; i += 1) env.step(mod.meta.example_actions[i % mod.meta.example_actions.length]);
+    assertEqual(JSON.stringify(resetKept), resetSnapshot, "reset obs changed by later steps");
+    assertEqual(JSON.stringify(midKept), midSnapshot, "mid-episode obs changed by later steps");
   });
 
-  test(`[${label}] speed: a full noop episode runs in <100ms`, () => {
+  test(`[${label}] speed: a full noop episode runs in <50ms (CONTRACT.md §6)`, () => {
     const env = mod.createEnv();
     const t0 = Date.now();
     let last = { obs: env.reset(seed0(), {}).obs, done: false };
@@ -217,7 +306,7 @@ for (const { label, mod } of TASK_MODS) {
       steps += 1;
     }
     const ms = Date.now() - t0;
-    assert(ms < 100, `noop episode took ${ms}ms`);
+    assert(ms < 50, `noop episode took ${ms}ms (budget: well under 50ms)`);
   });
 
   test(`[${label}] config.max_steps caps the episode`, () => {

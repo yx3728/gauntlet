@@ -80,7 +80,8 @@ node run_policy.js --policy ./policy.js --seeds $TRAINING_SEEDS_FIRST --json
 ```
 
 See `node run_policy.js --help` for all flags. `--seeds` accepts comma lists and ranges
-(`1,2,5..9`).
+(`1,2,5..9`) of **integers** — string seeds work only when calling `env.reset()` directly
+in-process, never on the runner CLI.
 
 **SEEDS:** the training seeds available to practise on are `$TRAINING_SEEDS` (start with
 one; widen if you choose). Your final policy is also checked on a separate, **held-out**

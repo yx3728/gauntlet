@@ -1,6 +1,9 @@
 /**
  * run_policy.js — run a policy against a task and print metrics.
  *
+ * (This header is a copy of the USAGE constant below — keep them in sync.
+ * Arena builds bundle this file and strip comments, so --help prints USAGE.)
+ *
  * Usage:
  *   node run_policy.js                          # ./policy.js on the default training seed
  *   node run_policy.js --seeds 1,2,5..9         # play these seeds (you choose how many)
@@ -33,6 +36,34 @@ const crypto = require("crypto");
 
 const { runEpisode } = require("../core/episode.js");
 const { aggregate } = require("../core/aggregate.js");
+
+// --help text. KEEP IN SYNC with the file header comment above: the header is for
+// people reading this file, but bundling (arena builds) strips comments, so --help
+// must print this embedded copy rather than re-reading the source file.
+const USAGE = `run_policy.js — run a policy against a task and print metrics.
+
+Usage:
+  node run_policy.js                          # ./policy.js on the default training seed
+  node run_policy.js --seeds 1,2,5..9         # play these seeds (you choose how many)
+  node run_policy.js --policy ./policy.js     # explicit policy file
+  node run_policy.js --max_steps 200          # OPTIONAL: cap a run for fast iteration
+  node run_policy.js --config '{"k":"v"}'     # task-specific config passthrough (JSON)
+  node run_policy.js --log light|full|none    # per-game log level (default: light)
+  node run_policy.js --trace trace.jsonl      # (debug) per-step JSONL trace
+  node run_policy.js --json                   # machine-readable output only
+  node run_policy.js --task <id-or-path>      # which task (default: ./task.bundle.js)
+
+Your policy.js must export { init?(), policy(obs, mem) -> { action, mem } }.
+See INTERFACE.md for the contract and DESCRIPTION.md for the goal.
+
+SEEDS: by default you play the first training seed. You may practise on any of the
+training seeds listed in INTERFACE.md — your call. Your final policy is also checked
+on a separate, HELD-OUT set of seeds you don't see, so prefer robust play over
+fitting one seed.
+
+PER-GAME LOGS: every game is auto-saved (default \`light\`) to game_logs/ — a small,
+fully replayable record { seed, config, action_log, checkpoints, task version }.
+Kept in memory and written once at the end. \`--log none\` disables it.`;
 
 /** Resolve a task module from a path (bundle or env.js) or a registry id. */
 function resolveTask(spec) {
@@ -70,17 +101,23 @@ function fileSha1(p) {
   }
 }
 
+/** CLI seeds are INTEGERS only (string seeds are an in-process env capability). */
 function parseSeeds(spec, fallback) {
   if (!spec) return fallback.slice();
   const out = [];
   for (const part of String(spec).split(",")) {
-    const m = part.match(/^(-?\d+)\.\.(-?\d+)$/);
+    const tok = part.trim();
+    if (tok === "") continue;
+    const m = tok.match(/^(-?\d+)\.\.(-?\d+)$/);
     if (m) {
       for (let i = +m[1]; i <= +m[2]; i += 1) out.push(i);
-    } else if (part.trim() !== "") {
-      out.push(Number(part));
+    } else if (/^-?\d+$/.test(tok)) {
+      out.push(Number(tok));
+    } else {
+      fail(`--seeds: invalid token "${tok}" (expected integers or ranges, e.g. 1,2,5..9)`);
     }
   }
+  if (!out.length) fail(`--seeds "${spec}" produced no seeds (check for inverted ranges like 9..5)`);
   return out;
 }
 
@@ -90,7 +127,12 @@ function parseArgs(argv) {
     const k = argv[i];
     if (k === "--json") { a.json = true; continue; }
     if (k === "--help" || k === "-h") { a.help = true; continue; }
-    if (k.startsWith("--")) { a[k.slice(2)] = argv[i + 1]; i += 1; }
+    if (k.startsWith("--")) {
+      const v = argv[i + 1];
+      if (v === undefined || v.startsWith("--")) fail(`${k} requires a value`);
+      a[k.slice(2)] = v;
+      i += 1;
+    }
   }
   return a;
 }
@@ -120,7 +162,7 @@ function writeGameLog(result, taskInfo, config, level, dir, runToken, idx) {
 function main() {
   const a = parseArgs(process.argv);
   if (a.help) {
-    console.log(fs.readFileSync(__filename, "utf8").split("*/")[0].replace(/^\/\*+/, "").trim());
+    console.log(USAGE);
     process.exit(0);
   }
 

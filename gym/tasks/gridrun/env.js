@@ -10,9 +10,11 @@
  * Completing a non-final floor opens a boon decision (flat score bonus vs.
  * freezing the next floor's hazards for a while), resolved via action.choice.
  *
- * Generation guarantees solvability: walls are carved, then BFS connectivity
- * from the start to key/exit/gems is verified (stationary fallback hazards
- * are also checked as blockers); failed layouts are deterministically redrawn.
+ * Generation guarantees solvability: walls are carved, BFS connectivity from
+ * the start to key/exit/gems is verified, and a time-expanded BFS over
+ * (player cell x hazard phase x has-key) proves the key-then-exit run is
+ * survivable against the MOVING patrols under the env's exact collision
+ * rules; failed layouts are deterministically redrawn.
  */
 
 "use strict";
@@ -26,6 +28,11 @@ const FLOORS = 3;
 const GEMS_PER_FLOOR = 3;
 const MIN_REACHABLE = 40; // a layout must keep at least this many cells connected
 const GEN_ATTEMPTS = 60; // deterministic redraw budget per floor
+// Per-floor step budget for the solvability proof: each of the FLOORS floors
+// must be clearable in at most floor((max_steps_default - (FLOORS-1) boon
+// steps) / FLOORS) = (400 - 2) / 3 -> 132 steps, so three proven floors plus
+// the two boon steps always fit inside max_steps_default.
+const FLOOR_SOLVE_BUDGET = 132;
 
 const FREEZE_STEPS = 12; // boon option 1: hazards hold still for this many steps
 const GEM_POINTS = 15;
@@ -51,7 +58,7 @@ const DIRS = [
 const meta = {
   id: "gridrun",
   name: "GridRun — dungeon floor crawler",
-  version: "1.0.0",
+  version: "1.1.0",
   max_steps_default: 400,
   training_seeds: [1, 2, 3, 4, 5, 6, 7, 8],
   example_actions: [
@@ -131,6 +138,72 @@ function findSegments(wallSet, reachable, excluded) {
   return segs;
 }
 
+function gcdInt(a, b) {
+  while (b) {
+    const t = a % b;
+    a = b;
+    b = t;
+  }
+  return a;
+}
+
+/**
+ * Time-expanded solvability proof: BFS over the product graph (player cell x
+ * hazard phase x has-key flag), moving {north,south,east,west,wait} per step
+ * from the start at phase 0. Mirrors step()'s EXACT collision semantics:
+ * death if the destination holds a hazard BEFORE patrols move ("you walked
+ * into it" — which also makes position swaps fatal) or AFTER they move ("it
+ * walked into you"); entering the exit with the key completes the floor
+ * before patrols move. No boon/freeze is assumed. Phases cycle modulo the
+ * LCM of the patrol ping-pong periods (route lengths 1..6 -> periods
+ * {1,4,6,8,10}, LCM <= 40 with two hazards), so the state space is at most
+ * 81 x 40 x 2. Returns true iff key-then-exit is reachable within `budget`
+ * steps. Pure function of the floor — consumes NO PRNG draws.
+ */
+function floorSolvable(fl, budget) {
+  const periods = fl.hazards.map((h) => (h.route.length === 1 ? 1 : 2 * h.route.length - 2));
+  const L = periods.reduce((acc, p) => (acc * p) / gcdInt(acc, p), 1);
+  const hazAt = []; // phase -> set of occupied cells (hazardPos is L-periodic)
+  for (let p = 0; p < L; p += 1) hazAt.push(new Set(fl.hazards.map((h) => hazardPos(h, p))));
+
+  const seen = new Uint8Array(SIZE * SIZE * L * 2);
+  const enc = (cell, phase, k) => (cell * L + phase) * 2 + k;
+  seen[enc(fl.start, 0, 0)] = 1;
+  let frontier = [enc(fl.start, 0, 0)];
+  for (let dist = 1; dist <= budget && frontier.length; dist += 1) {
+    const next = [];
+    for (const s of frontier) {
+      const k = s % 2;
+      const cp = (s - k) / 2;
+      const phase = cp % L;
+      const cell = (cp - phase) / L;
+      const x = cellX(cell);
+      const y = cellY(cell);
+      const phaseNext = (phase + 1) % L;
+      for (const { dx, dy } of Object.values(MOVES)) {
+        let nx = x + dx;
+        let ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= SIZE || ny >= SIZE || fl.wallSet.has(cellIdx(nx, ny))) {
+          nx = x; // blocked: stay put (as in step())
+          ny = y;
+        }
+        const dest = cellIdx(nx, ny);
+        if (hazAt[phase].has(dest)) continue; // walked into a patrol
+        const k2 = k === 1 || dest === fl.key ? 1 : 0;
+        if (k2 === 1 && dest === fl.exit) return true; // floor done before patrols move
+        if (hazAt[phaseNext].has(dest)) continue; // a patrol walked into us
+        const s2 = enc(dest, phaseNext, k2);
+        if (!seen[s2]) {
+          seen[s2] = 1;
+          next.push(s2);
+        }
+      }
+    }
+    frontier = next;
+  }
+  return false;
+}
+
 /**
  * Generate one floor: walls, start, exit, key, gems, hazards. Redraws (from
  * the same rng stream, so deterministically) until the layout is solvable.
@@ -182,14 +255,14 @@ function generateFloor(rng, floorNo) {
     }
     if (!hazards.length) continue;
 
-    // Stationary hazards block their cell forever — re-verify key/exit reachability.
-    const blockers = hazards.filter((h) => h.route.length === 1).map((h) => h.route[0]);
-    if (blockers.length) {
-      const reach2 = bfsReachable(new Set([...wallSet, ...blockers]), start);
-      if (!reach2.has(key) || !reach2.has(exit)) continue;
-    }
+    // Time-expanded solvability against the actual (moving or stationary)
+    // hazards: the player must be able to grab the key and reach the exit
+    // dodging the patrols within the floor's step budget. Pure check (no
+    // PRNG draws), so a failed attempt redraws deterministically.
+    const floor = { start, wallSet, walls: [...wallSet].sort((a, b) => a - b), exit, key, gems, hazards };
+    if (!floorSolvable(floor, FLOOR_SOLVE_BUDGET)) continue;
 
-    return { start, wallSet, walls: [...wallSet].sort((a, b) => a - b), exit, key, gems, hazards };
+    return floor;
   }
 
   // Last-resort fixed open floor (practically unreachable; guarantees termination).
@@ -293,7 +366,9 @@ function createEnv() {
     },
 
     step(action) {
-      if (st.done) return st.terminal; // idempotent terminal step
+      // Idempotent terminal step: fresh clone per call so callers mutating a
+      // returned obs cannot rewrite history (contract no-aliasing rule).
+      if (st.done) return JSON.parse(JSON.stringify(st.terminal));
       const a = action && typeof action === "object" && !Array.isArray(action) ? action : {};
       st.steps += 1;
       let event = null;

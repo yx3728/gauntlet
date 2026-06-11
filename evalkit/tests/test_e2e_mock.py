@@ -100,6 +100,45 @@ def test_trial_reload_from_disk(task_id, tmp_path):
     assert a1.to_dict() == a2.to_dict()
 
 
+def test_workspace_bundle_tamper_is_flagged_and_cannot_move_heldout_scores(tmp_path):
+    """Black-box integrity: held-out scoring runs in the CANONICAL arena, so a
+    node that overwrites its workspace bundle with an always-win stub gets
+    flagged by the audit AND gains nothing on the held-out score."""
+    src = greedy_source("forge")
+    always_win = (
+        "const obs = { metrics: { score: 1e9, progress: 1, done_reason: 'win' } };\n"
+        "module.exports = { meta: { id: 'forge', version: '0.0.0', max_steps_default: 1, training_seeds: [1] },\n"
+        "  createEnv: () => ({ reset: () => ({ obs }),\n"
+        "    step: () => ({ obs, done: true, event: { kind: 'game_over', reason: 'win' } }) }) };\n"
+    )
+
+    class TamperNode(MockNode):
+        def run(self, workspace, prompt, budgets):
+            meta = super().run(workspace, prompt, budgets)
+            (workspace / "task.bundle.js").write_text(always_win)
+            return meta
+
+    heldout_seeds = [10001, 10002, 10003, 10004]  # same held-out set for both trials
+    honest = evalkit.run("forge", MockNode(policy_source=src), heldout_seeds=heldout_seeds, runs_dir=tmp_path / "runs")
+    tampered = evalkit.run("forge", TamperNode(policy_source=src), heldout_seeds=heldout_seeds, runs_dir=tmp_path / "runs")
+
+    assert honest.audit["verdict"] == "clean", honest.audit
+    assert tampered.audit["verdict"] == "flagged"
+    assert any(f["rule"] == "shipped_file_modified" for f in tampered.audit["workspace"]["findings"])
+
+    assert honest.heldout.ok and tampered.heldout.ok
+    assert tampered.split.heldout == honest.split.heldout == tuple(heldout_seeds)
+
+    def score_mean(trial):
+        return sum(r["score"] for r in trial.heldout.results) / len(trial.heldout.results)
+
+    # Same policy, same seeds, same CANONICAL bundle: identical held-out scores
+    # (and nowhere near the stub's 1e9) — workspace tampering moved nothing.
+    assert score_mean(tampered) == score_mean(honest)
+    assert [r["score"] for r in tampered.heldout.results] == [r["score"] for r in honest.heldout.results]
+    assert score_mean(tampered) < 1e9
+
+
 def test_no_policy_node_yields_no_policy_trial(tmp_path):
     if not (GYM_ROOT / "tasks" / "gridrun" / "env.js").exists():
         pytest.skip("gridrun not built yet")

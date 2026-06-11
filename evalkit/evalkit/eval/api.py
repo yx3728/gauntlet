@@ -133,6 +133,34 @@ class Analysis:
         return "\n".join(L) + "\n"
 
 
+def score_policy(
+    policy_path: str | Path,
+    seeds,
+    *,
+    arena_dir: str | Path | None = None,
+    task: str | None = None,
+    gym_root: str | Path | None = None,
+    max_steps: int = 0,
+    config: dict | None = None,
+    timeout_s: int = 600,
+    node_bin: str = "node",
+) -> BatchResult:
+    """Score one policy on a batch of seeds (the exposed low-level: a thin
+    wrapper over the per-batch boundary). Exactly one of `arena_dir` (arena
+    mode) or `task` (repo mode: a task id or env.js path) must be given."""
+    return run_policy_batch(
+        policy_path,
+        seeds,
+        arena_dir=arena_dir,
+        task=task,
+        gym_root=gym_root,
+        max_steps=max_steps,
+        config=config,
+        timeout_s=timeout_s,
+        node_bin=node_bin,
+    )
+
+
 def _build_arena(task: str, out_dir: Path, gym_root: Path, node_bin: str) -> dict:
     cmd = [node_bin, str(gym_root / "arena" / "build_arena.js"), "--task", task, "--out", str(out_dir)]
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
@@ -147,6 +175,7 @@ def run(
     *,
     budgets: NodeBudgets | None = None,
     n_heldout: int = 30,
+    heldout_seeds=None,
     gym_root: str | Path | None = None,
     runs_dir: str | Path | None = None,
     trial_name: str | None = None,
@@ -154,7 +183,9 @@ def run(
     node_bin: str = "node",
 ) -> Trial:
     """Full pipeline for ONE trial: arena -> agent node -> audit -> held-out
-    scoring -> baselines. Returns a Trial (also fully persisted on disk)."""
+    scoring -> baselines. Returns a Trial (also fully persisted on disk).
+    Held-out seeds are drawn fresh per trial (see `seeds.split_for`) unless an
+    explicit `heldout_seeds=` set is given; the split is recorded in trial.json."""
     budgets = budgets or NodeBudgets()
     gym_root = Path(gym_root).resolve() if gym_root else default_gym_root()
     repo_root = gym_root.parent
@@ -171,7 +202,7 @@ def run(
     # 1. Pinned arena for this trial (canonical copy used for all scoring).
     arena_dir = trial_dir / "arena"
     manifest = _build_arena(task, arena_dir, gym_root, node_bin)
-    split = split_for(manifest["training_seeds"], n_heldout=n_heldout)
+    split = split_for(manifest["training_seeds"], n_heldout=n_heldout, heldout_seeds=heldout_seeds)
 
     # 2. Isolated workspace for the node (its own copy of the arena).
     workspace = trial_dir / "workspace"

@@ -349,7 +349,10 @@ function createEnv() {
     },
 
     step(action) {
-      if (st.done) return st.terminal; // idempotent terminal step
+      // Idempotent terminal step: a fresh deep clone per call, so a caller mutating a
+      // returned obs can never corrupt the cached terminal state (no aliasing). The
+      // JSON content is identical — no observable behavior change, version stays 1.0.0.
+      if (st.done) return JSON.parse(JSON.stringify(st.terminal));
       const a = action && typeof action === "object" ? action : {};
 
       // 1. Resolve yesterday's trader offer (default: decline), then today's op.
