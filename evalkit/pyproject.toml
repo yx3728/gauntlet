@@ -1,0 +1,9 @@
+[project]
+name = "gauntlet-evalkit"
+version = "0.1.0"
+description = "Lib2 — eval + orchestration for the gauntlet long-horizon agent-eval framework. Two modules: evalkit.agents (black-box node layer) and evalkit.eval (held-out scoring, baselines, diagnostic probe). API functions only; no CLI."
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
