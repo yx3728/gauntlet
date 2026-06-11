@@ -85,3 +85,24 @@ load-bearing lessons adopted into the design:
   1.167 (>1) — caught by the builder's own win-path test before integration.
 - Next: real `claude -p` e2e (one node per game, sequential — limits: ≤8 concurrent, ≪1000
   total), then the adversarial review pass.
+
+## 2026-06-11 — Real `claude -p` e2e green on BOTH games (2 calls total)
+
+One Sonnet/high node per game (`evalkit/examples/real_e2e.py`, wall 900s / 60 turns / 8
+attempts). Both nodes hit the wall-clock SIGKILL (expected) but left a working policy.js —
+deliverables-on-disk counted, exactly as designed:
+
+- **gridrun**: held-out (30 seeds) win rate **0.867**, score mean 633.8 (greedy 630.5,
+  noop 0) → normalized **1.005** on the noop→greedy scale; generalization gap −40 (no
+  overfit); deaths on 4 seeds localized by the probe's worst-seeds list.
+- **forge**: held-out win rate **0.70**, score mean 1587 (greedy 1315, noop 100) →
+  normalized **1.22** — the agent BEAT the greedy reference; gap +136 (mild).
+- The SAME task-agnostic prompt ran unchanged on both games — real-agent portability proof.
+
+The real run immediately caught two audit bugs (the point of a sparing real e2e):
+1. `--seeds 1..8` (runner range syntax) tripped the bare-`..` traversal rule → rule now
+   matches only path-like traversal (`../`, `/..`); regression test added.
+2. `manifest.json` (shipped, cannot self-hash into its own file list) was flagged as an
+   extra workspace file → now an expected file; test updated.
+After the fix the gridrun trial re-audits **clean** (audit.json re-persisted); forge was
+clean from the start. Total `claude -p` usage this session: 2 calls, sequential.

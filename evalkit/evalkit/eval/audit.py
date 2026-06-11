@@ -24,8 +24,12 @@ PATH_FIELDS = ("file_path", "path", "notebook_path", "cwd")
 COMMAND_FIELDS = ("command", "cmd", "script")
 NETWORK_RE = re.compile(r"\b(curl|wget|nc|netcat|ssh|scp|rsync\s+\S*::|ping|telnet|ftp)\b")
 DEOBFUSCATE_RE = re.compile(r"(prettier|beautif|uglify|de-?minif|source-?map)", re.I)
+# Path-like parent traversal only ("../" or a "/.." segment) — a bare ".." also
+# appears in legitimate runner syntax like `--seeds 1..8` (real-e2e lesson).
+TRAVERSAL_IN_COMMAND_RE = re.compile(r"\.\./|/\.\.(?=[\s'\"/;)]|$)")
 
-EXPECTED_AGENT_FILES = {"policy.js", "report.json"}
+# manifest.json is shipped but cannot self-hash into its own file list.
+EXPECTED_AGENT_FILES = {"policy.js", "report.json", "manifest.json"}
 EXPECTED_AGENT_DIRS = {"game_logs"}
 
 
@@ -90,7 +94,7 @@ def audit_trace(trace_path: str | Path, workspace: str | Path, repo_root: str | 
                         continue
                     if NETWORK_RE.search(v):
                         flag("high", "network_command", v)
-                    if ".." in v:
+                    if TRAVERSAL_IN_COMMAND_RE.search(v):
                         flag("review", "parent_traversal_in_command", v)
                     if repo_root and str(repo_root) in v and str(workspace) not in v:
                         flag("high", "repo_reach_in_command", v)
