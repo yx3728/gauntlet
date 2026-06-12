@@ -1,0 +1,256 @@
+{
+  "trial_dir": "/Users/REDACTED/gauntlet/runs/roguelike-sonnet46-max",
+  "node": {
+    "node": "claude-code:claude-sonnet-4-6/max",
+    "status": "ok",
+    "wall_ms": 13014115,
+    "policy_path": "/Users/REDACTED/gauntlet/runs/roguelike-sonnet46-max/workspace/policy.js",
+    "report": null,
+    "trace_path": "/Users/REDACTED/gauntlet/runs/roguelike-sonnet46-max/trace.jsonl",
+    "meta": {
+      "exit_code": 0,
+      "cmd": [
+        "claude",
+        "-p",
+        "--model",
+        "claude-sonnet-4-6",
+        "--effort",
+        "max",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "default",
+        "--allowedTools",
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "--strict-mcp-config",
+        "--disallowedTools",
+        "WebFetch",
+        "WebSearch",
+        "Task",
+        "--max-turns",
+        "2000"
+      ]
+    }
+  },
+  "audit": "flagged",
+  "canonical_heldout": {
+    "n_seeds": 30,
+    "clear_rate": 0.1667,
+    "clear_rate_wilson95": [
+      0.0734,
+      0.3356
+    ],
+    "clears": 5,
+    "eval_score_mean": 0.5488,
+    "eval_score_median": 0.378,
+    "done_reason_rates": {
+      "death": 0.8333,
+      "win": 0.1667
+    },
+    "progress_mean": 0.4534,
+    "win_step_mean": 38482.4,
+    "win_step_median": 40733,
+    "win_step_min": 20289,
+    "win_step_max": 56874,
+    "win_steps": [
+      20289,
+      23724,
+      40733,
+      50792,
+      56874
+    ]
+  },
+  "fixed_2000_2029": {
+    "n_seeds": 30,
+    "clear_rate": 0.0333,
+    "clear_rate_wilson95": [
+      0.0059,
+      0.1667
+    ],
+    "clears": 1,
+    "eval_score_mean": 0.3896,
+    "eval_score_median": 0.3305,
+    "done_reason_rates": {
+      "death": 0.9667,
+      "win": 0.0333
+    },
+    "progress_mean": 0.3618,
+    "win_step_mean": 15026,
+    "win_step_median": 15026,
+    "win_step_min": 15026,
+    "win_step_max": 15026,
+    "win_steps": [
+      15026
+    ]
+  },
+  "training": {
+    "n_seeds": 13,
+    "clear_rate": 0.3077,
+    "clear_rate_wilson95": [
+      0.1268,
+      0.5763
+    ],
+    "clears": 4,
+    "eval_score_mean": 0.6323,
+    "eval_score_median": 0.335,
+    "done_reason_rates": {
+      "death": 0.6923,
+      "win": 0.3077
+    },
+    "progress_mean": 0.5279,
+    "win_step_mean": 59477,
+    "win_step_median": 64075.0,
+    "win_step_min": 27375,
+    "win_step_max": 82383,
+    "win_steps": [
+      27375,
+      57946,
+      70204,
+      82383
+    ]
+  },
+  "baselines": {
+    "greedy": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.3995,
+      "eval_score_median": 0.4,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.3995
+    },
+    "noop": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.2168,
+      "eval_score_median": 0.2175,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.2168
+    },
+    "smart": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.4142,
+      "eval_score_median": 0.4,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.4142
+    }
+  },
+  "manual_ladder_t1_policy_at_40_90k": {
+    "n_seeds": 30,
+    "clear_rate": 0.0,
+    "clear_rate_wilson95": [
+      0.0,
+      0.1135
+    ],
+    "clears": 0,
+    "eval_score_mean": 0.3425,
+    "eval_score_median": 0.35,
+    "done_reason_rates": {
+      "death": 1.0
+    },
+    "progress_mean": 0.3425
+  },
+  "manual_baseline": {
+    "policy": "trials/ladder-t1/workspace/policy.js",
+    "policy_sha256": "7cadeeb807aa20f7d4a2bb24b53838463227ba56ee8c0f96fb4937be00f6960a",
+    "dev_regime": "v1 (speed_cap=inf, ~uncapped steps)",
+    "heldout_seeds": "2000-2029 (30)",
+    "clear_rate_inf_90k": 0.2,
+    "clear_rate_inf_30k": 0.06666666666666667,
+    "win_steps_inf_90k": [
+      25129,
+      26827,
+      40198,
+      59337,
+      76138,
+      78336
+    ],
+    "clear_rate_by_cap_90k": {
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0.03,
+      "8": 0,
+      "10": 0,
+      "12": 0.03,
+      "14": 0,
+      "19": 0.07,
+      "20": 0,
+      "50": 0.07,
+      "90": 0.03,
+      "inf": 0.2
+    },
+    "at_40_90k_measured": "see manual_policy_at_40_90k.json (0/30, 100% death, progress mean 0.3425)",
+    "self_reported_clear": "~51% (self-eval at own inf dev regime, self-chosen seeds)"
+  },
+  "parity_gate": {
+    "ok": true,
+    "seeds": [
+      2000,
+      2008,
+      2017
+    ],
+    "fields": [
+      "steps",
+      "score",
+      "done_reason",
+      "progress",
+      "kills",
+      "level",
+      "wave",
+      "survived_ms"
+    ],
+    "mismatches": []
+  },
+  "diagnostic_inf_90k_fixed_seeds": {
+    "n_seeds": 30,
+    "clear_rate": 0.0333,
+    "clear_rate_wilson95": [
+      0.0059,
+      0.1667
+    ],
+    "clears": 1,
+    "eval_score_mean": 0.3896,
+    "eval_score_median": 0.3305,
+    "done_reason_rates": {
+      "death": 0.9667,
+      "win": 0.0333
+    },
+    "progress_mean": 0.3618,
+    "win_step_mean": 15026,
+    "win_step_median": 15026,
+    "win_step_min": 15026,
+    "win_step_max": 15026,
+    "win_steps": [
+      15026
+    ]
+  }
+}

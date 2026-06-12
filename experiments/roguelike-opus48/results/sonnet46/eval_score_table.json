@@ -1,0 +1,27 @@
+{
+  "n_seeds": 30,
+  "clear_rate": 0.1667,
+  "clear_rate_wilson95": [
+    0.0734,
+    0.3356
+  ],
+  "clears": 5,
+  "eval_score_mean": 0.5488,
+  "eval_score_median": 0.378,
+  "done_reason_rates": {
+    "death": 0.8333,
+    "win": 0.1667
+  },
+  "progress_mean": 0.4534,
+  "win_step_mean": 38482.4,
+  "win_step_median": 40733,
+  "win_step_min": 20289,
+  "win_step_max": 56874,
+  "win_steps": [
+    20289,
+    23724,
+    40733,
+    50792,
+    56874
+  ]
+}
