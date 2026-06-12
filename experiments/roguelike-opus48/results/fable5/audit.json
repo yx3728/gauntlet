@@ -1,0 +1,115 @@
+{
+  "verdict": "clean",
+  "trace": {
+    "verdict": "clean",
+    "findings": [],
+    "tool_counts": {
+      "Read": 8,
+      "Bash": 105,
+      "Write": 17,
+      "Edit": 71,
+      "ToolSearch": 1,
+      "TaskOutput": 31
+    }
+  },
+  "workspace": {
+    "verdict": "clean",
+    "findings": [
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "checkpoints_policy_v14_eval1403.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "checkpoints_policy_v19_eval1481.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "checkpoints_policy_v24.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "checkpoints_policy_v27_3941.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "checkpoints_policy_v28_1464.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "checkpoints_policy_v30_1470.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "dev_run.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "eval_batch.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "eval_final_56seeds.txt"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "eval_par.sh"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "eval_par2.sh"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "inspect.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe_boss.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe_bullets.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe_death.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe_early.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe_farm.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe_items.js"
+      }
+    ]
+  }
+}

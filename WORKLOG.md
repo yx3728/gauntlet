@@ -226,3 +226,28 @@ The trial (commit 64d8663 wiring; results archived in `experiments/roguelike-opu
 User directive: chain Sonnet 4.6/max then Fable 5/max serially, same conditions, after each
 successful completion (mechanical fixes only; design decisions stop for the user).
 Sonnet launched: `roguelike-sonnet46-max`.
+
+## 2026-06-12 — Chain complete: Sonnet 16.7% / Opus 73.3% / Fable 90% — INTERIM_REPORT.md final
+
+- **Sonnet 4.6/max** (216.9 min, self-terminated): canonical 16.7% (5/30), fixed-seed 3.3%
+  (1/30 — seed-set sensitivity at low rates, both reported), training 30.8% (real overfit),
+  fast-but-rare wins (median 40.7k). Audit **flagged**: 1 false-positive credential rule (its
+  own session scratch under ~/.claude/projects/<session>/) + 3 REAL read-only repo-metadata
+  peeks (`git ls-files | head -20`, `git status`, `cat .gitignore`) — letter-violation of
+  "stay within this directory", zero information gain relevant to the eval (held-out seeds
+  exist only in orchestrator memory during the session; filenames only, no contents). Result
+  stands with disclosure. Post-chain follow-ups noted: scope the .claude credential rule to
+  exclude the session's own dirs; consider workspaces outside the framework repo. No
+  report.json (the known ~1/2 self-report failure mode). Parity gate OK.
+- **Fable 5/max single node** (190.8 min, self-terminated): canonical **90% (27/30)**,
+  fixed-seed 80%, win median 40.5k (min 9.6k — fastest win on record for this game),
+  eval_score mean 1.469, audit **clean**, parity gate OK, calibrated self-eval (94.2% self vs
+  90% canonical). First single-agent Fable datapoint (manual 97% arm was ultracode
+  multi-agent). Used in-session background-shell parallelism (31 TaskOutput reads) — within
+  the allowlist.
+- All three arms: node self-terminated (no backstop ever fired), zero policy errors, zero
+  orchestration failures, full artifacts; results archived under
+  `experiments/roguelike-opus48/results/{opus48,sonnet46,fable5}/`.
+- `INTERIM_REPORT.md` finalized: faithfulness (substrate exact, ordering reproduces the manual
+  record), the new win-speed dimension (separates Fable from Opus at similar reliability),
+  treatment effect (every arm far above its ∞-developed manual counterpart at 40), confounds.

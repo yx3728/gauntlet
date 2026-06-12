@@ -1,0 +1,363 @@
+{
+  "trial_dir": "/Users/REDACTED/gauntlet/runs/roguelike-fable5-max",
+  "node": {
+    "node": "claude-code:claude-fable-5/max",
+    "status": "ok",
+    "wall_ms": 11449312,
+    "policy_path": "/Users/REDACTED/gauntlet/runs/roguelike-fable5-max/workspace/policy.js",
+    "report": {
+      "best_result": {
+        "cleared": true,
+        "progress": 1.0,
+        "level": 12,
+        "wave": 3,
+        "boss_reached": true,
+        "boss_hp_destroyed": 1.0,
+        "score": 33820,
+        "survival_ms": 199533
+      },
+      "how_far": "Cleared the game: kills the full random boss roster (azure/crimson/void/voidCore, ~19.5M-50.9M HP each, 1-3 bosses per run) on 131/139 practice seed-runs (94.2%, three disjoint seed sets incl. fully fresh ones); fastest clear at step 11972 (~200s), median win ~43.7k steps; losing runs still average ~0.7-0.9 progress.",
+      "failure_modes": [
+        "Ultra-thin spawn seeds: few adds means few levels (stuck ~9-12), so boss fights stretch past 5 minutes and rim/floor chip damage (~450/bullet) eventually outpaces healing",
+        "Getting herded toward walls/floor by aimed bullet fans; the rim halves escape options and grazes accumulate there",
+        "The void boss's slow closing bullet lattice (cage) can trap a short-horizon dodger; bosses ramming at ~15 px/tick do 2000-3000 contact damage",
+        "Late bosses (voidCore 50M HP) are pure DPS checks: weak drafts that survive boss 1 can still time out of healing during boss 3"
+      ],
+      "lessons": [
+        "Waves are time-based (wave 2 @60s, first boss @90s); boss count/variants are random per run; killing every boss = win (progress 1.0)",
+        "The ship autofires straight up, so positioning IS aiming: park under targets, lead by bullet flight time, and let pierce columns hit boss + adds together",
+        "Pierce re-hits bosses while traversing them (the single biggest boss-DPS multiplier); fire-rate/multishot/damage stack multiplicatively on top",
+        "Sustain converts dodging mistakes into chip: shield (=max HP, self-repairing), regen, lifesteal at high DPS, and full-heal picks when low are what let builds tank 50k+ damage",
+        "Draft adaptively: exp/magnet engines compound and are only worth taking early in TIME (not level); on spawn-thin runs they amplify nothing, so pivot to DPS+sustain",
+        "Bombs wipe every enemy bullet on screen (value scales with bullet count), invincibility (5s) is a license for point-blank boss DPS, LV+ drops are free levels",
+        "Dodge with exact swept rect-rect collision over a ~20-tick horizon; circle approximations cause phantom-collision paralysis in dense rain",
+        "Walls/corners/floor are local minima that turn into traps under aimed fire: escalating linger costs, committed escapes to mid-field, and a critical-HP retreat-to-calm-column mode each cut deaths",
+        "Outcomes are chaotically seed-sensitive: any tweak reshuffles later events, so changes were accepted only on 40-56-seed batch evidence; many plausible 'improvements' (closer boss range, wider margins, longer horizons, two-segment paths) measurably hurt"
+      ],
+      "attempts_used": 38
+    },
+    "trace_path": "/Users/REDACTED/gauntlet/runs/roguelike-fable5-max/trace.jsonl",
+    "meta": {
+      "exit_code": 0,
+      "cmd": [
+        "claude",
+        "-p",
+        "--model",
+        "claude-fable-5",
+        "--effort",
+        "max",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "default",
+        "--allowedTools",
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "--strict-mcp-config",
+        "--disallowedTools",
+        "WebFetch",
+        "WebSearch",
+        "Task",
+        "--max-turns",
+        "2000"
+      ]
+    }
+  },
+  "audit": "clean",
+  "canonical_heldout": {
+    "n_seeds": 30,
+    "clear_rate": 0.9,
+    "clear_rate_wilson95": [
+      0.7438,
+      0.9654
+    ],
+    "clears": 27,
+    "eval_score_mean": 1.469,
+    "eval_score_median": 1.5355,
+    "done_reason_rates": {
+      "death": 0.1,
+      "win": 0.9
+    },
+    "progress_mean": 0.9618,
+    "win_step_mean": 39275.5,
+    "win_step_median": 40463,
+    "win_step_min": 9600,
+    "win_step_max": 73966,
+    "win_steps": [
+      9600,
+      11816,
+      16459,
+      21441,
+      23009,
+      27310,
+      27767,
+      31868,
+      35435,
+      36033,
+      36674,
+      40077,
+      40200,
+      40463,
+      41213,
+      42403,
+      42616,
+      45446,
+      46196,
+      47436,
+      48683,
+      50279,
+      53096,
+      55096,
+      56975,
+      58881,
+      73966
+    ]
+  },
+  "fixed_2000_2029": {
+    "n_seeds": 30,
+    "clear_rate": 0.8,
+    "clear_rate_wilson95": [
+      0.6269,
+      0.9049
+    ],
+    "clears": 24,
+    "eval_score_mean": 1.3597,
+    "eval_score_median": 1.4627,
+    "done_reason_rates": {
+      "death": 0.2,
+      "win": 0.8
+    },
+    "progress_mean": 0.903,
+    "win_step_mean": 38625.5,
+    "win_step_median": 42046.5,
+    "win_step_min": 12793,
+    "win_step_max": 65878,
+    "win_steps": [
+      12793,
+      13640,
+      16472,
+      16996,
+      17525,
+      21288,
+      23710,
+      27845,
+      31767,
+      34845,
+      37232,
+      41558,
+      42535,
+      44278,
+      46919,
+      49794,
+      50163,
+      51473,
+      53600,
+      53802,
+      56186,
+      56284,
+      60429,
+      65878
+    ]
+  },
+  "training": {
+    "n_seeds": 13,
+    "clear_rate": 0.9231,
+    "clear_rate_wilson95": [
+      0.6669,
+      0.9863
+    ],
+    "clears": 12,
+    "eval_score_mean": 1.5695,
+    "eval_score_median": 1.5671,
+    "done_reason_rates": {
+      "death": 0.0769,
+      "win": 0.9231
+    },
+    "progress_mean": 0.9923,
+    "win_step_mean": 33727.3,
+    "win_step_median": 37846.5,
+    "win_step_min": 16435,
+    "win_step_max": 50852,
+    "win_steps": [
+      16435,
+      16510,
+      16816,
+      21030,
+      30531,
+      36736,
+      38957,
+      40081,
+      42524,
+      44099,
+      50157,
+      50852
+    ]
+  },
+  "baselines": {
+    "greedy": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.4036,
+      "eval_score_median": 0.4,
+      "done_reason_rates": {
+        "death": 0.9667,
+        "timeout": 0.0333
+      },
+      "progress_mean": 0.4036
+    },
+    "noop": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.1906,
+      "eval_score_median": 0.1855,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.1906
+    },
+    "smart": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.3936,
+      "eval_score_median": 0.4,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.3936
+    }
+  },
+  "manual_ladder_t1_policy_at_40_90k": {
+    "n_seeds": 30,
+    "clear_rate": 0.0,
+    "clear_rate_wilson95": [
+      0.0,
+      0.1135
+    ],
+    "clears": 0,
+    "eval_score_mean": 0.3425,
+    "eval_score_median": 0.35,
+    "done_reason_rates": {
+      "death": 1.0
+    },
+    "progress_mean": 0.3425
+  },
+  "manual_baseline": {
+    "policy": "trials/ladder-t1/workspace/policy.js",
+    "policy_sha256": "7cadeeb807aa20f7d4a2bb24b53838463227ba56ee8c0f96fb4937be00f6960a",
+    "dev_regime": "v1 (speed_cap=inf, ~uncapped steps)",
+    "heldout_seeds": "2000-2029 (30)",
+    "clear_rate_inf_90k": 0.2,
+    "clear_rate_inf_30k": 0.06666666666666667,
+    "win_steps_inf_90k": [
+      25129,
+      26827,
+      40198,
+      59337,
+      76138,
+      78336
+    ],
+    "clear_rate_by_cap_90k": {
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0.03,
+      "8": 0,
+      "10": 0,
+      "12": 0.03,
+      "14": 0,
+      "19": 0.07,
+      "20": 0,
+      "50": 0.07,
+      "90": 0.03,
+      "inf": 0.2
+    },
+    "at_40_90k_measured": "see manual_policy_at_40_90k.json (0/30, 100% death, progress mean 0.3425)",
+    "self_reported_clear": "~51% (self-eval at own inf dev regime, self-chosen seeds)"
+  },
+  "parity_gate": {
+    "ok": true,
+    "seeds": [
+      2000,
+      2008,
+      2017
+    ],
+    "fields": [
+      "steps",
+      "score",
+      "done_reason",
+      "progress",
+      "kills",
+      "level",
+      "wave",
+      "survived_ms"
+    ],
+    "mismatches": []
+  },
+  "diagnostic_inf_90k_fixed_seeds": {
+    "n_seeds": 30,
+    "clear_rate": 0.8,
+    "clear_rate_wilson95": [
+      0.6269,
+      0.9049
+    ],
+    "clears": 24,
+    "eval_score_mean": 1.3597,
+    "eval_score_median": 1.4627,
+    "done_reason_rates": {
+      "death": 0.2,
+      "win": 0.8
+    },
+    "progress_mean": 0.903,
+    "win_step_mean": 38625.5,
+    "win_step_median": 42046.5,
+    "win_step_min": 12793,
+    "win_step_max": 65878,
+    "win_steps": [
+      12793,
+      13640,
+      16472,
+      16996,
+      17525,
+      21288,
+      23710,
+      27845,
+      31767,
+      34845,
+      37232,
+      41558,
+      42535,
+      44278,
+      46919,
+      49794,
+      50163,
+      51473,
+      53600,
+      53802,
+      56186,
+      56284,
+      60429,
+      65878
+    ]
+  }
+}

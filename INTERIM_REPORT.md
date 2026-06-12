@@ -121,9 +121,9 @@ seeds) vs 73.3% canonical is a modest self-eval gap, now measured rather than gu
 
 | arm | status | clear @40/90k canonical (Wilson95) | clear @40/90k fixed 2000–2029 | win_step median (clears) | session |
 |---|---|---|---|---|---|
-| Opus 4.8 / max | **done** | **73.3%** (22/30) [.56,.86] | 76.7% (23/30) | 56 979 | 2.9 h, self-terminated, audit review (benign) |
 | Sonnet 4.6 / max | **done** | **16.7%** (5/30) [.07,.34] | 3.3% (1/30) | 40 733 | 3.6 h, self-terminated, audit **flagged** (see below) |
-| Fable 5 / max (single `-p` node) | running | — | — | — | manual fable arm was ULTRACODE multi-agent (97% @∞) — not like-for-like; the single-agent manual arm was never evaluated |
+| Opus 4.8 / max | **done** | **73.3%** (22/30) [.56,.86] | 76.7% (23/30) | 56 979 | 2.9 h, self-terminated, audit review (benign) |
+| Fable 5 / max (single `-p` node) | **done** | **90.0%** (27/30) [.74,.97] | 80.0% (24/30) | 40 463 | 3.2 h, self-terminated, audit **clean** |
 
 ### Sonnet 4.6 leg — detail
 
@@ -151,4 +151,44 @@ seeds) vs 73.3% canonical is a modest self-eval gap, now measured rather than gu
   (uniform-conditions rule defers them): scope the `.claude` credential rule to exclude the
   session's own scratch dirs; consider placing trial workspaces outside the framework repo.
 
-*(Fable 5 section lands when the chain completes.)*
+### Fable 5 leg — detail
+
+- Single `-p` node (NOT multi-agent): the manual fable arm that scored 97% @∞ was ultracode
+  multi-agent orchestration — not comparable; the manual single-agent fable arm was never
+  evaluated, so **this is the first single-agent Fable number on this game**: 90% canonical /
+  80% on the manual's fixed seed set, audit **clean**, parity gate OK, zero policy errors.
+- **Fast as well as reliable:** win_step median 40 463 — Opus-level clear-reliability territory
+  at Sonnet-level win speed; min 9 600 steps (the fastest win observed in any arm, manual or
+  gauntlet); eval_score mean 1.469 (vs Opus 1.127, Sonnet 0.549).
+- Training 92.3% vs held-out 90% clear — no clear-rate overfit (training score mean is higher
+  because practice runs farmed longer).
+- Session behavior: used background-shell parallelism inside its session (31 TaskOutput reads
+  of its own Bash jobs) — within the tool allowlist; no boundary findings at all.
+- Self-report: 94.2% over 131/139 self-run seed-episodes, median ~43.7k — close to canonical
+  (90%, 40.5k): the most calibrated self-eval of the three arms.
+
+## 6. Synthesis (all three arms, identical conditions)
+
+The eval discriminates cleanly and in a new dimension the manual pipeline lacked:
+
+| | Sonnet 4.6 | Opus 4.8 | Fable 5 |
+|---|---|---|---|
+| canonical clear @40/90k | 16.7% | 73.3% | 90.0% |
+| eval_score mean | 0.549 | 1.127 | 1.469 |
+| win_step median | 40 733 | 56 979 | 40 463 |
+| profile | fragile rusher (fast rare wins, 83% death, overfits) | reliable grinder (slow consistent wins, no overfit) | fast + reliable (calibrated self-eval) |
+| manual baseline (∞-dev) | 0% at every cap | 20% @∞ / 0% @40 | n/a single-agent (97% @∞ multi-agent) |
+
+- **Faithfulness:** substrate byte-identical and exact-reproducing; parity gate passed on every
+  arm's final policy; the model ORDERING reproduces the manual record (Sonnet ≪ Opus < Fable)
+  with the same qualitative failure modes (Sonnet combat-bottlenecked/fragile; Opus
+  survival-first grinder).
+- **The treatment matters:** developing UNDER the eval regime with the win-first criterion
+  lifted every arm far above its ∞-developed manual counterpart evaluated at 40 (Sonnet
+  0→3–17%, Opus 0→73–77%). At n=1 the criterion and regime effects are bundled (Confounds §4).
+- **The new dimension works:** win_step separates Fable from Opus (same-ish reliability, ~1.4×
+  faster wins) — invisible to a clear-rate-only eval.
+- **Engineering:** three multi-hour frontier sessions ran end-to-end through the unchanged
+  pipeline with zero orchestration failures, full artifact persistence, working integrity
+  audits (one benign-review, one real-but-contained flag, one clean), and deterministic
+  canonical re-scoring throughout.
