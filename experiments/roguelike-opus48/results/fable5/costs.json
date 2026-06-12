@@ -1,0 +1,58 @@
+{
+  "total_cost_usd": 81.426278,
+  "num_turns": 234,
+  "duration_api_ms": 4338779,
+  "compactions": 0,
+  "usage": {
+    "input_tokens": 57935,
+    "cache_creation_input_tokens": 601794,
+    "cache_read_input_tokens": 57659539,
+    "output_tokens": 222995,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 601794,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 1204,
+        "output_tokens": 984,
+        "cache_read_input_tokens": 403418,
+        "cache_creation_input_tokens": 599,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 599
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1674,
+      "outputTokens": 17,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001759,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "claude-fable-5": {
+      "inputTokens": 57935,
+      "outputTokens": 222995,
+      "cacheReadInputTokens": 57659539,
+      "cacheCreationInputTokens": 601794,
+      "webSearchRequests": 0,
+      "costUSD": 81.424519,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000
+    }
+  }
+}

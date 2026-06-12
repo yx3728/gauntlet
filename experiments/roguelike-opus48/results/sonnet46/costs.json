@@ -1,0 +1,58 @@
+{
+  "total_cost_usd": 22.861764000000008,
+  "num_turns": 274,
+  "duration_api_ms": 11443924,
+  "compactions": 5,
+  "usage": {
+    "input_tokens": 268,
+    "cache_creation_input_tokens": 883854,
+    "cache_read_input_tokens": 25908923,
+    "output_tokens": 581411,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 883854,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 1,
+        "output_tokens": 767,
+        "cache_read_input_tokens": 145342,
+        "cache_creation_input_tokens": 4960,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4960
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 1674,
+      "outputTokens": 15,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.001749,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    },
+    "claude-sonnet-4-6": {
+      "inputTokens": 283,
+      "outputTokens": 631138,
+      "cacheReadInputTokens": 26714470,
+      "cacheCreationInputTokens": 900359,
+      "webSearchRequests": 0,
+      "costUSD": 22.860015000000008,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  }
+}

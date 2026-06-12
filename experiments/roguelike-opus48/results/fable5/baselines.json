@@ -1,0 +1,2048 @@
+{
+  "greedy": {
+    "ok": true,
+    "task": {
+      "id": "roguelike",
+      "version": "2.0.0",
+      "bundle_sha": "930822ecbf24"
+    },
+    "config": {},
+    "seeds": [
+      74429627,
+      149303673,
+      158383561,
+      238166393,
+      314662115,
+      327281229,
+      375130208,
+      384855894,
+      492473445,
+      518054574,
+      678326714,
+      705537212,
+      742309353,
+      790867912,
+      857115725,
+      911924473,
+      1011112560,
+      1078338858,
+      1118358742,
+      1129863904,
+      1205113547,
+      1402462784,
+      1494771001,
+      1515036554,
+      1517076420,
+      1538286360,
+      1673574355,
+      1868999411,
+      1993803303,
+      2049328392
+    ],
+    "results": [
+      {
+        "score": 5869.38,
+        "progress": 0.308,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 18,
+        "level": 4,
+        "wave": 2,
+        "survived_ms": 69383.33,
+        "seed": 74429627,
+        "steps": 4163,
+        "events": {
+          "level_up": 3,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7105.6,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 15,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 105600,
+        "seed": 149303673,
+        "steps": 6336,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6507.9,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 14,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 107900,
+        "seed": 158383561,
+        "steps": 6474,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6198.72,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 11,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 98716.67,
+        "seed": 238166393,
+        "steps": 5923,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6098.52,
+        "progress": 0.402,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.004,
+        "kills": 10,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 98516.67,
+        "seed": 314662115,
+        "steps": 5911,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3389.7,
+        "progress": 0.399,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 8,
+        "level": 1,
+        "wave": 2,
+        "survived_ms": 89700,
+        "seed": 327281229,
+        "steps": 5382,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7298.42,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 22,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 98416.67,
+        "seed": 375130208,
+        "steps": 5905,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 52520,
+        "progress": 0.9,
+        "done_reason": "timeout",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.534,
+        "kills": 314,
+        "level": 34,
+        "wave": 3,
+        "survived_ms": 1500000,
+        "seed": 384855894,
+        "steps": 90000,
+        "events": {
+          "level_up": 33,
+          "boss_phase": 14,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7906.47,
+        "progress": 0.401,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 23,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 106466.67,
+        "seed": 492473445,
+        "steps": 6388,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7097.62,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 15,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 97616.67,
+        "seed": 518054574,
+        "steps": 5857,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 5169.67,
+        "progress": 0.31,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 21,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 69666.67,
+        "seed": 678326714,
+        "steps": 4180,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 5995.67,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 9,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 95666.67,
+        "seed": 705537212,
+        "steps": 5740,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6202.27,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 11,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 102266.67,
+        "seed": 742309353,
+        "steps": 6136,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6394.5,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 13,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 94500,
+        "seed": 790867912,
+        "steps": 5670,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7397.62,
+        "progress": 0.401,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 18,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 97616.67,
+        "seed": 857115725,
+        "steps": 5857,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6301.4,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 12,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 101400,
+        "seed": 911924473,
+        "steps": 6084,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6907.6,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 13,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 107600,
+        "seed": 1011112560,
+        "steps": 6456,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 5995.37,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 9,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 95366.67,
+        "seed": 1078338858,
+        "steps": 5722,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6198.52,
+        "progress": 0.401,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.002,
+        "kills": 11,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 98516.67,
+        "seed": 1118358742,
+        "steps": 5911,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7195.08,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 16,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 95083.33,
+        "seed": 1129863904,
+        "steps": 5705,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 5995.3,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 9,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 95300,
+        "seed": 1205113547,
+        "steps": 5718,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 4268.5,
+        "progress": 0.304,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 12,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 68500,
+        "seed": 1402462784,
+        "steps": 4110,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6213.87,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 11,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 113866.67,
+        "seed": 1494771001,
+        "steps": 6832,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 4382.23,
+        "progress": 0.365,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 13,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 82233.33,
+        "seed": 1515036554,
+        "steps": 4934,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3171.42,
+        "progress": 0.317,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 6,
+        "level": 1,
+        "wave": 2,
+        "survived_ms": 71416.67,
+        "seed": 1517076420,
+        "steps": 4285,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6094.72,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 10,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 94716.67,
+        "seed": 1538286360,
+        "steps": 5683,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6598.4,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 15,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 98400,
+        "seed": 1673574355,
+        "steps": 5904,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7399.47,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 18,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 99466.67,
+        "seed": 1868999411,
+        "steps": 5968,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6194,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 11,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 94000,
+        "seed": 1993803303,
+        "steps": 5640,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6897.75,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 18,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 97750,
+        "seed": 2049328392,
+        "steps": 5865,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      }
+    ],
+    "aggregate": {
+      "n": 30,
+      "score": {
+        "mean": 7698.8563,
+        "median": 6208.07,
+        "min": 3171.42,
+        "max": 52520
+      },
+      "progress": {
+        "mean": 0.4036,
+        "median": 0.4,
+        "min": 0.304,
+        "max": 0.9
+      },
+      "kills": {
+        "mean": 23.5333,
+        "median": 13,
+        "min": 6,
+        "max": 314
+      },
+      "level": {
+        "mean": 3.3,
+        "median": 2,
+        "min": 1,
+        "max": 34
+      },
+      "wave": {
+        "mean": 2.8,
+        "median": 3,
+        "min": 2,
+        "max": 3
+      },
+      "survived_ms": {
+        "mean": 141521.668,
+        "median": 97683.335,
+        "min": 68500,
+        "max": 1500000
+      },
+      "steps": {
+        "mean": 8491.3,
+        "median": 5861,
+        "min": 4110,
+        "max": 90000
+      },
+      "boss_hp_destroyed": {
+        "mean": 0.0182,
+        "median": 0,
+        "min": 0,
+        "max": 0.534
+      },
+      "boss_cleared_rate": 0,
+      "boss_reached_rate": 0.8,
+      "done_reason_rates": {
+        "death": 0.9667,
+        "timeout": 0.0333
+      },
+      "policy_error_rate": 0
+    },
+    "error": null,
+    "stderr_tail": null,
+    "exit_code": 0,
+    "wall_ms": 2169
+  },
+  "noop": {
+    "ok": true,
+    "task": {
+      "id": "roguelike",
+      "version": "2.0.0",
+      "bundle_sha": "930822ecbf24"
+    },
+    "config": {},
+    "seeds": [
+      74429627,
+      149303673,
+      158383561,
+      238166393,
+      314662115,
+      327281229,
+      375130208,
+      384855894,
+      492473445,
+      518054574,
+      678326714,
+      705537212,
+      742309353,
+      790867912,
+      857115725,
+      911924473,
+      1011112560,
+      1078338858,
+      1118358742,
+      1129863904,
+      1205113547,
+      1402462784,
+      1494771001,
+      1515036554,
+      1517076420,
+      1538286360,
+      1673574355,
+      1868999411,
+      1993803303,
+      2049328392
+    ],
+    "results": [
+      {
+        "score": 3767.53,
+        "progress": 0.3,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 7,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 67533.33,
+        "seed": 74429627,
+        "steps": 4052,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 731.6,
+        "progress": 0.14,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 31600,
+        "seed": 149303673,
+        "steps": 1896,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 540.35,
+        "progress": 0.179,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 0,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 40350,
+        "seed": 158383561,
+        "steps": 2421,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3367.3,
+        "progress": 0.299,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 3,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 67300,
+        "seed": 238166393,
+        "steps": 4038,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 643.22,
+        "progress": 0.192,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 1,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 43216.67,
+        "seed": 314662115,
+        "steps": 2593,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3670.28,
+        "progress": 0.312,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 6,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 70283.33,
+        "seed": 327281229,
+        "steps": 4217,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 536.55,
+        "progress": 0.162,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 0,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 36550,
+        "seed": 375130208,
+        "steps": 2193,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 1557.28,
+        "progress": 0.255,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 5,
+        "level": 2,
+        "wave": 1,
+        "survived_ms": 57283.33,
+        "seed": 384855894,
+        "steps": 3437,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3565.27,
+        "progress": 0.29,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 5,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 65266.67,
+        "seed": 492473445,
+        "steps": 3916,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 1336.47,
+        "progress": 0.162,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 3,
+        "level": 2,
+        "wave": 1,
+        "survived_ms": 36466.67,
+        "seed": 518054574,
+        "steps": 2188,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 1753.4,
+        "progress": 0.237,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 7,
+        "level": 2,
+        "wave": 1,
+        "survived_ms": 53400,
+        "seed": 678326714,
+        "steps": 3204,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 754.62,
+        "progress": 0.243,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 54616.67,
+        "seed": 705537212,
+        "steps": 3277,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 505.4,
+        "progress": 0.024,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 0,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 5400,
+        "seed": 742309353,
+        "steps": 324,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 708.12,
+        "progress": 0.036,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 8116.67,
+        "seed": 790867912,
+        "steps": 487,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3767.72,
+        "progress": 0.301,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 7,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 67716.67,
+        "seed": 857115725,
+        "steps": 4063,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 2867.53,
+        "progress": 0.3,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 3,
+        "level": 1,
+        "wave": 2,
+        "survived_ms": 67533.33,
+        "seed": 911924473,
+        "steps": 4052,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 724.93,
+        "progress": 0.111,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 24933.33,
+        "seed": 1011112560,
+        "steps": 1496,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 746.72,
+        "progress": 0.208,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 46716.67,
+        "seed": 1078338858,
+        "steps": 2803,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3368.55,
+        "progress": 0.305,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 3,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 68550,
+        "seed": 1118358742,
+        "steps": 4113,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 719.35,
+        "progress": 0.086,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 19350,
+        "seed": 1129863904,
+        "steps": 1161,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 653.18,
+        "progress": 0.236,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 1,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 53183.33,
+        "seed": 1205113547,
+        "steps": 3191,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 730.45,
+        "progress": 0.135,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 30450,
+        "seed": 1402462784,
+        "steps": 1827,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 627.22,
+        "progress": 0.121,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 1,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 27216.67,
+        "seed": 1494771001,
+        "steps": 1633,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 1751.77,
+        "progress": 0.23,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 7,
+        "level": 2,
+        "wave": 1,
+        "survived_ms": 51766.67,
+        "seed": 1515036554,
+        "steps": 3106,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 2673.62,
+        "progress": 0.327,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 1,
+        "level": 1,
+        "wave": 2,
+        "survived_ms": 73616.67,
+        "seed": 1517076420,
+        "steps": 4417,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 1234.58,
+        "progress": 0.154,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 7,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 34583.33,
+        "seed": 1538286360,
+        "steps": 2075,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 726.9,
+        "progress": 0.12,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 26900,
+        "seed": 1673574355,
+        "steps": 1614,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 518.88,
+        "progress": 0.084,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 0,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 18883.33,
+        "seed": 1868999411,
+        "steps": 1133,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 713.62,
+        "progress": 0.061,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 2,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 13616.67,
+        "seed": 1993803303,
+        "steps": 817,
+        "events": {
+          "game_over": 1
+        }
+      },
+      {
+        "score": 624.55,
+        "progress": 0.109,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 1,
+        "level": 1,
+        "wave": 1,
+        "survived_ms": 24550,
+        "seed": 2049328392,
+        "steps": 1473,
+        "events": {
+          "game_over": 1
+        }
+      }
+    ],
+    "aggregate": {
+      "n": 30,
+      "score": {
+        "mean": 1529.5653,
+        "median": 739.16,
+        "min": 505.4,
+        "max": 3767.72
+      },
+      "progress": {
+        "mean": 0.1906,
+        "median": 0.1855,
+        "min": 0.024,
+        "max": 0.327
+      },
+      "kills": {
+        "mean": 2.8667,
+        "median": 2,
+        "min": 0,
+        "max": 7
+      },
+      "level": {
+        "mean": 1.3333,
+        "median": 1,
+        "min": 1,
+        "max": 2
+      },
+      "wave": {
+        "mean": 1.2667,
+        "median": 1,
+        "min": 1,
+        "max": 2
+      },
+      "survived_ms": {
+        "mean": 42898.3337,
+        "median": 41783.335,
+        "min": 5400,
+        "max": 73616.67
+      },
+      "steps": {
+        "mean": 2573.9,
+        "median": 2507,
+        "min": 324,
+        "max": 4417
+      },
+      "boss_cleared_rate": 0,
+      "boss_reached_rate": 0,
+      "done_reason_rates": {
+        "death": 1
+      },
+      "policy_error_rate": 0
+    },
+    "error": null,
+    "stderr_tail": null,
+    "exit_code": 0,
+    "wall_ms": 267
+  },
+  "smart": {
+    "ok": true,
+    "task": {
+      "id": "roguelike",
+      "version": "2.0.0",
+      "bundle_sha": "930822ecbf24"
+    },
+    "config": {},
+    "seeds": [
+      74429627,
+      149303673,
+      158383561,
+      238166393,
+      314662115,
+      327281229,
+      375130208,
+      384855894,
+      492473445,
+      518054574,
+      678326714,
+      705537212,
+      742309353,
+      790867912,
+      857115725,
+      911924473,
+      1011112560,
+      1078338858,
+      1118358742,
+      1129863904,
+      1205113547,
+      1402462784,
+      1494771001,
+      1515036554,
+      1517076420,
+      1538286360,
+      1673574355,
+      1868999411,
+      1993803303,
+      2049328392
+    ],
+    "results": [
+      {
+        "score": 4481.87,
+        "progress": 0.364,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 14,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 81866.67,
+        "seed": 74429627,
+        "steps": 4912,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7804.27,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 22,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 104266.67,
+        "seed": 149303673,
+        "steps": 6256,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7303.08,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 17,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 103083.33,
+        "seed": 158383561,
+        "steps": 6185,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 9795.32,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 37,
+        "level": 4,
+        "wave": 3,
+        "survived_ms": 95316.67,
+        "seed": 238166393,
+        "steps": 5719,
+        "events": {
+          "level_up": 3,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 9403.93,
+        "progress": 0.402,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.005,
+        "kills": 33,
+        "level": 4,
+        "wave": 3,
+        "survived_ms": 103933.33,
+        "seed": 314662115,
+        "steps": 6236,
+        "events": {
+          "level_up": 3,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7399.88,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 18,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 99883.33,
+        "seed": 327281229,
+        "steps": 5993,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6699.78,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 16,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 99783.33,
+        "seed": 375130208,
+        "steps": 5987,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 8820,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 27,
+        "level": 4,
+        "wave": 3,
+        "survived_ms": 121700,
+        "seed": 384855894,
+        "steps": 7302,
+        "events": {
+          "level_up": 3,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 8802.55,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 32,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 102550,
+        "seed": 492473445,
+        "steps": 6153,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 8610.75,
+        "progress": 0.401,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.002,
+        "kills": 30,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 110750,
+        "seed": 518054574,
+        "steps": 6645,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7720,
+        "progress": 0.401,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 21,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 122166.67,
+        "seed": 678326714,
+        "steps": 7330,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 8799.75,
+        "progress": 0.402,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.004,
+        "kills": 32,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 99750,
+        "seed": 705537212,
+        "steps": 5985,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 40020,
+        "progress": 0.404,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.007,
+        "kills": 339,
+        "level": 4,
+        "wave": 3,
+        "survived_ms": 129866.67,
+        "seed": 742309353,
+        "steps": 7792,
+        "events": {
+          "level_up": 3,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 9301.02,
+        "progress": 0.402,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.004,
+        "kills": 32,
+        "level": 4,
+        "wave": 3,
+        "survived_ms": 101016.67,
+        "seed": 790867912,
+        "steps": 6061,
+        "events": {
+          "level_up": 3,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 9020,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 34,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 120433.33,
+        "seed": 857115725,
+        "steps": 7226,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 9518.47,
+        "progress": 0.403,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.007,
+        "kills": 29,
+        "level": 5,
+        "wave": 3,
+        "survived_ms": 118466.67,
+        "seed": 911924473,
+        "steps": 7108,
+        "events": {
+          "level_up": 4,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 8397.83,
+        "progress": 0.402,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.003,
+        "kills": 28,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 97833.33,
+        "seed": 1011112560,
+        "steps": 5870,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7506.6,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 19,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 106600,
+        "seed": 1078338858,
+        "steps": 6396,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 3870.48,
+        "progress": 0.313,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 8,
+        "level": 2,
+        "wave": 2,
+        "survived_ms": 70483.33,
+        "seed": 1118358742,
+        "steps": 4229,
+        "events": {
+          "level_up": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7190.9,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 21,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 90900,
+        "seed": 1129863904,
+        "steps": 5454,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6404.77,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 13,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 104766.67,
+        "seed": 1205113547,
+        "steps": 6286,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7594.67,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 20,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 94666.67,
+        "seed": 1402462784,
+        "steps": 5680,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7815.83,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 22,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 115833.33,
+        "seed": 1494771001,
+        "steps": 6950,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 6101.27,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 10,
+        "level": 2,
+        "wave": 3,
+        "survived_ms": 101266.67,
+        "seed": 1515036554,
+        "steps": 6076,
+        "events": {
+          "level_up": 1,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7298.5,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0,
+        "kills": 17,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 98500,
+        "seed": 1517076420,
+        "steps": 5910,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 42709.73,
+        "progress": 0.404,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.007,
+        "kills": 356,
+        "level": 6,
+        "wave": 3,
+        "survived_ms": 109733.33,
+        "seed": 1538286360,
+        "steps": 6584,
+        "events": {
+          "level_up": 5,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 8220,
+        "progress": 0.401,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.002,
+        "kills": 26,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 146100,
+        "seed": 1673574355,
+        "steps": 8766,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7208.93,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 16,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 108933.33,
+        "seed": 1868999411,
+        "steps": 6536,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 7914.08,
+        "progress": 0.4,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": true,
+        "boss_hp_destroyed": 0.001,
+        "kills": 23,
+        "level": 3,
+        "wave": 3,
+        "survived_ms": 114083.33,
+        "seed": 1993803303,
+        "steps": 6845,
+        "events": {
+          "level_up": 2,
+          "boss_phase": 1,
+          "game_over": 1
+        }
+      },
+      {
+        "score": 5769.25,
+        "progress": 0.308,
+        "done_reason": "death",
+        "win_step": null,
+        "boss_cleared": false,
+        "boss_reached": false,
+        "boss_hp_destroyed": null,
+        "kills": 22,
+        "level": 3,
+        "wave": 2,
+        "survived_ms": 69250,
+        "seed": 2049328392,
+        "steps": 4155,
+        "events": {
+          "level_up": 2,
+          "game_over": 1
+        }
+      }
+    ],
+    "aggregate": {
+      "n": 30,
+      "score": {
+        "mean": 9916.7837,
+        "median": 7810.05,
+        "min": 3870.48,
+        "max": 42709.73
+      },
+      "progress": {
+        "mean": 0.3936,
+        "median": 0.4,
+        "min": 0.308,
+        "max": 0.404
+      },
+      "kills": {
+        "mean": 44.4667,
+        "median": 22,
+        "min": 8,
+        "max": 356
+      },
+      "level": {
+        "mean": 3.1333,
+        "median": 3,
+        "min": 2,
+        "max": 6
+      },
+      "wave": {
+        "mean": 2.9,
+        "median": 3,
+        "min": 2,
+        "max": 3
+      },
+      "survived_ms": {
+        "mean": 104792.7777,
+        "median": 103508.33,
+        "min": 69250,
+        "max": 146100
+      },
+      "steps": {
+        "mean": 6287.5667,
+        "median": 6210.5,
+        "min": 4155,
+        "max": 8766
+      },
+      "boss_hp_destroyed": {
+        "mean": 0.0015,
+        "median": 0,
+        "min": 0,
+        "max": 0.007
+      },
+      "boss_cleared_rate": 0,
+      "boss_reached_rate": 0.9,
+      "done_reason_rates": {
+        "death": 1
+      },
+      "policy_error_rate": 0
+    },
+    "error": null,
+    "stderr_tail": null,
+    "exit_code": 0,
+    "wall_ms": 1115
+  }
+}

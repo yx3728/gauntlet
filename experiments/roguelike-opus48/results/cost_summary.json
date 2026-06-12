@@ -1,0 +1,20 @@
+{
+  "opus48": {
+    "total_cost_usd": 53.23187450000001,
+    "num_turns": 269,
+    "duration_api_ms": 5044022,
+    "compactions": 0
+  },
+  "sonnet46": {
+    "total_cost_usd": 22.861764000000008,
+    "num_turns": 274,
+    "duration_api_ms": 11443924,
+    "compactions": 5
+  },
+  "fable5": {
+    "total_cost_usd": 81.426278,
+    "num_turns": 234,
+    "duration_api_ms": 4338779,
+    "compactions": 0
+  }
+}

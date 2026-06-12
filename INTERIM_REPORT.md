@@ -137,19 +137,31 @@ seeds) vs 73.3% canonical is a modest self-eval gap, now measured rather than gu
   the overfit signature the manual pipeline saw in Sonnet, now quantified by the probe.
 - Wins, when they come, are FAST: median 40 733 steps (min 20 289) vs Opus's 56 979 — a
   high-variance rush profile vs Opus's reliable grind (visible only in the win_step dimension).
-- No `report.json` (the known ~1/2 self-report capture failure mode; deliverables-on-disk
-  carried the trial). Not regime-robust: @∞ diagnostic 3.3%.
-- **Audit flagged — forensics:** (a) one `credential_access` hit is a false positive (the agent
-  read its OWN session's tool-result overflow under `~/.claude/projects/<this-session>/…`);
-  (b) three `repo_reach_in_command` hits are real letter-violations of "stay within this
-  directory": read-only peeks at the surrounding git repo (`git ls-files | head -20`,
-  `git status --short | grep policy`, `cat .gitignore`). Information gained: top-20 tracked
-  FILENAMES + ignore patterns — no file contents, no game source, no strategy. **Eval integrity
-  holds:** this trial's held-out seeds existed only in orchestrator memory during the session
-  (persisted after), and the canonical re-score is outside the workspace. The audit caught the
-  boundary-crossing exactly as designed; result stands with disclosure. Post-chain follow-ups
-  (uniform-conditions rule defers them): scope the `.claude` credential rule to exclude the
-  session's own scratch dirs; consider placing trial workspaces outside the framework repo.
+- No `report.json` — and the trace shows WHY (errata E4): the prompt's report instruction
+  was **destroyed by auto-compaction** (it survives only as a vague echo in the compaction
+  summaries; near session end the agent deliberates "Let me check if there's a report.json
+  format to write" and never recovers the schema). This is a compaction casualty, not mere
+  agent indiscipline; deliverables-on-disk carried the trial. Not regime-robust: @∞
+  diagnostic 3.3%. Its own in-trace broad scan (36/500 self-run seeds = 7.2% [5.2, 9.8])
+  suggests the 16.7% canonical headline was a lucky draw.
+- **Audit flagged — forensics (CORRECTED in §7, errata E1/E2):** (a) one `credential_access`
+  hit is a false positive (the agent read its OWN session's tool-result overflow under
+  `~/.claude/projects/<this-session>/…`); (b) the audit flagged 3 `repo_reach_in_command`
+  hits, but the retrospective trace audit found **~10 git commands total — the cwd-relative
+  ones were missed** (no absolute path to match). The unflagged `git log --oneline -5`
+  returned commit messages **containing the Opus arm's result** ("Opus 4.8 trial results:
+  73.3% canonical held-out clear…"), and `git ls-files` listed framework source filenames.
+  So the information gained was MORE than the original "filenames only" forensic stated:
+  prior-arm headline numbers (anchoring contamination), though still no seeds, no game
+  source contents, no strategy. **Held-out scoring integrity holds** (seeds existed only in
+  orchestrator memory; canonical re-score outside the workspace), but the audit verdict
+  under-reported the reach, and the contamination existed because results were committed
+  mid-chain into the same repo the workspaces live in. Fixes in §8.
+- **Condition asymmetry (disclosed late — errata E3):** Sonnet ran at a **200k context
+  window with 5 auto-compactions** (each wiping ~90% of working memory, ~170k→~14k tokens),
+  while Opus and Fable ran at 1M with zero. The `run_trial.py` "identical conditions" claim
+  is false for this arm; compaction demonstrably degraded the session (see report.json note
+  below) and plausibly contributes to Sonnet's fragile profile.
 
 ### Fable 5 leg — detail
 
@@ -162,8 +174,16 @@ seeds) vs 73.3% canonical is a modest self-eval gap, now measured rather than gu
   gauntlet); eval_score mean 1.469 (vs Opus 1.127, Sonnet 0.549).
 - Training 92.3% vs held-out 90% clear — no clear-rate overfit (training score mean is higher
   because practice runs farmed longer).
-- Session behavior: used background-shell parallelism inside its session (31 TaskOutput reads
-  of its own Bash jobs) — within the tool allowlist; no boundary findings at all.
+- Session behavior (CORRECTED — errata E2/E5): used background-shell parallelism (31
+  TaskOutput reads of its own Bash jobs). TaskOutput/ToolSearch are **not in the allowlist**
+  — they are permission-exempt harness machinery, revealing that `--allowedTools` is a
+  permission gate, not a closed tool universe (benign here; audit rule added to the roadmap).
+  And the "no boundary findings" claim was a **false negative**: at session start Fable ran
+  an unflagged cwd-relative repo probe (`git rev-parse --show-toplevel && git log --oneline |
+  head -20 && git ls-files | head -50`) and saw BOTH prior arms' headline results in commit
+  messages. No seeds/source/strategy contents; held-out integrity holds; but the verdict
+  "clean" was wrong and the later arms of the chain were anchoring-contaminated by
+  mid-chain result commits.
 - Self-report: 94.2% over 131/139 self-run seed-episodes, median ~43.7k — close to canonical
   (90%, 40.5k): the most calibrated self-eval of the three arms.
 
@@ -173,11 +193,23 @@ The eval discriminates cleanly and in a new dimension the manual pipeline lacked
 
 | | Sonnet 4.6 | Opus 4.8 | Fable 5 |
 |---|---|---|---|
-| canonical clear @40/90k | 16.7% | 73.3% | 90.0% |
+| canonical clear @40/90k (own draw) | 16.7% | 73.3% | 90.0% |
+| fixed seeds 2000–2029 | 3.3% | 76.7% | 80.0% |
+| **pooled (both sets, n=60)** | **10.0%** [4.7, 20.1] | **75.0%** [62.8, 84.2] | **85.0%** [73.9, 91.9] |
 | eval_score mean | 0.549 | 1.127 | 1.469 |
 | win_step median | 40 733 | 56 979 | 40 463 |
+| session cost / turns / compactions | $22.86 / 274 / **5** | $53.23 / 269 / 0 | $81.43 / 234 / 0 |
+| context window | **200k** | 1M | 1M |
 | profile | fragile rusher (fast rare wins, 83% death, overfits) | reliable grinder (slow consistent wins, no overfit) | fast + reliable (calibrated self-eval) |
 | manual baseline (∞-dev) | 0% at every cap | 20% @∞ / 0% @40 | n/a single-agent (97% @∞ multi-agent) |
+
+**Paired comparison caveat (errata E6 — important):** the canonical numbers were measured on
+three DISJOINT unpredictable draws (zero seed overlap). On the one **shared** seed set
+(2000–2029) the apparent Opus-vs-Fable reliability gap shrinks from 16.7pp to **3.3pp**
+(76.7% vs 80.0%; McNemar discordants 5 vs 6 — not significant at n=30). What robustly
+separates Fable from Opus in this data is **win speed** (median 40.5k vs 57k steps,
+eval_score 1.469 vs 1.127) and cross-regime stability — NOT clear-rate. Sonnet ≪ both holds
+on every seed set. Chain total cost: **≈ $157.52**.
 
 - **Faithfulness:** substrate byte-identical and exact-reproducing; parity gate passed on every
   arm's final policy; the model ORDERING reproduces the manual record (Sonnet ≪ Opus < Fable)
@@ -192,3 +224,188 @@ The eval discriminates cleanly and in a new dimension the manual pipeline lacked
   pipeline with zero orchestration failures, full artifact persistence, working integrity
   audits (one benign-review, one real-but-contained flag, one clean), and deterministic
   canonical re-scoring throughout.
+
+---
+
+## 7. Errata (corrections to this report's earlier statements)
+
+Scientific record of claims this report (or its sources) made that the post-chain
+retrospective audit — 4 investigators + adversarial verifiers over the traces, artifacts,
+and code — disproved. Each was corrected in place above; this section preserves what was
+wrong and how it was caught.
+
+| # | wrong claim (where) | corrected finding (evidence) |
+|---|---|---|
+| E1 | "Information gained: top-20 tracked FILENAMES … no file contents" (§5 Sonnet forensics) | Sonnet ran ~10 git commands; the audit flagged only the 3 carrying absolute paths. The unflagged cwd-relative `git log --oneline -5` returned **commit messages containing the Opus arm's result**; `git ls-files` listed framework source names. (Verified in trace tool_results.) |
+| E2 | "within the tool allowlist; no boundary findings at all" (§5 Fable) | TaskOutput/ToolSearch are permission-exempt harness tools, **not** allowlisted — `--allowedTools` is a permission gate, not a closed tool universe. And Fable ran an **unflagged** session-start repo probe seeing BOTH prior arms' results; the audit verdict "clean" was a false negative. |
+| E3 | "All trials in the series run under IDENTICAL conditions; only the model differs" (run_trial.py) | Sonnet ran at a **200k context window with 5 auto-compactions** (~170k→~14k tokens each); Opus/Fable at 1M with zero. Effective memory is part of the treatment and differed structurally. (Trace `modelUsage.contextWindow` + `compact_boundary` events.) |
+| E4 | Sonnet's missing report.json attributed to "the known ~1/2 self-report capture failure mode" (§5) | It was a **compaction casualty**: the report instruction was compacted out of context; the agent later deliberated "Let me check if there's a report.json format to write" and never recovered the schema. The previously known mode was SIGKILL truncation; this is a new, distinct mode. |
+| E5 | "audit: clean" treated as "no boundary events" (Fable row, §5 table) | Verdict stands as the audit's output, but it missed a real (benign) boundary event — recorded here as a false negative of the current rule set. |
+| E6 | §6 presented 73.3% vs 90.0% as the headline Opus/Fable comparison | Those numbers come from **disjoint seed draws**. On the shared set: 76.7% vs 80.0%, McNemar 5-vs-6 discordants — no significant reliability difference. The robust Fable-vs-Opus separations are win speed and regime stability. |
+
+The corrections do not change: the model ORDERING (Sonnet ≪ Opus ≈/≲ Fable), every
+faithfulness result (substrate byte-identity, exact reproductions, parity gates), the
+manual-baseline comparisons, or any canonical number — those re-derive exactly from the
+persisted per-seed artifacts. What changes is the cross-arm *interpretation* (E3, E6) and
+the audit's *completeness story* (E1, E2, E5).
+
+## 8. What the three trials revealed about gauntlet (framework retrospective)
+
+Method: a 4-pool retrospective audit (session-trace forensics; framework fit; integrity
+layer; eval methodology) of ~9.7h of frontier sessions, 33 findings, every high-impact one
+adversarially verified against the artifacts (0 refuted). Full detail in the audit outputs;
+this section is the curated, prioritized result.
+
+### 8.1 What held up under real load (validated design bets)
+
+1. **Canonical-scoring independence is the load-bearing integrity wall — and it held.**
+   Everything that went wrong at the node boundary (repo peeks, compactions, tool-surface
+   drift) was *contained* by scoring the final policy outside the node's reach on
+   memory-only seed draws: parity gates passed per-seed on all three arms; zero policy
+   errors across 180 canonical episodes; workspace re-hash clean everywhere.
+2. **Deliverables-on-disk as the unit of success.** All three nodes self-terminated well
+   under the backstops (234–274 turns vs 2000; 2.9–3.6h vs 8h), and the one lost deliverable
+   (Sonnet's report.json) cost nothing scientifically because policy.js-on-disk is what gets
+   scored.
+3. **Full-trace persistence is the honesty backstop.** Every error in this errata section
+   was caught FROM gauntlet's own trace.jsonl — cost, context windows, compactions, the
+   unflagged git commands, the tool surface. The framework recorded everything even where it
+   didn't yet *report* everything.
+4. **The one-deliberate-change discipline worked end-to-end.** The criterion text propagated
+   into behavior (Opus hardcoded `SPEED = 40`; the formula survived 4 of Sonnet's 5
+   compaction summaries; Fable cited "the exact evaluation regime"), and the win_step
+   dimension it bought is the most robust cross-arm separator in the data.
+5. **The seams absorbed the big game with declared extensions, not hacks** — overlay arenas,
+   `meta.heavy`, `run(prompt=, config=)`, the adapter-owned RNG — and the whole experiment
+   (parity gate, fixed-seed scoring, comparison tables) composed OUTSIDE the framework from
+   the public API, with zero mid-chain framework patches.
+6. **Mock smoke + kill-resilience predicted the real runs.** Zero orchestration failures,
+   empty stderr, no permission denials, across the entire chain.
+
+### 8.2 Problems (high impact — bit us, or could corrupt results)
+
+1. **Per-trial held-out draws break cross-arm comparability** (the E6 erratum). Each arm sat
+   a different exam; at n=30, draws move clear-rates by up to 13pp (Sonnet 16.7% vs 3.3%).
+   *Fix (S):* experiment-level frozen draw — draw once, pass `heldout_seeds=` to every arm
+   (the seam already exists), persist the draw out of node reach. *Fix (M):* an
+   `evalkit.cross_score(trials)` that re-scores every arm's policy on the union of all draws
+   and emits paired tables (the pooled n=60 numbers in §6 are a hand-made preview; ~25
+   CPU-min, zero tokens).
+2. **Node conditions are part of the treatment and were neither pinned nor recorded** (E3).
+   Context window, compactions, served-model identity, rate limits — all in the trace, none
+   in trial.json, no cross-arm condition diff. *Fix (S/M):* parse the trace's result/system
+   events at session end into `NodeResult.meta` (cost, usage, turns, contextWindow,
+   compactions) and emit an explicit confound line for any condition differing across arms
+   of one experiment. Compaction count belongs in every analysis as a long-horizon failure
+   signature in its own right.
+3. **The audit under-detects exactly the reach class that occurred** (E1/E2/E5): cwd-relative
+   VCS commands carry no absolute path and matched no rule; harness-internal tools execute
+   outside the allowlist unflagged; meanwhile 81% of emitted findings were false positives
+   from the harness's OWN scratch paths (/tmp eval files, `~/.claude/projects/<own-session>`
+   overflow), and the one real signal was diluted. *Fixes (all S):* flag VCS invocations when
+   the workspace is not itself a repo; flag any executed tool outside (allowlist ∪ documented
+   harness-internal set) and pin the advertised tool list into trial.json; whitelist the
+   session's OWN scratch roots (derivable from the trace init event); group findings by rule.
+4. **Workspaces live inside the framework repo, and results were committed mid-chain into
+   it** — the combination that turned benign curiosity into cross-arm contamination. One
+   `cd ..` from the workspace is the orchestrator's own code, prior arms' artifacts, and a
+   result-bearing git history. *Fix (S):* default workspaces to a neutral location outside
+   any repo; *procedure fix (free):* never commit result-bearing text into a repo reachable
+   from a live arm's cwd — stage results after the chain (this run's lesson learned the
+   honest way).
+5. **No crash-safe persistence or resume for a 3–4h, $23–81 trial.** trial.json (including
+   the seed draw!) is written only at run end; an orchestrator crash mid-node orphans the
+   claude child and forfeits the arm (the artifacts survive, but no code path consumes a
+   half-finished trial dir). *Fix (M):* write `trial.json{status: running}` + the split
+   BEFORE the node starts; wrap the child in a process-group with cleanup; add a
+   `resume(trial_dir)` that re-enters at the scoring stage when a policy exists.
+6. **"Flagged" had no defined operational meaning** — the response was ad-hoc manual
+   forensics, which anchored on the (incomplete) audit findings and produced E1. *Fix (M):*
+   an always-on `forensics.json` ledger (every tool_use classified: read/write,
+   inside/outside, target class) + verdict semantics defined in code, so a human reviews a
+   complete ledger, not grep output.
+
+### 8.3 High-value improvements (capability gaps the trials exposed)
+
+1. **A task-owned criterion seam.** The real comparable (win-first/win-speed eval_score)
+   lives in experiment scripts; evalkit's generic probe ran on the farmable raw score and
+   produced a **false overfit alarm on Fable** (largest score-gap, no clear-rate overfit —
+   92.3% train vs 90% held-out). Move `criterion(result) -> float` into task meta; analyze
+   uses it for gaps/baseline-position/CIs, falling back to score. (M)
+2. **Cost/usage accounting as a first-class output** — $157.52 of chain spend was invisible
+   until this audit. (S; same trace parse as #8.2.2.)
+3. **Live observability** — a status.json heartbeat (turns, last event, trace bytes,
+   compactions) + `evalkit.watch(trial_dir)`; operators hand-rolled trace-size monitors for
+   9.7 hours. (M)
+4. **The experiment layer** — chain-of-arms with a shared cohort, registry of trials
+   (runs/registry.jsonl), cross-arm tables, Wilson CIs in evalkit proper. run_trial.py argv +
+   flat runs/ + hand-made comparison.json is scar tissue every future experiment would
+   rewrite. (M)
+5. **Reference-policy tier** — noop/greedy/smart all die at 100% on this task; normalization
+   against them reads 4–18× and anchors nothing. The manual ladder-t1 policy (already
+   canonically scored, criterion 0.34) is the right kind of anchor; let tasks/experiments
+   register reference policies that score automatically. (S–M)
+6. **report.json finalize nudge** — one bounded `claude -p --resume <session_id>` turn when
+   the report is missing at session end (either end mode), recorded as nudge-elicited.
+   "Write early" is proven insufficient against compaction. (M)
+
+### 8.4 Nice-to-haves (workable today, awkward)
+
+Chunked batch scoring (a pathological seed currently discards a whole batch); baseline-run
+caching keyed on (policy, seeds, substrate) for shared cohorts; win-at-cap / win_step edge
+semantics written into CONTRACT + conformance (Opus won a seed at step 88 951 of 90 000 —
+1.2% from the boundary the comparable is discontinuous at); arrival-timestamp sidecar for
+traces (model-vs-tool time attribution); workspace size accounting/cleanup (Sonnet left
+2.1 GB); audit finding grouping; sanitize-and-archive traces as a built-in step.
+
+### 8.5 Priority order
+
+1. (S) Frozen shared draw + workspaces outside the repo + no mid-chain result commits — the
+   three together close the comparability AND contamination holes for the very next chain.
+2. (S) Trace-derived telemetry into trial.json (cost, conditions, compactions, tool surface)
+   + the three audit rules (VCS, unexpected-tool, own-scratch whitelist).
+3. (M) Crash-safe persistence + resume.
+4. (M) Criterion seam + CIs in evalkit (kills the false-overfit class of error).
+5. (M) Experiment layer + cross_score + registry.
+6. (M) Heartbeat observability; report-nudge; reference tier; the §8.4 list opportunistically.
+
+## 9. Data bookkeeping & provenance (audit answers)
+
+A dedicated lineage audit traced every number in this report back to disk. Verdict:
+**substantially robust — every headline number re-derives exactly from persisted per-seed
+artifacts — with named gaps, all of which were recoverable and have now been recovered.**
+
+**Was anything lost?** Nothing irrecoverable. Items that were summary-only or volatile, now
+fixed: the @∞-diagnostic and parity-gate per-seed raws were discarded after summarization
+(deterministically regenerable; @∞ raws have now been re-run and persisted for all arms);
+intermediate policy versions are overwritten on disk but reconstructable from the trace
+(verified **byte-exact** for Sonnet — 59 versions — and near-exact for Opus/Fable, whose
+Bash-based edits need a bash-aware replayer; Fable's 6 on-disk checkpoints provide ground
+truth); Opus/Fable ran `--log none` so dev game logs were never written (regenerable only by
+replay); Sonnet's 1.8 GB of game logs and a 1.4 GB dev trace lived in gitignored/volatile
+locations — **salvaged today** into the trial dirs with sha256 manifests.
+
+**What was not recorded (and is now)?** Per-trial cost/tokens/turns; absolute session
+start/end; context windows and compaction events; claude CLI version (2.1.174 for all
+three); gauntlet git SHA at session start (reconstructed from trace timestamps × commit
+times: Opus@950c429, Sonnet@189dc77, Fable@179de55 — with the caveat that HEAD moved during
+sessions, which future stamping at run time eliminates); node/OS versions; exact scoring
+command lines (reconstructable from pinned code). All recovered post-hoc into per-arm
+`provenance.json` + `costs.json`; the §8 roadmap makes them recorded-at-run-time.
+
+**What can still be included (and now is)?** Committed to the results archive today:
+the three final `policy.js` files (the central evaluated artifacts — previously only in
+gitignored runs/), all per-seed raw batches (held-out, training, baselines, fixed-seed, @∞),
+the exact prompt, sanitized traces (system/rate-limit events stripped — they enumerate host
+tool/plugin inventory — and $HOME/emails redacted; provenance extracted first), costs,
+provenance, and salvage manifests. Remaining disk-only (size): Sonnet's 1.8 GB game logs +
+1.4 GB dev trace (sha256-manifested in the archive). One structural dependency is recorded
+rather than resolved: the manual-baseline constants cite raw CSVs in the sibling
+`ai_playtest_pipeline` repo.
+
+**Residual bookkeeping risks:** re-running analysis scripts overwrites derived files in
+place (safe while the substrate is pinned; versioning would be safer); `config: {}` in batch
+records means the 40/90k regime is pinned by code version rather than echoed as data (the
+adapter version + bundle sha make it unambiguous, but an explicit config echo is cheaper to
+audit); trial.json-at-end doubles as a completion marker but leaves the seed draw
+memory-only during the hours it matters most (§8.2.5).

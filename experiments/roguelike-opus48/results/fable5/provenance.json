@@ -1,0 +1,115 @@
+{
+  "trial": "roguelike-fable5-max",
+  "session": {
+    "session_id": "b48450d2-e496-4536-8cfa-eccb1be304db",
+    "model": "claude-fable-5",
+    "tools": [
+      "AskUserQuestion",
+      "Bash",
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "DesignSync",
+      "Edit",
+      "EnterPlanMode",
+      "EnterWorktree",
+      "ExitPlanMode",
+      "ExitWorktree",
+      "Glob",
+      "Grep",
+      "LSP",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "Read",
+      "RemoteTrigger",
+      "ScheduleWakeup",
+      "Skill",
+      "TaskCreate",
+      "TaskGet",
+      "TaskList",
+      "TaskOutput",
+      "TaskStop",
+      "TaskUpdate",
+      "ToolSearch",
+      "Workflow",
+      "Write"
+    ],
+    "claude_code_version": "2.1.174",
+    "version": null,
+    "cwd": "/Users/REDACTED/gauntlet/runs/roguelike-fable5-max/workspace"
+  },
+  "session_start": "2026-06-12T09:58:48.047Z",
+  "session_end": "2026-06-12T13:09:10.651Z",
+  "result_event": {
+    "subtype": "success",
+    "num_turns": 234,
+    "duration_ms": 11448107,
+    "duration_api_ms": 4338779,
+    "total_cost_usd": 81.426278,
+    "usage": {
+      "input_tokens": 57935,
+      "cache_creation_input_tokens": 601794,
+      "cache_read_input_tokens": 57659539,
+      "output_tokens": 222995,
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 601794,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 1204,
+          "output_tokens": 984,
+          "cache_read_input_tokens": 403418,
+          "cache_creation_input_tokens": 599,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 599
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "modelUsage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 1674,
+        "outputTokens": 17,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 0.001759,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000
+      },
+      "claude-fable-5": {
+        "inputTokens": 57935,
+        "outputTokens": 222995,
+        "cacheReadInputTokens": 57659539,
+        "cacheCreationInputTokens": 601794,
+        "webSearchRequests": 0,
+        "costUSD": 81.424519,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 64000
+      }
+    },
+    "permission_denials": [],
+    "session_id": "b48450d2-e496-4536-8cfa-eccb1be304db"
+  },
+  "compact_boundary_events": [],
+  "rate_limit_events": 2,
+  "context_windows": {
+    "claude-haiku-4-5-20251001": 200000,
+    "claude-fable-5": 1000000
+  },
+  "gauntlet_git_sha_at_session_start": "434cee41adbd",
+  "node_version_now": "v24.11.1",
+  "macos_version_now": "26.3.1",
+  "note": "Reconstructed post-hoc from trace.jsonl + git log (bookkeeping audit 2026-06-12). git SHA = last commit before session start; HEAD moved during sessions, so scoring/analysis code versions are the commits noted in WORKLOG. Future trials should stamp this at run time."
+}

@@ -1,0 +1,26 @@
+{
+  "tmp_salvage": [
+    {
+      "file": "t3.jsonl",
+      "bytes": 5683805,
+      "sha256": "17e90251749a44cf76dc787b6c70024c6607d33f2c01b87859247b49ad26381f",
+      "from": "/tmp/t3.jsonl"
+    },
+    {
+      "file": "trace_full.jsonl",
+      "bytes": 13926076,
+      "sha256": "4e407ca7dbe5434bea831f3861cb4eda966a4d90636023b7c9ff27161372cfd1",
+      "from": "/tmp/trace_full.jsonl"
+    },
+    {
+      "file": "trace_b.jsonl",
+      "bytes": 1416568918,
+      "sha256": "4301087360ee4a1c19c03d3d805a379062e61e14c3ae838a975be8f53f1bb064",
+      "from": "/tmp/trace_b.jsonl"
+    }
+  ],
+  "game_logs": {
+    "count": 2675,
+    "bytes": 1955595315
+  }
+}
