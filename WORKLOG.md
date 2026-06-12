@@ -149,3 +149,48 @@ score_policy() wrapper exported as DESIGN advertises.
 
 **Final state: gym 105/105, evalkit 46/46, mock e2e + tamper e2e + 2 real `claude -p`
 trials green. STOPPING here per spec — the big roguelike is deliberately not wired.**
+
+## 2026-06-11/12 — FIRST REAL TRIAL: the big roguelike × Opus 4.8, through gauntlet
+
+New assignment (supersedes the earlier stop-line): run gauntlet's first real trial on the
+manual-pipeline roguelike, entirely through the framework. Mapping + deltas:
+`experiments/roguelike-opus48/MAPPING.md`. Comparison baseline = `ladder-t1` (manual Opus
+4.8/max, v1 ∞-regime): held-out 20% clear @90k@∞ (6/30, converged), 0% at every finite cap
+tested; wins at 25k–76k steps; self-report ~51% vs canonical 20% (overfit).
+
+Wiring (commit 950c429):
+- `gym/tasks/roguelike/` — the 7 template-v2 workspace files vendored byte-identically
+  (sha256-verified against `TEMPLATE_VERSIONS.md`); thin adapter `env.js` maps to the
+  metrics envelope (`score` = in-game composite unchanged; `progress`; `done_reason`;
+  `win_step`), pins the eval regime structurally (speed_cap 40 / frame_skip 1 / 90k),
+  sanitizes actions, clones terminal obs. `meta.heavy` + `meta.arena.overlay_dir`.
+- **RNG ownership** (the landmine): the bundle installs its own global Math.random at
+  load; gauntlet's harness installs a safety net per episode — last-install-wins would
+  silently fork canonical trajectories from subject-observed ones. Fix: each adapter env
+  owns a SeededPRNG seeded exactly like the bundle's own and re-installs it before EVERY
+  reset/step (also gives cross-instance isolation); harness now re-installs its net per
+  episode. Proven by the **cross-runner determinism test**: 2000 steps byte-identical
+  between the vendored v2 runner (as a real subprocess) and the gauntlet adapter path.
+- Arena **overlay mode**: the subject workspace = the 7 v2 files byte-identical +
+  `manifest.json` only. Canonical scoring auto-falls-back to the REPO task (the arena
+  ships no gauntlet runner) — fully outside the node's reach.
+- Conformance for heavy tasks: capped battery config (same config both sides of every
+  determinism comparison), relaxed speed bound. All 18 conformance checks pass on the big
+  game. Suites: **gym 129/129, evalkit 46/46**.
+- evalkit: `run(prompt=, config=)`, scoring-mode auto-detect, `run_baselines(task=)`,
+  `score_policy` reused for the same-regime baseline.
+- Prompt = v2 `PROMPT.md` VERBATIM (sha-checked at assembly; refuses on drift) + the ONE
+  deliberate addition: the Step-3 scoring criterion (win prerequisite; earlier win =
+  higher; formula; in-game score is a reference — strategy-silent).
+
+Verification before any tokens:
+- **Mock smoke GREEN** (10s): full pipeline on the big game; every artifact persists;
+  workspace 7 files byte-identical to template v2; audit clean; 3 baselines ran.
+- **Kill-resilience GREEN**: stub node writes policy.js then hangs; SIGKILL at 8s
+  wall-clock; on-disk policy picked up and scored end-to-end.
+- **Substrate faithfulness**: manual verified clears reproduce EXACTLY on the vendored
+  bundle (2008→win@25129, 2011→win@26827); manual ∞-policy scored canonically @40/90k =
+  **0/30, 100% death, progress mean 0.3425** (matches the manual sweep's 0.32–0.37 band).
+
+Real run launched: `roguelike-opus48-max` — ONE Opus 4.8/max `claude -p` node, hardened
+recipe, **no horizon limit** (8h/2000-turn runaway backstops only). Expected 1–3h.
