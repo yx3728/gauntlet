@@ -41,8 +41,10 @@ module.exports = {
 const CROSS_STEPS = 2000;
 const CROSS_SEED = 11;
 
-test("[roguelike] golden pin: goldens below are for roguelike@2.0.0 (template v2)", () => {
-  assertEqual(roguelike.meta.version, "2.0.0", "version changed — re-pin goldens deliberately");
+test("[roguelike] golden pin: goldens below are for roguelike@2.1.0 (template v2)", () => {
+  // 2.0.0 -> 2.1.0 added ONLY meta.criterion (no trajectory change); goldens
+  // re-verified unchanged at the bump.
+  assertEqual(roguelike.meta.version, "2.1.0", "version changed — re-pin goldens deliberately");
 });
 
 test("[roguelike] cross-runner determinism: gauntlet adapter == vendored v2 runner (subprocess)", () => {

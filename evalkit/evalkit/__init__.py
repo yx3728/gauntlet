@@ -13,7 +13,7 @@ protocol and the metrics envelope), never on a task's specifics.
 from .seeds import SeedSplit, split_for
 from .boundary import BatchResult, run_policy_batch
 from .agents import AgentNode, NodeBudgets, NodeResult, MockNode, ClaudeCodeNode, develop
-from .eval import run, analyze, score_policy, run_baselines, Trial, Analysis
+from .eval import run, analyze, resume, score_policy, run_baselines, run_cohort, cross_score, wilson95, Trial, Analysis
 
 __all__ = [
     "SeedSplit",
@@ -28,6 +28,14 @@ __all__ = [
     "develop",
     "run",
     "analyze",
+    "resume",
+    "run_cohort",
+    "cross_score",
+    "wilson95",
+    "resume",
+    "run_cohort",
+    "cross_score",
+    "wilson95",
     "score_policy",
     "run_baselines",
     "Trial",

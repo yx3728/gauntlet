@@ -20,8 +20,9 @@ from pathlib import Path
 from .node import AgentNode, NodeBudgets, NodeResult
 from .mock import MockNode
 from .claude_code import ClaudeCodeNode
+from .trace_meta import extract_trace_meta
 
-__all__ = ["AgentNode", "NodeBudgets", "NodeResult", "MockNode", "ClaudeCodeNode", "develop"]
+__all__ = ["AgentNode", "NodeBudgets", "NodeResult", "MockNode", "ClaudeCodeNode", "develop", "extract_trace_meta"]
 
 
 def develop(
@@ -63,4 +64,11 @@ def develop(
     )
     if report_error:
         result.meta["report_parse_error"] = report_error
+    # v2: session conditions + cost, parsed from the trace (tolerant: {} for
+    # non-stream-json node kinds). This is what makes context window,
+    # compactions, served model, and spend RECORDED conditions instead of
+    # post-hoc forensics.
+    tm = extract_trace_meta(trace)
+    if tm:
+        result.meta["trace_meta"] = tm
     return result

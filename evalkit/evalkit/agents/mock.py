@@ -38,10 +38,16 @@ class MockNode(AgentNode):
             (workspace / "report.json").write_text(json.dumps(self.report, indent=2))
 
         trace_path = workspace.parent / "trace.jsonl"
+        # Shaped like a real stream-json session so trace-consuming paths (audit,
+        # telemetry extraction) run for real: init carries session/tools/version,
+        # result carries usage/cost/modelUsage.
         events = [
-            {"type": "system", "subtype": "init", "session_id": "mock", "tools": []},
+            {"type": "system", "subtype": "init", "session_id": "mock-session", "model": "mock",
+             "tools": ["Bash", "Read", "Write", "Edit", "Glob", "Grep"], "version": "0.0.0-mock",
+             "cwd": str(workspace), "timestamp": "1970-01-01T00:00:00Z"},
             {
                 "type": "assistant",
+                "timestamp": "1970-01-01T00:00:01Z",
                 "message": {
                     "content": [
                         {"type": "text", "text": "mock node: writing the fixed policy"},
@@ -49,7 +55,11 @@ class MockNode(AgentNode):
                     ]
                 },
             },
-            {"type": "result", "subtype": "success", "num_turns": 1},
+            {"type": "result", "subtype": "success", "num_turns": 1, "duration_ms": 1,
+             "duration_api_ms": 1, "total_cost_usd": 0.0, "permission_denials": [],
+             "usage": {"input_tokens": 0, "output_tokens": 0},
+             "modelUsage": {"mock": {"contextWindow": 0, "maxOutputTokens": 0}},
+             "session_id": "mock-session", "timestamp": "1970-01-01T00:00:02Z"},
         ]
         with open(trace_path, "w") as f:
             for e in events:

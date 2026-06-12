@@ -46,6 +46,36 @@ TRAVERSAL_IN_COMMAND_RE = re.compile(r"\.\./|/\.\.(?=[\s'\"/;)]|$)")
 EXPECTED_AGENT_FILES = {"policy.js", "report.json", "manifest.json"}
 EXPECTED_AGENT_DIRS = {"game_logs"}
 
+# Harness-internal tools that execute regardless of --allowedTools (the v1
+# retrospective proved the allowlist is a permission gate, not a closed tool
+# universe). Documented here so anything OUTSIDE allowlist+this set is flagged.
+HARNESS_INTERNAL_TOOLS = {"ToolSearch", "TaskOutput", "TaskStop", "Monitor", "StructuredOutput", "Skill"}
+
+# VCS clients: any invocation from a workspace that is NOT itself a repo is a
+# reach for the surrounding filesystem's history (the v1 chain's contamination
+# vector — cwd-relative `git log` carried no absolute path and matched no rule).
+VCS_RE = re.compile(r"(?:^|[\s;|&(])(git|hg|svn)\s")
+
+
+def _own_scratch_roots(workspace: Path, session: dict | None) -> list[str]:
+    """Locations the NODE HARNESS itself creates for this session (tool-result
+    overflow, background-task outputs, tmp scratch). Reads here are the
+    session's own working memory, not boundary crossings — the v1 audits were
+    81% false positives from exactly these paths."""
+    slug = str(workspace).replace("/", "-")
+    home = str(Path.home())
+    # Deliberately NARROW (matches the v1 false-positive data exactly): agent
+    # self-scratch under /tmp and the harness's session dirs. NOT $TMPDIR
+    # (/var/folders) — that would also swallow genuinely foreign paths.
+    roots = [
+        f"{home}/.claude/projects/{slug}",
+        "/tmp/",
+        "/private/tmp/",
+    ]
+    if session and session.get("cwd"):
+        roots.append(f"{home}/.claude/projects/" + str(session["cwd"]).replace("/", "-"))
+    return roots
+
 
 def _iter_tool_uses(obj):
     """Recursively yield {"type": "tool_use", ...} blocks from a JSON value."""
@@ -59,10 +89,22 @@ def _iter_tool_uses(obj):
             yield from _iter_tool_uses(v)
 
 
-def audit_trace(trace_path: str | Path, workspace: str | Path, repo_root: str | Path | None = None) -> dict:
+def audit_trace(
+    trace_path: str | Path,
+    workspace: str | Path,
+    repo_root: str | Path | None = None,
+    allowed_tools: tuple[str, ...] | None = None,
+    session: dict | None = None,
+) -> dict:
     trace_path = Path(trace_path)
     workspace = Path(workspace).resolve()
     repo_root = Path(repo_root).resolve() if repo_root else None
+    scratch = _own_scratch_roots(workspace, session)
+    workspace_is_repo = (workspace / ".git").exists()
+
+    def in_own_scratch(p: Path) -> bool:
+        sp = str(p)
+        return any(sp.startswith(r) for r in scratch)
 
     findings: list[dict] = []
     tool_counts: dict[str, int] = {}
@@ -87,6 +129,8 @@ def audit_trace(trace_path: str | Path, workspace: str | Path, repo_root: str | 
                 tool_counts[name] = tool_counts.get(name, 0) + 1
                 if name in ("WebFetch", "WebSearch") or name.startswith("mcp__"):
                     flag("high", "network_or_mcp_tool", name)
+                elif allowed_tools is not None and name not in allowed_tools and name not in HARNESS_INTERNAL_TOOLS:
+                    flag("review", "unexpected_tool", name)
                 inp = tu.get("input") or {}
                 if not isinstance(inp, dict):
                     continue
@@ -99,11 +143,14 @@ def audit_trace(trace_path: str | Path, workspace: str | Path, repo_root: str | 
                     p = Path(v).expanduser()
                     if p.name == "task.bundle.js":
                         flag("review", "bundle_read", f"{name} {k}={v}")
-                    if CREDENTIAL_RE.search(str(p)):
+                    if CREDENTIAL_RE.search(str(p)) and not in_own_scratch(p):
                         flag("high", "credential_access", f"{name} {k}={v}")
                     if p.is_absolute() and not p.resolve().is_relative_to(workspace):
-                        sev = "high" if (repo_root and p.resolve().is_relative_to(repo_root)) else "review"
-                        flag(sev, "absolute_path_outside_workspace", f"{name} {k}={v}")
+                        if in_own_scratch(p.resolve()) or in_own_scratch(p):
+                            flag("info", "own_session_scratch_read", f"{name} {k}={v}")
+                        else:
+                            sev = "high" if (repo_root and p.resolve().is_relative_to(repo_root)) else "review"
+                            flag(sev, "absolute_path_outside_workspace", f"{name} {k}={v}")
                     if "tasks/" in v and v.endswith("env.js"):
                         flag("high", "task_source_reach", f"{name} {k}={v}")
                 for k in COMMAND_FIELDS:
@@ -112,6 +159,8 @@ def audit_trace(trace_path: str | Path, workspace: str | Path, repo_root: str | 
                         continue
                     if NETWORK_RE.search(v):
                         flag("high", "network_command", v)
+                    if not workspace_is_repo and VCS_RE.search(v):
+                        flag("review", "vcs_in_nonrepo_workspace", v)
                     if TRAVERSAL_IN_COMMAND_RE.search(v):
                         flag("review", "parent_traversal_in_command", v)
                     if repo_root and str(repo_root) in v and str(workspace) not in v:
@@ -172,8 +221,8 @@ def audit_workspace(workspace: str | Path, manifest: dict) -> dict:
     return {"verdict": verdict, "findings": findings}
 
 
-def audit(trace_path, workspace, manifest: dict, repo_root=None) -> dict:
-    t = audit_trace(trace_path, workspace, repo_root)
+def audit(trace_path, workspace, manifest: dict, repo_root=None, allowed_tools=None, session=None) -> dict:
+    t = audit_trace(trace_path, workspace, repo_root, allowed_tools=allowed_tools, session=session)
     w = audit_workspace(workspace, manifest)
     order = {"clean": 0, "review": 1, "flagged": 2}
     verdict = max((t["verdict"], w["verdict"]), key=lambda v: order[v])

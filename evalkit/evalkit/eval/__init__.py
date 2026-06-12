@@ -5,15 +5,24 @@ seam and scores it on held-out seeds; `analyze` turns a trial into comparable
 numbers and failure localization.
 """
 
-from .api import Analysis, Trial, analyze, run, score_policy
+from .api import Analysis, Trial, analyze, resume, run, score_policy
 from .audit import audit, audit_trace, audit_workspace
 from .baselines import discover_baselines, run_baselines
+from .cohort import cross_score, run_cohort
+from .criterion import criterion_fn, criterion_summary, wilson95
 from .probe import diagnostic_probe
 from .scoring import summarize
 
 __all__ = [
     "run",
     "analyze",
+    "resume",
+    "score_policy",
+    "run_cohort",
+    "cross_score",
+    "criterion_fn",
+    "criterion_summary",
+    "wilson95",
     "score_policy",
     "Trial",
     "Analysis",

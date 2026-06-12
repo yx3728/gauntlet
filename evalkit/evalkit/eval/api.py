@@ -19,15 +19,59 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import datetime
+import os
+import platform
+import threading
+
 from ..agents import AgentNode, NodeBudgets, NodeResult, develop
 from ..boundary import BatchResult, default_gym_root, run_policy_batch
 from ..seeds import SeedSplit, split_for
 from .audit import audit
 from .baselines import run_baselines
+from .criterion import criterion_fn, criterion_summary
 from .probe import diagnostic_probe
 from .scoring import summarize
 
 PROMPT_TEMPLATE = Path(__file__).resolve().parents[1] / "agents" / "prompts" / "policy_dev.md"
+
+# v2: node workspaces default OUTSIDE any repo (the structural fix for v1's
+# cross-arm contamination — one `cd ..` from a workspace must reach nothing).
+DEFAULT_WORKSPACE_ROOT = Path.home() / ".gauntlet" / "workspaces"
+_REGISTRY_LOCK = threading.Lock()  # parallel arms append to one registry
+
+
+def _now_iso() -> str:
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _git_repo_above(path: Path) -> Path | None:
+    for p in [path, *path.parents]:
+        if (p / ".git").exists():
+            return p
+    return None
+
+
+def _provenance(repo_root: Path) -> dict:
+    """Stamped AT RUN START (v1 lesson: HEAD moved during sessions and the SHA
+    had to be reconstructed from timestamps)."""
+    prov = {"started_at": _now_iso(), "platform": platform.platform(),
+            "python": platform.python_version()}
+    try:
+        prov["node_version"] = subprocess.run(["node", "--version"], capture_output=True, text=True, timeout=10).stdout.strip()
+    except Exception:
+        pass
+    try:
+        sha = subprocess.run(["git", "-C", str(repo_root), "rev-parse", "--short=12", "HEAD"],
+                             capture_output=True, text=True, timeout=10)
+        if sha.returncode == 0:
+            prov["gauntlet_sha"] = sha.stdout.strip()
+            dirty = subprocess.run(["git", "-C", str(repo_root), "status", "--porcelain"],
+                                   capture_output=True, text=True, timeout=10)
+            prov["gauntlet_dirty"] = bool(dirty.stdout.strip())
+    except Exception:
+        pass
+    return prov
 
 
 @dataclass
@@ -94,6 +138,7 @@ class Analysis:
     training_summary: dict
     baseline_summaries: dict
     probe: dict
+    criterion: dict = field(default_factory=dict)  # the task-owned comparable (v2 seam)
 
     def to_dict(self) -> dict:
         return {
@@ -101,6 +146,7 @@ class Analysis:
             "node_name": self.node_name,
             "status": self.status,
             "audit_verdict": self.audit_verdict,
+            "criterion": self.criterion,
             "heldout_summary": self.heldout_summary,
             "training_summary": self.training_summary,
             "baseline_summaries": self.baseline_summaries,
@@ -111,6 +157,21 @@ class Analysis:
         """Human-readable markdown summary."""
         L = [f"# Analysis — {self.task_id} / {self.node_name}", ""]
         L.append(f"- status: **{self.status}**, audit: **{self.audit_verdict}**")
+        c = self.criterion
+        if c.get("kind") and c.get("heldout", {}).get("n"):
+            ch, ct = c["heldout"], c.get("training", {})
+            L.append(
+                f"- criterion `{c['kind']}` held-out (n={ch['n']}): mean **{ch.get('mean')}**, "
+                f"clear rate **{ch.get('clear_rate')}** {ch.get('clear_rate_wilson95')}"
+                + (f", win_step median {ch['win_step']['median']}" if ch.get("win_step") else "")
+            )
+            if ct.get("n"):
+                L.append(
+                    f"- criterion generalization: training clear {ct.get('clear_rate')} / mean {ct.get('mean')} "
+                    f"vs held-out clear {ch.get('clear_rate')} / mean {ch.get('mean')} (gap {c.get('gap')})"
+                )
+            for bname, bsum in sorted(c.get("baselines", {}).items()):
+                L.append(f"- criterion baseline `{bname}`: mean {bsum.get('mean')}, clear rate {bsum.get('clear_rate')}")
         h = self.heldout_summary
         if h.get("n"):
             score, prog = h.get("score", {}), h.get("progress", {})
@@ -183,6 +244,7 @@ def run(
     node_bin: str = "node",
     prompt: str | None = None,
     config: dict | None = None,
+    workspace_root: str | Path | None = None,
 ) -> Trial:
     """Full pipeline for ONE trial: arena -> agent node -> audit -> held-out
     scoring -> baselines. Returns a Trial (also fully persisted on disk).
@@ -211,25 +273,55 @@ def run(
         trial_dir = runs_dir / name
     trial_dir.mkdir(parents=True)
 
+    provenance = _provenance(repo_root)
+
     # 1. Pinned arena for this trial (canonical copy used for all scoring).
     arena_dir = trial_dir / "arena"
     manifest = _build_arena(task, arena_dir, gym_root, node_bin)
     split = split_for(manifest["training_seeds"], n_heldout=n_heldout, heldout_seeds=heldout_seeds)
 
-    # 2. Isolated workspace for the node (its own copy of the arena).
-    workspace = trial_dir / "workspace"
+    # 2. Neutral, OUT-OF-REPO workspace for the node. trial_dir (and with it the
+    #    frozen seed split, prior trials, and the framework itself) is not
+    #    reachable from the node's cwd by construction.
+    ws_root = Path(workspace_root).resolve() if workspace_root else DEFAULT_WORKSPACE_ROOT
+    ws_parent = ws_root / name
+    ws_parent.mkdir(parents=True, exist_ok=False)
+    repo_above = _git_repo_above(ws_parent)
+    if repo_above is not None:
+        shutil.rmtree(ws_parent, ignore_errors=True)
+        raise RuntimeError(
+            f"workspace root {ws_parent} sits inside a git repo ({repo_above}); "
+            "node workspaces must live outside any repo (v2 isolation rule) — pass workspace_root="
+        )
+    workspace = ws_parent / "workspace"
     shutil.copytree(arena_dir, workspace)
 
-    # 3. The black-box node develops a policy (the agents seam).
+    # 3. Crash-safe early persist: the split + running status exist on disk
+    #    BEFORE the (multi-hour) node starts; resume(trial_dir) can finish a
+    #    crashed trial from here.
     prompt_text = prompt if prompt is not None else PROMPT_TEMPLATE.read_text().replace("$ATTEMPTS", str(budgets.attempts))
     (trial_dir / "prompt.txt").write_text(prompt_text)
+    _persist_running(trial_dir, manifest, split, node.name, provenance, ws_parent,
+                     {"task": task, "config": config, "batch_timeout_s": batch_timeout_s,
+                      "gym_root": str(gym_root), "node_bin": node_bin})
+
+    # 4. The black-box node develops a policy (the agents seam).
     node_result = develop(workspace, prompt_text, node, budgets)
+    provenance["finished_at"] = _now_iso()
 
-    # 4. Integrity audit (trace + workspace tamper check).
+    # 5. Copy the node's outputs back into the trial dir (the persisted record);
+    #    the neutral dir is removed once the copy succeeds.
+    node_result = _collect_workspace(trial_dir, ws_parent, node_result)
+    workspace = trial_dir / "workspace"
+
+    # 6. Integrity audit (trace + workspace tamper check + tool-surface check).
     trace = node_result.trace_path or (trial_dir / "trace.jsonl")
-    audit_result = audit(trace, workspace, manifest, repo_root)
+    tm = node_result.meta.get("trace_meta", {})
+    audit_result = audit(trace, workspace, manifest, repo_root,
+                         allowed_tools=getattr(node, "allowed_tools", None),
+                         session=tm.get("session"))
 
-    # 5. Score the FINAL policy on the canonical substrate (held-out + training):
+    # 7. Score the FINAL policy on the canonical substrate (held-out + training):
     #    the pinned arena bundle when present, else the canonical repo task.
     if (arena_dir / "task.bundle.js").exists():
         score_kw = {"arena_dir": arena_dir}
@@ -240,7 +332,7 @@ def run(
         heldout = run_policy_batch(node_result.policy_path, split.heldout, **score_kw, config=config, timeout_s=batch_timeout_s)
         training = run_policy_batch(node_result.policy_path, split.training, **score_kw, config=config, timeout_s=batch_timeout_s)
 
-    # 6. Baselines on the same held-out seeds and the same pinned substrate.
+    # 8. Baselines on the same held-out seeds and the same pinned substrate.
     baseline_kw = dict(score_kw)
     baseline_kw.setdefault("gym_root", gym_root)
     baselines = run_baselines(task, split.heldout, config=config, timeout_s=batch_timeout_s, **baseline_kw)
@@ -259,11 +351,124 @@ def run(
         baselines=baselines,
         manifest=manifest,
     )
-    _persist(trial)
+    _persist(trial, provenance=provenance)
     return trial
 
 
-def _persist(trial: Trial) -> None:
+def _persist_running(trial_dir: Path, manifest: dict, split: SeedSplit, node_name: str,
+                     provenance: dict, ws_parent: Path, rerun: dict) -> None:
+    (trial_dir / "trial.json").write_text(
+        json.dumps(
+            {
+                "format": "gauntlet_trial_v1",
+                "status": "running",
+                "created_at": int(time.time()),
+                "task": manifest,
+                "node": {"node": node_name},
+                "split": {"training": list(split.training), "heldout": list(split.heldout)},
+                "provenance": provenance,
+                "workspace_parent": str(ws_parent),
+                "rerun": rerun,  # everything resume() needs to re-enter at scoring
+            },
+            indent=2,
+        )
+    )
+
+
+def _collect_workspace(trial_dir: Path, ws_parent: Path, node_result: NodeResult) -> NodeResult:
+    """Copy workspace + trace + stderr from the neutral location into the trial
+    dir, re-point NodeResult paths at the persisted copies, then remove the
+    neutral dir. On copy failure the neutral dir is left in place (data first)."""
+    dst_ws = trial_dir / "workspace"
+    shutil.copytree(ws_parent / "workspace", dst_ws, dirs_exist_ok=True)
+    for f in ("trace.jsonl", "stderr.log"):
+        src = ws_parent / f
+        if src.exists():
+            shutil.copy2(src, trial_dir / f)
+    if node_result.policy_path:
+        node_result.policy_path = dst_ws / "policy.js"
+    if node_result.trace_path and (trial_dir / "trace.jsonl").exists():
+        node_result.trace_path = trial_dir / "trace.jsonl"
+    shutil.rmtree(ws_parent, ignore_errors=True)
+    return node_result
+
+
+def resume(trial_dir: str | Path, *, batch_timeout_s: int | None = None, node_bin: str | None = None) -> Trial:
+    """Finish a crashed/killed trial: collect the neutral workspace if it still
+    exists, then re-enter at audit -> scoring -> baselines -> persist. Requires
+    a policy.js (deliverables-on-disk is the unit of success)."""
+    trial_dir = Path(trial_dir)
+    t = json.loads((trial_dir / "trial.json").read_text())
+    if t.get("status") == "complete":
+        return Trial.from_dir(trial_dir)
+    manifest = t["task"]
+    rerun = t.get("rerun", {})
+    task = rerun.get("task") or manifest["task_id"]
+    gym_root = Path(rerun.get("gym_root")) if rerun.get("gym_root") else default_gym_root()
+    repo_root = gym_root.parent
+    config = rerun.get("config")
+    timeout_s = batch_timeout_s or rerun.get("batch_timeout_s") or 600
+    nb = node_bin or rerun.get("node_bin") or "node"
+    split = SeedSplit(training=tuple(t["split"]["training"]), heldout=tuple(t["split"]["heldout"]))
+    provenance = t.get("provenance", {})
+    provenance["resumed_at"] = _now_iso()
+
+    ws_parent = Path(t.get("workspace_parent", ""))
+    if ws_parent.exists() and not (trial_dir / "workspace").exists():
+        node_result = NodeResult(node=t["node"]["node"], status="resumed", wall_ms=0)
+        node_result.trace_path = ws_parent / "trace.jsonl" if (ws_parent / "trace.jsonl").exists() else None
+        pol = ws_parent / "workspace" / "policy.js"
+        node_result.policy_path = pol if pol.exists() else None
+        node_result = _collect_workspace(trial_dir, ws_parent, node_result)
+    else:
+        pol = trial_dir / "workspace" / "policy.js"
+        tr = trial_dir / "trace.jsonl"
+        node_result = NodeResult(node=t["node"]["node"], status="resumed", wall_ms=0,
+                                 policy_path=pol if pol.exists() else None,
+                                 trace_path=tr if tr.exists() else None)
+    from ..agents.trace_meta import extract_trace_meta
+    tm = extract_trace_meta(node_result.trace_path)
+    if tm:
+        node_result.meta["trace_meta"] = tm
+    rep = trial_dir / "workspace" / "report.json"
+    if rep.exists():
+        try:
+            node_result.report = json.loads(rep.read_text())
+        except Exception:
+            pass
+
+    workspace = trial_dir / "workspace"
+    trace = node_result.trace_path or (trial_dir / "trace.jsonl")
+    audit_result = audit(trace, workspace, manifest, repo_root, session=tm.get("session") if tm else None)
+
+    arena_dir = trial_dir / "arena"
+    score_kw = {"arena_dir": arena_dir} if (arena_dir / "task.bundle.js").exists() else {"task": task, "gym_root": gym_root}
+    heldout = training = None
+    if node_result.policy_path:
+        heldout = run_policy_batch(node_result.policy_path, split.heldout, **score_kw, config=config, timeout_s=timeout_s)
+        training = run_policy_batch(node_result.policy_path, split.training, **score_kw, config=config, timeout_s=timeout_s)
+    baseline_kw = dict(score_kw)
+    baseline_kw.setdefault("gym_root", gym_root)
+    baselines = run_baselines(manifest["task_id"], split.heldout, config=config, timeout_s=timeout_s, **baseline_kw)
+
+    trial = Trial(
+        trial_dir=trial_dir,
+        task_id=manifest["task_id"],
+        task_version=manifest["task_version"],
+        status="complete" if node_result.policy_path else "no_policy",
+        node=node_result,
+        split=split,
+        audit=audit_result,
+        heldout=heldout,
+        training=training,
+        baselines=baselines,
+        manifest=manifest,
+    )
+    _persist(trial, provenance=provenance)
+    return trial
+
+
+def _persist(trial: Trial, provenance: dict | None = None) -> None:
     d = trial.trial_dir
     if trial.heldout:
         (d / "heldout.json").write_text(json.dumps(trial.heldout.to_dict(), indent=2))
@@ -284,10 +489,27 @@ def _persist(trial: Trial) -> None:
                 "node": trial.node.to_dict(),
                 "split": {"training": list(trial.split.training), "heldout": list(trial.split.heldout)},
                 "audit": trial.audit,
+                "provenance": provenance or {},
             },
             indent=2,
         )
     )
+    # Append-only trial registry (one line per completed trial).
+    tm = trial.node.meta.get("trace_meta", {})
+    reg = {
+        "name": d.name,
+        "created_at": int(time.time()),
+        "task_id": trial.task_id,
+        "task_version": trial.task_version,
+        "node": trial.node.node,
+        "status": trial.status,
+        "audit_verdict": trial.audit.get("verdict"),
+        "heldout_n": len(trial.split.heldout),
+        "cost_usd": tm.get("total_cost_usd"),
+        "compactions": tm.get("compaction_count"),
+    }
+    with _REGISTRY_LOCK, open(d.parent / "registry.jsonl", "a") as f:
+        f.write(json.dumps(reg) + "\n")
 
 
 def analyze(trial: Trial | str | Path) -> Analysis:
@@ -299,6 +521,22 @@ def analyze(trial: Trial | str | Path) -> Analysis:
     training_results = trial.training.results if trial.training and trial.training.ok else []
     baseline_results = {k: v.results for k, v in trial.baselines.items() if v.ok}
 
+    # The task-owned comparable (v2 criterion seam; falls back to raw score).
+    # v1 lesson: running the generalization probe on the farmable raw score
+    # produced a false overfit alarm — the gap below is on the criterion.
+    kind, fn = criterion_fn(trial.manifest.get("criterion"))
+    criterion_block: dict = {}
+    if heldout_results:
+        ch = criterion_summary(heldout_results, fn)
+        ct = criterion_summary(training_results, fn)
+        criterion_block = {
+            "kind": kind,
+            "heldout": ch,
+            "training": ct,
+            "gap": round((ct.get("mean") or 0) - (ch.get("mean") or 0), 4) if ct.get("n") else None,
+            "baselines": {k: criterion_summary(v, fn) for k, v in baseline_results.items()},
+        }
+
     analysis = Analysis(
         task_id=trial.task_id,
         node_name=trial.node.node,
@@ -308,6 +546,7 @@ def analyze(trial: Trial | str | Path) -> Analysis:
         training_summary=summarize(training_results),
         baseline_summaries={k: summarize(v) for k, v in baseline_results.items()},
         probe=diagnostic_probe(heldout_results, training_results, baseline_results) if heldout_results else {},
+        criterion=criterion_block,
     )
     (trial.trial_dir / "analysis.json").write_text(json.dumps(analysis.to_dict(), indent=2))
     (trial.trial_dir / "ANALYSIS.md").write_text(analysis.render())

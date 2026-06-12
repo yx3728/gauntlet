@@ -129,6 +129,7 @@ function writeManifest(outDir, meta, arenaMode) {
       : null,
     max_steps_default: meta.max_steps_default,
     training_seeds: meta.training_seeds,
+    criterion: meta.criterion || null, // the task-owned eval comparable (v2 seam)
     files,
   };
   fs.writeFileSync(path.join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");

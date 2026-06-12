@@ -33,7 +33,8 @@ const SPEED_CAP = 40; // px/tick — fixed for this task (the eval's number)
 const meta = {
   id: "roguelike",
   name: "Roguelike Skies (manual-trial v2 regime: speed_cap 40, 90k budget)",
-  version: "2.0.0", // tracks trial template v2; bump on ANY behavior change
+  version: "2.1.0", // 2.1.0 = +meta.criterion (eval-comparable declaration ONLY;
+  // game/trajectory semantics byte-identical to 2.0.0 — goldens unchanged)
   max_steps_default: CAP_DEFAULT,
   // Seed 1 is the default dev seed of the v2 template; the rest are the named
   // TRAINING_SEEDS baked into the vendored runner. Held-out seeds live
@@ -47,6 +48,9 @@ const meta = {
     { move: [8, 8], upgrade_choice: 2 },
   ],
   heavy: true, // full episodes run ~0.5-1.5s — conformance uses capped episodes
+  // The eval comparable (v2 criterion seam) — semantics identical to the v1
+  // experiment's eval_score: win -> 1+(cap-win_step)/cap in (1,2]; else progress.
+  criterion: { kind: "win_speed", cap: CAP_DEFAULT },
   arena: { overlay_dir: "vendor" }, // ship the byte-identical v2 workspace files
 };
 
