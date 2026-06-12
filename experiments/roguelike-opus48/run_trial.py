@@ -1,14 +1,19 @@
-"""The real trial: ONE Claude Opus 4.8 (effort=max) node on the roguelike,
-end-to-end through gauntlet, NO artificial horizon (8h wall / 2000 turns are
-RUNAWAY BACKSTOPS only — the prompt's "no budget" promise is operative; the
-session ends when the agent finishes its deliverables).
+"""One real trial: a single Claude node (model/effort from argv) on the
+roguelike, end-to-end through gauntlet, NO artificial horizon (8h wall / 2000
+turns are RUNAWAY BACKSTOPS only — the prompt's "no budget" promise is
+operative; the session ends when the agent finishes its deliverables).
 
-Usage: python3 experiments/roguelike-opus48/run_trial.py
+All trials in the series run under IDENTICAL conditions; only the model
+differs.
+
+Usage: python3 experiments/roguelike-opus48/run_trial.py [model] [trial_name]
+       (default: claude-opus-4-8 roguelike-opus48-max)
 """
 
 from __future__ import annotations
 
 import json
+import sys
 
 from common import REPO, build_prompt, heldout_table
 
@@ -17,7 +22,9 @@ from evalkit.agents import ClaudeCodeNode, NodeBudgets
 
 
 def main():
-    node = ClaudeCodeNode(model="claude-opus-4-8", effort="max")
+    model = sys.argv[1] if len(sys.argv) > 1 else "claude-opus-4-8"
+    trial_name = sys.argv[2] if len(sys.argv) > 2 else "roguelike-opus48-max"
+    node = ClaudeCodeNode(model=model, effort="max")
     budgets = NodeBudgets(wall_clock_s=8 * 3600, max_turns=2000)  # backstops, not budgets
     prompt = build_prompt()
 
@@ -28,7 +35,7 @@ def main():
         budgets=budgets,
         prompt=prompt,
         runs_dir=REPO / "runs",
-        trial_name="roguelike-opus48-max",
+        trial_name=trial_name,
         batch_timeout_s=7200,
     )
     print(f"trial dir: {trial.trial_dir}")
