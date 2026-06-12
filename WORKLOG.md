@@ -150,6 +150,44 @@ score_policy() wrapper exported as DESIGN advertises.
 **Final state: gym 105/105, evalkit 46/46, mock e2e + tamper e2e + 2 real `claude -p`
 trials green. STOPPING here per spec — the big roguelike is deliberately not wired.**
 
+## 2026-06-12 — gauntlet v2 (the §8 priority set) + first parallel cohort launched
+
+**Phase A (commit 448daea), all Tier-1+2 fixes, suites 129 JS / 63 py:**
+1. Frozen shared held-out draw — `run_cohort` freezes ONE draw (default n=80) before any
+   arm and passes `heldout_seeds=` everywhere; persisted in the cohort dir pre-arms.
+2. Workspaces OUTSIDE any repo — `run()` now copies the arena to a neutral root
+   (`~/.gauntlet/workspaces/<trial>`, refuses roots inside a git repo), the node runs
+   there, artifacts are collected back into the trial dir, neutral dir removed. The v1
+   contamination class (repo-reachable cwd) is closed structurally.
+3. Conditions/cost telemetry — `trace_meta.py` parses init/result/compact_boundary/
+   rate_limit events into `NodeResult.meta.trace_meta` → trial.json (cost, turns, context
+   windows, compactions, served model, CLI version); provenance (gauntlet SHA + dirty
+   flag, node/python/OS, started/finished ISO) stamped AT RUN START.
+4. Criterion seam — tasks declare `meta.criterion` (carried via the arena manifest);
+   `analyze` computes criterion summaries/gap/Wilson CIs on it (falls back to raw score).
+   roguelike@2.1.0 declares `win_speed` (semantics byte-identical to v1 eval_score;
+   trajectories unchanged — goldens stand).
+5. Crash-safe persist + `resume()` — trial.json{status:running}+split written BEFORE the
+   node; `_collect_workspace` copy-back; `resume(trial_dir)` re-enters at scoring;
+   ClaudeCodeNode kills its process group on ANY orchestrator exception.
+6. Audit trust — own-session scratch whitelist (narrow: /tmp + own ~/.claude/projects
+   slug → "info"), `vcs_in_nonrepo_workspace` rule (the missed v1 vector), 
+   `unexpected_tool` rule vs allowlist∪harness-internal set.
+7. Cohort runner — `run_cohort` (ThreadPool, frozen draw, per-rep+pooled criterion tables
+   with Wilson CIs, condition-diff confound detection, COHORT.md, registry.jsonl, arm
+   failures contained) + `cross_score`. Replaces the v1 hand-rolled scripts.
+
+**Phase A validation:** concurrency-4 MOCK cohort on the roguelike GREEN (44 checks):
+frozen draw reached every arm; workspaces outside any repo, collected, no leftovers;
+**byte-identical canonical scoring across 3 parallel same-policy arms**; telemetry/
+provenance/criterion/Wilson all populated; audit clean (v1 FP classes downgraded);
+crash→resume on the frozen draw byte-identical to live arms.
+
+**Phase B launched:** `cohort-v2-n2` — roguelike × {haiku45(+effort max, pre-flight
+verified), sonnet46, opus48, fable5} × 2 reps, concurrency 4, frozen draw n=80, fixed
+2000–2029 + v1-policy cross-scores as caveated refs, no horizon (8h/2000 backstops).
+Prompt = v1 byte-identical (sha-gated assembler). Results staged ONLY after the chain.
+
 ## 2026-06-11/12 — FIRST REAL TRIAL: the big roguelike × Opus 4.8, through gauntlet
 
 New assignment (supersedes the earlier stop-line): run gauntlet's first real trial on the
