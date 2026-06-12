@@ -194,3 +194,35 @@ Verification before any tokens:
 
 Real run launched: `roguelike-opus48-max` — ONE Opus 4.8/max `claude -p` node, hardened
 recipe, **no horizon limit** (8h/2000-turn runaway backstops only). Expected 1–3h.
+
+## 2026-06-12 — Opus 4.8 trial COMPLETE: 73.3% canonical held-out clear @40/90k
+
+In-flight review (28 agents) confirmed the wiring sound and caught reporting hazards before
+the report: MAPPING.md had misquoted the manual baseline (the raw 90k sweep shows Opus
+clears 3–7% at several finite caps — non-monotonic; cap 40 never swept; six ∞ win steps
+25129–78336) — corrected from the raw CSVs; added Wilson CIs, confounds checklist, policy
+provenance sidecar, a **parity gate** (subject runner vs canonical scorer on the final
+policy), and an ∞-regime diagnostic row (review's two policy-contingent divergence classes:
+exotic malformed moves; in-policy RogueEnv lookahead — neither occurred).
+
+The trial (commit 64d8663 wiring; results archived in `experiments/roguelike-opus48/results/opus48/`):
+- Node finished ON ITS OWN: status ok, **171.7 min**, 2.9h — backstop never fired. Tools:
+  135 Bash / 74 Edit / 21 Write / 38 Read; 3.8MB trace; report.json written mid-session.
+- **Canonical held-out (30 unpredictable seeds, 40/90k): 73.3% clear (22/30)**, Wilson95
+  [0.56, 0.86]; win_step median 56 978 (range 29 600–80 085); eval_score mean 1.127; zero
+  policy errors. Fixed seeds 2000–2029: 76.7% (23/30), win median 58 361.
+- Training 76.9% vs held-out 73.3% — no overfit (self-report ~87% is self-eval, modest gap).
+- Baselines on the same seeds: noop 1 872 / greedy 7 193 / smart 8 076 mean score; the
+  policy sits at 12.8 on the noop→greedy scale.
+- **Parity gate OK** (vendor runner == canonical scorer per-seed, all 8 fields). Audit
+  "review" = benign /tmp scratch reads only; workspace clean; no network/MCP/source reach.
+- The policy hardcodes `SPEED = 40` — the agent internalized the eval regime; @∞ its
+  trajectories are identical (cap non-binding by design; at cap 12 it dies — cap is live).
+- Headline vs the manual baseline: manual ∞-developed Opus = 20% @∞, **0/30 at this
+  40/90k regime**; gauntlet's 40-developed Opus = **73.3% at 40/90k** (and 76.7% at ∞) —
+  developing UNDER the eval regime + the win-first criterion transformed the outcome.
+  (Confounds: n=1, criterion+regime bundled — disclosed in MAPPING/report.)
+
+User directive: chain Sonnet 4.6/max then Fable 5/max serially, same conditions, after each
+successful completion (mechanical fixes only; design decisions stop for the user).
+Sonnet launched: `roguelike-sonnet46-max`.
