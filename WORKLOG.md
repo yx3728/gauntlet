@@ -289,3 +289,18 @@ Sonnet launched: `roguelike-sonnet46-max`.
 - `INTERIM_REPORT.md` finalized: faithfulness (substrate exact, ordering reproduces the manual
   record), the new win-speed dimension (separates Fable from Opus at similar reliability),
   treatment effect (every arm far above its ∞-developed manual counterpart at 40), confounds.
+
+## 2026-06-12 — PAUSED at user request (session limit), cohort running unattended
+
+State at pause: haiku45-r1/r2 + sonnet46-r1 COMPLETE (0/80, 0/80, 9/80 on the frozen
+draw); opus48-r1/r2, sonnet46-r2, fable5-r1 LIVE; fable5-r2 queued. The cohort runner
+(background process) finishes arms, scores canonically, writes cohort_report.json +
+COHORT.md on its own. v1 references already cross-scored onto the frozen draw
+(v1_policies_on_frozen_draw.json). Monitoring stopped.
+
+RESUME CHECKLIST (on user go-ahead): 1) verify all 8 trials complete (runs/cohort-v2-n2-*/
+trial.json status; `evalkit.resume(dir)` any stragglers); 2) python3
+experiments/cohort-v2/analyze_cohort.py (fixed-seed 2000-2029 scoring + final_comparison);
+3) inspect audits (haiku/sonnet "review" findings unchecked); 4) report sections (cross-arm
+table + CIs, condition documentation incl. ctx-window-confounded-with-tier caveat, v2
+self-validation, concurrency observations); 5) stage results post-chain; 6) flag N=3.
