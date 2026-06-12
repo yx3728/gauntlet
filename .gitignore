@@ -6,3 +6,4 @@ runs/
 .DS_Store
 *.egg-info/
 dist/
+smoke-stub-claude.sh

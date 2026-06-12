@@ -10,6 +10,7 @@ const path = require("path");
 const TASKS = {
   gridrun: "gridrun/env.js",
   forge: "forge/env.js",
+  roguelike: "roguelike/env.js",
 };
 
 function entryPath(id) {

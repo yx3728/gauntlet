@@ -181,11 +181,23 @@ def run(
     trial_name: str | None = None,
     batch_timeout_s: int = 600,
     node_bin: str = "node",
+    prompt: str | None = None,
+    config: dict | None = None,
 ) -> Trial:
     """Full pipeline for ONE trial: arena -> agent node -> audit -> held-out
     scoring -> baselines. Returns a Trial (also fully persisted on disk).
     Held-out seeds are drawn fresh per trial (see `seeds.split_for`) unless an
-    explicit `heldout_seeds=` set is given; the split is recorded in trial.json."""
+    explicit `heldout_seeds=` set is given; the split is recorded in trial.json.
+
+    `prompt` overrides the built-in task-agnostic dev prompt (verbatim text).
+    `config` is the task config used for ALL canonical scoring (policy held-out
+    + training + baselines) — passed through opaquely (CONTRACT.md).
+
+    Scoring substrate: if the built arena ships gauntlet's `task.bundle.js`
+    (standard arenas), scoring runs inside that pinned arena. Overlay arenas
+    (ported tasks shipping their own surface, e.g. a reproduced external trial
+    workspace) carry no gauntlet runner, so scoring runs through the canonical
+    REPO task module instead — equally outside the node's reach."""
     budgets = budgets or NodeBudgets()
     gym_root = Path(gym_root).resolve() if gym_root else default_gym_root()
     repo_root = gym_root.parent
@@ -209,22 +221,29 @@ def run(
     shutil.copytree(arena_dir, workspace)
 
     # 3. The black-box node develops a policy (the agents seam).
-    prompt = PROMPT_TEMPLATE.read_text().replace("$ATTEMPTS", str(budgets.attempts))
-    (trial_dir / "prompt.txt").write_text(prompt)
-    node_result = develop(workspace, prompt, node, budgets)
+    prompt_text = prompt if prompt is not None else PROMPT_TEMPLATE.read_text().replace("$ATTEMPTS", str(budgets.attempts))
+    (trial_dir / "prompt.txt").write_text(prompt_text)
+    node_result = develop(workspace, prompt_text, node, budgets)
 
     # 4. Integrity audit (trace + workspace tamper check).
     trace = node_result.trace_path or (trial_dir / "trace.jsonl")
     audit_result = audit(trace, workspace, manifest, repo_root)
 
-    # 5. Score the FINAL policy in the canonical arena (held-out + training).
+    # 5. Score the FINAL policy on the canonical substrate (held-out + training):
+    #    the pinned arena bundle when present, else the canonical repo task.
+    if (arena_dir / "task.bundle.js").exists():
+        score_kw = {"arena_dir": arena_dir}
+    else:
+        score_kw = {"task": task, "gym_root": gym_root}
     heldout = training = None
     if node_result.policy_path:
-        heldout = run_policy_batch(node_result.policy_path, split.heldout, arena_dir=arena_dir, timeout_s=batch_timeout_s)
-        training = run_policy_batch(node_result.policy_path, split.training, arena_dir=arena_dir, timeout_s=batch_timeout_s)
+        heldout = run_policy_batch(node_result.policy_path, split.heldout, **score_kw, config=config, timeout_s=batch_timeout_s)
+        training = run_policy_batch(node_result.policy_path, split.training, **score_kw, config=config, timeout_s=batch_timeout_s)
 
-    # 6. Baselines on the same held-out seeds and the same pinned bundle.
-    baselines = run_baselines(task, split.heldout, arena_dir=arena_dir, gym_root=gym_root, timeout_s=batch_timeout_s)
+    # 6. Baselines on the same held-out seeds and the same pinned substrate.
+    baseline_kw = dict(score_kw)
+    baseline_kw.setdefault("gym_root", gym_root)
+    baselines = run_baselines(task, split.heldout, config=config, timeout_s=batch_timeout_s, **baseline_kw)
 
     status = "complete" if node_result.policy_path else "no_policy"
     trial = Trial(

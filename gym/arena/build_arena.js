@@ -51,6 +51,20 @@ function buildArena(taskId, outDir) {
   fs.rmSync(outDir, { recursive: true, force: true });
   fs.mkdirSync(outDir, { recursive: true });
 
+  // OVERLAY MODE (ported/legacy tasks): when meta.arena.overlay_dir is set, the
+  // task supplies its ENTIRE agent-facing surface verbatim (its own pre-built
+  // bundle, runner, docs, template) — e.g. a byte-identical reproduction of an
+  // external proven trial workspace. The builder ships those files untouched
+  // plus manifest.json (the version pin / audit anchor). Canonical scoring for
+  // such tasks runs through the repo task module, not the arena (see evalkit).
+  if (meta.arena && meta.arena.overlay_dir) {
+    const overlay = path.join(taskDir, meta.arena.overlay_dir);
+    for (const f of fs.readdirSync(overlay).sort()) {
+      fs.copyFileSync(path.join(overlay, f), path.join(outDir, f));
+    }
+    return writeManifest(outDir, meta, "overlay");
+  }
+
   // 1. The black-box simulator bundle (minified — structural black box, no source).
   esbuild.buildSync({
     entryPoints: [entry],
@@ -92,16 +106,27 @@ function buildArena(taskId, outDir) {
   fs.copyFileSync(path.join(GYM, "arena", "policy.template.js"), path.join(outDir, "policy.template.js"));
 
   // 5. Manifest (the version pin).
+  return writeManifest(outDir, meta, "standard");
+}
+
+function writeManifest(outDir, meta, arenaMode) {
   const files = {};
   for (const f of fs.readdirSync(outDir).sort()) {
     files[f] = sha256(fs.readFileSync(path.join(outDir, f)));
   }
+  // The pinned simulator artifact: gauntlet's task.bundle.js in standard mode,
+  // or the overlay's own pre-built bundle (e.g. env.bundle.js) in overlay mode.
+  const bundleFile = ["task.bundle.js", "env.bundle.js"].find((f) => fs.existsSync(path.join(outDir, f))) || null;
   const manifest = {
     format: "gauntlet_arena_manifest_v1",
+    arena_mode: arenaMode,
     task_id: meta.id,
     task_name: meta.name,
     task_version: meta.version,
-    bundle_sha1_12: crypto.createHash("sha1").update(fs.readFileSync(path.join(outDir, "task.bundle.js"))).digest("hex").slice(0, 12),
+    bundle_file: bundleFile,
+    bundle_sha1_12: bundleFile
+      ? crypto.createHash("sha1").update(fs.readFileSync(path.join(outDir, bundleFile))).digest("hex").slice(0, 12)
+      : null,
     max_steps_default: meta.max_steps_default,
     training_seeds: meta.training_seeds,
     files,

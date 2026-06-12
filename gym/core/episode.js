@@ -19,14 +19,16 @@
 const crypto = require("crypto");
 const { SeededPRNG, installGlobalMathRandom } = require("./prng.js");
 
-// Safety-net global Math.random override: installed once per process, reseeded
-// per episode with a stream distinct from the env's own SeededPRNG(seed).
+// Safety-net global Math.random override: RE-INSTALLED at every episode start
+// (install is a cheap idempotent function assignment), reseeded with a stream
+// distinct from the env's own SeededPRNG(seed). Re-installing (rather than
+// install-once) matters for ported games whose adapters take ownership of the
+// global override mid-episode: the next episode of any other task must get the
+// safety net back, not the previous task's stream.
 let _net = null;
 function reseedGlobalOverride(seed) {
-  if (!_net) {
-    _net = new SeededPRNG(0);
-    installGlobalMathRandom(_net);
-  }
+  if (!_net) _net = new SeededPRNG(0);
+  installGlobalMathRandom(_net);
   _net.reseed("net:" + String(seed));
 }
 
