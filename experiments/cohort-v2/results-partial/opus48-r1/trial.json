@@ -1,0 +1,594 @@
+{
+  "format": "gauntlet_trial_v1",
+  "created_at": 1781293424,
+  "task": {
+    "format": "gauntlet_arena_manifest_v1",
+    "arena_mode": "overlay",
+    "task_id": "roguelike",
+    "task_name": "Roguelike Skies (manual-trial v2 regime: speed_cap 40, 90k budget)",
+    "task_version": "2.1.0",
+    "bundle_file": "env.bundle.js",
+    "bundle_sha1_12": "7ff9deac4156",
+    "max_steps_default": 90000,
+    "training_seeds": [
+      1,
+      11,
+      23,
+      42,
+      57,
+      88,
+      101,
+      137,
+      199,
+      256,
+      314,
+      451,
+      512
+    ],
+    "criterion": {
+      "kind": "win_speed",
+      "cap": 90000
+    },
+    "files": {
+      "GAME_DESCRIPTION.md": "324e441b0ae6359cd6cb06c16b464e3ea2fde7cd6d195f3a105294e238a2d045",
+      "INTERFACE.md": "0ea9b1b62e6047d56c6f3db6038a3b01fed2d77b83329e78d4d1b26769481386",
+      "env.bundle.js": "424916b286c9efbbd95957caa5f4fabcf35d3812439ba04647f66996dac54b13",
+      "expand_trace.js": "61c4fb3d66ab0732cfeec20cf1a0945d65064700aa9c31eb05cd237c00a1c5bf",
+      "play_step.js": "70dfd78a85c1f217130c547b1059e5c6aee601dcc0b4b8da6805c1e1e4fd7748",
+      "policy.template.js": "6e699f7940f1ecaa869b0b3489e615ad92bb474953ebdbdabcafa16bf06e6e9b",
+      "run_policy.js": "4e43412319100a11196e42ee4502cdba5f306d7a410efa1f855982a5df7979ce"
+    }
+  },
+  "status": "complete",
+  "node": {
+    "node": "claude-code:claude-opus-4-8/max",
+    "status": "ok",
+    "wall_ms": 13554674,
+    "policy_path": "/Users/REDACTED/gauntlet/runs/cohort-v2-n2-opus48-r1/workspace/policy.js",
+    "report": {
+      "best_result": {
+        "cleared": true,
+        "progress": 1.0,
+        "level": 34,
+        "wave": 3,
+        "boss_reached": true,
+        "boss_hp_destroyed": 1.0,
+        "score": 213320,
+        "survival_ms": 1262000
+      },
+      "how_far": "Clears the game (\u901a\u5173): defeats the boss and destroys 100% of its HP (e.g. seed 1 wins at ~step 75.7k, level 34). Measured on fresh held-out seeds (never tuned on): ~28% are won outright (game cleared), most non-wins still reach the boss, mean progress ~0.66, estimated eval score ~0.71. On the visible training seeds it does notably better (~54% wins), but that is partly overfit \u2014 the fresh-seed numbers are the honest predictor.",
+      "failure_modes": [
+        "Slow-leveling death spiral: on unlucky upgrade-RNG seeds the level/DPS ramps too slowly, so I stay weak and get chipped down by the boss bullet-hell before scaling (early deaths around levels 3-10).",
+        "Timeout at ~90%: on some seeds DPS ramps late and I reach the final boss layer but run out of the 90k-step budget before destroying it.",
+        "Enemy/boss body contact is an instant-ish kill (damage ~ enemy HP); fleeing UP into the boss was a major early-death cause (fixed with anti-top positioning + a wide boss margin)."
+      ],
+      "lessons": [
+        "Enemy BODY contact is the #1 threat (lethal, ~= enemy HP; elites/boss = instant kill) \u2014 never touch one; bullets (300/450 dmg) are secondary.",
+        "Survival is necessary but LEVELING SPEED is what decides win vs timeout vs death \u2014 it gates the DPS ramp needed to destroy the ~tens-of-millions boss HP within the budget.",
+        "Dodge core: a receding-horizon sampling planner with a DECAYING collision penalty (imminent hits >> far-future) + AABB prediction; boss bullets are constant-velocity so linear prediction is accurate. This prevents corner-trapping and surprise clips.",
+        "Fire-rate (floors ~30ms) + multishot are the dominant DPS levers; exp multipliers + full-screen magnet + aggressive exp collection drive the level snowball. Boss uptime and survival directly conflict (the boss fires from its own x), so chasing uptime gets you killed.",
+        "Stay BELOW the boss and central-ish; the bottom EDGE is fine (bullet gaps widen lower down) but the CORNERS are death traps.",
+        "Beware overfitting: tuning weights on a fixed seed set looked like ~96% but generalized to ~70% on fresh seeds \u2014 only general, physics-grounded changes transfer; per-seed weight tweaks are washed out by deterministic chaos."
+      ],
+      "attempts_used": 62
+    },
+    "trace_path": "/Users/REDACTED/gauntlet/runs/cohort-v2-n2-opus48-r1/trace.jsonl",
+    "meta": {
+      "exit_code": 0,
+      "cmd": [
+        "claude",
+        "-p",
+        "--model",
+        "claude-opus-4-8",
+        "--effort",
+        "max",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "default",
+        "--allowedTools",
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "--strict-mcp-config",
+        "--disallowedTools",
+        "WebFetch",
+        "WebSearch",
+        "Task",
+        "--max-turns",
+        "2000"
+      ],
+      "trace_meta": {
+        "session": {
+          "session_id": "8c0a25dc-2eb3-43f5-8e51-6e6c8bed5216",
+          "model": "claude-opus-4-8",
+          "tools": [
+            "AskUserQuestion",
+            "Bash",
+            "CronCreate",
+            "CronDelete",
+            "CronList",
+            "DesignSync",
+            "Edit",
+            "EnterPlanMode",
+            "EnterWorktree",
+            "ExitPlanMode",
+            "ExitWorktree",
+            "Glob",
+            "Grep",
+            "LSP",
+            "Monitor",
+            "NotebookEdit",
+            "PushNotification",
+            "Read",
+            "RemoteTrigger",
+            "ScheduleWakeup",
+            "Skill",
+            "TaskCreate",
+            "TaskGet",
+            "TaskList",
+            "TaskOutput",
+            "TaskStop",
+            "TaskUpdate",
+            "ToolSearch",
+            "Workflow",
+            "Write"
+          ],
+          "claude_code_version": "2.1.174",
+          "cwd": "/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace"
+        },
+        "session_start": "2026-06-12T15:41:10.503Z",
+        "session_end": "2026-06-12T19:26:35.940Z",
+        "result": {
+          "subtype": "success",
+          "num_turns": 270,
+          "duration_ms": 13553676,
+          "duration_api_ms": 5503667,
+          "total_cost_usd": 52.77541199999999,
+          "usage": {
+            "input_tokens": 24050,
+            "cache_creation_input_tokens": 568096,
+            "cache_read_input_tokens": 74460306,
+            "output_tokens": 389692,
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 568096,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1752,
+                "cache_read_input_tokens": 511501,
+                "cache_creation_input_tokens": 817,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 817
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "modelUsage": {
+            "claude-haiku-4-5-20251001": {
+              "inputTokens": 1674,
+              "outputTokens": 15,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0,
+              "webSearchRequests": 0,
+              "costUSD": 0.001749,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000
+            },
+            "claude-opus-4-8": {
+              "inputTokens": 24050,
+              "outputTokens": 389692,
+              "cacheReadInputTokens": 74460306,
+              "cacheCreationInputTokens": 568096,
+              "webSearchRequests": 0,
+              "costUSD": 52.77366299999999,
+              "contextWindow": 1000000,
+              "maxOutputTokens": 64000
+            }
+          },
+          "permission_denials": [],
+          "session_id": "8c0a25dc-2eb3-43f5-8e51-6e6c8bed5216"
+        },
+        "total_cost_usd": 52.77541199999999,
+        "num_turns": 270,
+        "context_windows": {
+          "claude-haiku-4-5-20251001": 200000,
+          "claude-opus-4-8": 1000000
+        },
+        "compactions": [],
+        "compaction_count": 0,
+        "rate_limit_events": 13
+      }
+    }
+  },
+  "split": {
+    "training": [
+      1,
+      11,
+      23,
+      42,
+      57,
+      88,
+      101,
+      137,
+      199,
+      256,
+      314,
+      451,
+      512
+    ],
+    "heldout": [
+      23909282,
+      89683790,
+      99055528,
+      114393872,
+      120734801,
+      127511755,
+      128736927,
+      159563661,
+      211671483,
+      216294123,
+      225667921,
+      248132113,
+      267895665,
+      286929402,
+      291466058,
+      296277116,
+      346859415,
+      347138107,
+      347237370,
+      377589150,
+      421086513,
+      423743162,
+      433655565,
+      447141502,
+      454360361,
+      564358683,
+      669395028,
+      674649657,
+      677875595,
+      688369459,
+      694048034,
+      700451100,
+      717773896,
+      720469439,
+      754978692,
+      805193672,
+      841466700,
+      903566773,
+      964887657,
+      993024654,
+      1004050057,
+      1063816017,
+      1075386637,
+      1089133765,
+      1195497507,
+      1227337628,
+      1239134193,
+      1248874055,
+      1272848672,
+      1290348223,
+      1363646577,
+      1364837773,
+      1376534578,
+      1398707742,
+      1463662692,
+      1492703610,
+      1498472200,
+      1519659702,
+      1553934308,
+      1555539873,
+      1666071108,
+      1666141856,
+      1681457707,
+      1688071062,
+      1693213230,
+      1741073764,
+      1767536853,
+      1781576834,
+      1808257358,
+      1842084158,
+      1869686383,
+      1887572581,
+      1942632252,
+      1965209130,
+      2048060130,
+      2055473899,
+      2088110682,
+      2090271083,
+      2106417234,
+      2140472805
+    ]
+  },
+  "audit": {
+    "verdict": "review",
+    "trace": {
+      "verdict": "review",
+      "findings": [
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/GAME_DESCRIPTION.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/INTERFACE.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/policy.template.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/run_policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/play_step.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/expand_trace.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore2.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore3.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore4.js"
+        },
+        {
+          "severity": "review",
+          "rule": "unexpected_tool",
+          "detail": "TaskCreate"
+        },
+        {
+          "severity": "review",
+          "rule": "unexpected_tool",
+          "detail": "TaskUpdate"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore5.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore5.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore6.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore7.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore8.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore9.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore10.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/dodge_test.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore_dmg.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/report.json"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore_build.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore_exp.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/dodge_bench.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/scan_upgrades.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore_timeout.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/explore_exp.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-opus48-r1/workspace/report.json"
+        }
+      ],
+      "tool_counts": {
+        "Read": 23,
+        "Write": 22,
+        "Bash": 128,
+        "ToolSearch": 1,
+        "TaskCreate": 3,
+        "TaskUpdate": 7,
+        "Edit": 85
+      }
+    },
+    "workspace": {
+      "verdict": "clean",
+      "findings": [
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "dodge_bench.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "dodge_test.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore10.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore2.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore3.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore4.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore5.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore6.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore7.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore8.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore9.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore_build.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore_dmg.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore_exp.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore_timeout.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "scan_upgrades.js"
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "started_at": "2026-06-12T15:41:06Z",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.12.12",
+    "node_version": "v24.11.1",
+    "gauntlet_sha": "5b70a2853546",
+    "gauntlet_dirty": false,
+    "finished_at": "2026-06-12T19:27:01Z"
+  }
+}

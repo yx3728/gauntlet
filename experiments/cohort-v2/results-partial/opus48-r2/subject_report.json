@@ -1,0 +1,20 @@
+{
+  "best_result": { "cleared": true, "progress": 1.0, "level": 9, "wave": 3,
+                   "boss_reached": true, "boss_hp_destroyed": 1.0, "score": 40000, "survival_ms": 305000 },
+  "how_far": "Cleared the game (defeated the boss / 通关) on the majority of seeds: ~0.59-0.63 win rate across ~450 fresh held-out seeds (MEAN_EVAL ~0.97-1.02), fastest win ~step 18259 (eval ~1.80, full 19.5M boss HP destroyed). Non-wins still reach the boss and chip 10-90% of its HP.",
+  "failure_modes": [
+    "Early/mid boss-fight deaths at low level: overwhelmed by the dense bullet barrage (300/450-dmg bullets) and pinned in a bottom corner where a descending elite's contact (~2700, near one-shot) finishes a thin HP pool before shields accumulate.",
+    "Occasional DPS-timeouts: survived the full 90k steps but upgrade RNG never offered enough DPS (no pierce / low multishot), so the 19.5M-HP boss wasn't finished (reached ~50-90% destroyed).",
+    "Extreme chaotic sensitivity: tiny policy changes flip which seeds live/die, so most micro-tuning washes across large seed sets; only a handful of orthogonal/mechanic-exploiting levers gave robust gains."
+  ],
+  "lessons": [
+    "Boss has ~19.5M HP; base autofire (~2.4k DPS) is hopeless. DPS scales 50-100x via pierce (bullets rake the 120px-tall boss for per-tick damage) + multishot + fire-rate + crit + satellites, all gated by leveling.",
+    "Auto-fire shoots straight up, so stay x-aligned under the boss (~120px wide) or you deal ~0 damage; dodging off-axis tanks DPS.",
+    "Survival is the master key: surviving long enough always wins (out-level + out-DPS the boss). Deaths, not low DPS, dominate failures.",
+    "Killing enemies IS defense (fewer enemies => fewer bullets); pure evasion backfires. An INSTANT greedy per-tick dodge (pick the safest reachable resting spot, re-planned every tick) beat rollout/hysteresis/2-ply — responsiveness > commitment.",
+    "Biggest robust gains were orthogonal additions of survival without costing DPS: collect heart (+1000 shield) and levelup (+1 level) pickups; lean upgrades toward survival/exp before the boss so you enter with a buffer.",
+    "Exploit states you're ALREADY in, don't chase pickups: during the `invincible` pickup's ~5s immunity, stop dodging and lock under the boss for free max-DPS (validated win-rate gain on held-out). But aggressively DETOURING for invincible/bomb/exp pickups gets you killed en route. Bombs clear the whole screen of bullets on contact — useful, but only grab them opportunistically.",
+    "Validate on large fresh seed sets, not the tuning set: the chaos makes single/small-set results misleading and easy to overfit."
+  ],
+  "attempts_used": 45
+}

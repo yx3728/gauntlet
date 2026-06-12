@@ -1,0 +1,19 @@
+{
+  "best_result": { "cleared": true, "progress": 1.0, "level": 34, "wave": 3,
+                   "boss_reached": true, "boss_hp_destroyed": 1.0, "score": 213320, "survival_ms": 1262000 },
+  "how_far": "Clears the game (通关): defeats the boss and destroys 100% of its HP (e.g. seed 1 wins at ~step 75.7k, level 34). Measured on fresh held-out seeds (never tuned on): ~28% are won outright (game cleared), most non-wins still reach the boss, mean progress ~0.66, estimated eval score ~0.71. On the visible training seeds it does notably better (~54% wins), but that is partly overfit — the fresh-seed numbers are the honest predictor.",
+  "failure_modes": [
+    "Slow-leveling death spiral: on unlucky upgrade-RNG seeds the level/DPS ramps too slowly, so I stay weak and get chipped down by the boss bullet-hell before scaling (early deaths around levels 3-10).",
+    "Timeout at ~90%: on some seeds DPS ramps late and I reach the final boss layer but run out of the 90k-step budget before destroying it.",
+    "Enemy/boss body contact is an instant-ish kill (damage ~ enemy HP); fleeing UP into the boss was a major early-death cause (fixed with anti-top positioning + a wide boss margin)."
+  ],
+  "lessons": [
+    "Enemy BODY contact is the #1 threat (lethal, ~= enemy HP; elites/boss = instant kill) — never touch one; bullets (300/450 dmg) are secondary.",
+    "Survival is necessary but LEVELING SPEED is what decides win vs timeout vs death — it gates the DPS ramp needed to destroy the ~tens-of-millions boss HP within the budget.",
+    "Dodge core: a receding-horizon sampling planner with a DECAYING collision penalty (imminent hits >> far-future) + AABB prediction; boss bullets are constant-velocity so linear prediction is accurate. This prevents corner-trapping and surprise clips.",
+    "Fire-rate (floors ~30ms) + multishot are the dominant DPS levers; exp multipliers + full-screen magnet + aggressive exp collection drive the level snowball. Boss uptime and survival directly conflict (the boss fires from its own x), so chasing uptime gets you killed.",
+    "Stay BELOW the boss and central-ish; the bottom EDGE is fine (bullet gaps widen lower down) but the CORNERS are death traps.",
+    "Beware overfitting: tuning weights on a fixed seed set looked like ~96% but generalized to ~70% on fresh seeds — only general, physics-grounded changes transfer; per-seed weight tweaks are washed out by deterministic chaos."
+  ],
+  "attempts_used": 62
+}

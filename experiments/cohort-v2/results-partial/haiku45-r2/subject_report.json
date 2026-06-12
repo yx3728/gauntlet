@@ -1,0 +1,29 @@
+{
+  "best_result": {
+    "cleared": false,
+    "progress": 0.40,
+    "level": 3,
+    "wave": 3,
+    "boss_reached": true,
+    "boss_hp_destroyed": 0.0,
+    "score": 7490.1,
+    "survival_ms": 90100
+  },
+  "how_far": "Did not clear the game. Reached 40% progress on seed 19, surviving 90 seconds through waves 1-3, killing 19 enemies, reaching level 3, and engaging the boss. Defeated by the boss despite reasonable level and upgrades - suggests boss mechanics are very challenging or damage output still insufficient.",
+  "failure_modes": [
+    "Boss has high HP and/or damage output - level 3 with good upgrades still insufficient to defeat it",
+    "Boss may have attack patterns or phases requiring specialized knowledge to avoid",
+    "Damage scaling doesn't catch up to boss HP even with aggressive damage upgrade selection",
+    "Most seeds (80%+) fail to reach wave 3 due to wave 2 being a difficult gauntlet with high enemy density"
+  ],
+  "lessons": [
+    "Adaptive dodging based on health state (perpendicular dodge when low HP) improves survival",
+    "Collecting items aggressively (350px range) is key to leveling up and gaining survivability",
+    "Health-aware upgrade selection (prioritize health when <40% HP) extends survival",
+    "Direct boss pursuit only viable at level 3+, otherwise maintain safe mid-field positioning",
+    "Wave progression: wave 1 has sparse enemies, wave 2 is dangerous gauntlet, wave 3 has boss",
+    "Rarity-weighted upgrade scoring (orange=4x multiplier) combined with keyword matching works well",
+    "Some seeds (4,7,15) are nearly unwinnable - early enemy placement and item drops critical"
+  ],
+  "attempts_used": 60
+}

@@ -1,0 +1,254 @@
+{
+  "verdict": "review",
+  "trace": {
+    "verdict": "review",
+    "findings": [
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/GAME_DESCRIPTION.md"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/INTERFACE.md"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/run_policy.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/policy.template.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/probe.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/probe2.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/policy.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/diag.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/collect_upgrades.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/diag_boss.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/diag_exp.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/diag_spawn.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/eval.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/eval_worker.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/diag_death.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/test_tunnel.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/policy.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/introspect.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/sweep.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/explore_worker.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/hitstats.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/movie.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/bench_worker.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/bench.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-fable5-r1/workspace/diag_pattern.js"
+      }
+    ],
+    "tool_counts": {
+      "Read": 4,
+      "Bash": 62,
+      "Write": 25,
+      "Edit": 57
+    }
+  },
+  "workspace": {
+    "verdict": "clean",
+    "findings": [
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "bench.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "bench_worker.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "collect_upgrades.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "diag.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "diag_boss.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "diag_death.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "diag_exp.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "diag_pattern.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "diag_spawn.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "eval.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "eval_worker.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "explore2.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "explore_log.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "explore_worker.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "hitstats.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "introspect.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "movie.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "probe2.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "sweep.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "test_tunnel.js"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "upgrade_catalog.json"
+      }
+    ]
+  }
+}

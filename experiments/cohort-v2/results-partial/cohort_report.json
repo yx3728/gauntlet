@@ -1,0 +1,618 @@
+{
+  "format": "gauntlet_cohort_v1",
+  "name": "cohort-v2-n2",
+  "task": "roguelike",
+  "task_version": "2.1.0",
+  "criterion": {
+    "kind": "win_speed",
+    "cap": 90000
+  },
+  "heldout_seeds": [
+    23909282,
+    89683790,
+    99055528,
+    114393872,
+    120734801,
+    127511755,
+    128736927,
+    159563661,
+    211671483,
+    216294123,
+    225667921,
+    248132113,
+    267895665,
+    286929402,
+    291466058,
+    296277116,
+    346859415,
+    347138107,
+    347237370,
+    377589150,
+    421086513,
+    423743162,
+    433655565,
+    447141502,
+    454360361,
+    564358683,
+    669395028,
+    674649657,
+    677875595,
+    688369459,
+    694048034,
+    700451100,
+    717773896,
+    720469439,
+    754978692,
+    805193672,
+    841466700,
+    903566773,
+    964887657,
+    993024654,
+    1004050057,
+    1063816017,
+    1075386637,
+    1089133765,
+    1195497507,
+    1227337628,
+    1239134193,
+    1248874055,
+    1272848672,
+    1290348223,
+    1363646577,
+    1364837773,
+    1376534578,
+    1398707742,
+    1463662692,
+    1492703610,
+    1498472200,
+    1519659702,
+    1553934308,
+    1555539873,
+    1666071108,
+    1666141856,
+    1681457707,
+    1688071062,
+    1693213230,
+    1741073764,
+    1767536853,
+    1781576834,
+    1808257358,
+    1842084158,
+    1869686383,
+    1887572581,
+    1942632252,
+    1965209130,
+    2048060130,
+    2055473899,
+    2088110682,
+    2090271083,
+    2106417234,
+    2140472805
+  ],
+  "n_heldout": 80,
+  "arms": [
+    {
+      "name": "haiku45",
+      "reps": 2
+    },
+    {
+      "name": "sonnet46",
+      "reps": 2
+    },
+    {
+      "name": "opus48",
+      "reps": 2
+    },
+    {
+      "name": "fable5",
+      "reps": 2
+    }
+  ],
+  "concurrency": 4,
+  "started_at": "2026-06-12T15:31:17Z",
+  "provenance": {
+    "started_at": "2026-06-12T15:31:17Z",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.12.12",
+    "node_version": "v24.11.1",
+    "gauntlet_sha": "5b70a2853546",
+    "gauntlet_dirty": false
+  },
+  "finished_at": "2026-06-12T20:20:56Z",
+  "criterion_kind": "win_speed",
+  "arms_table": {
+    "haiku45": {
+      "reps": [
+        {
+          "trial": "cohort-v2-n2-haiku45-r2",
+          "status": "complete",
+          "heldout": {
+            "n": 80,
+            "mean": 0.2021,
+            "median": 0.1915,
+            "min": 0.022,
+            "max": 0.401,
+            "clears": 0,
+            "clear_rate": 0.0,
+            "clear_rate_wilson95": [
+              0.0,
+              0.0458
+            ]
+          },
+          "training": {
+            "n": 13,
+            "mean": 0.2129,
+            "median": 0.247,
+            "min": 0.054,
+            "max": 0.393,
+            "clears": 0,
+            "clear_rate": 0.0,
+            "clear_rate_wilson95": [
+              0.0,
+              0.2281
+            ]
+          },
+          "conditions": {
+            "model": "claude-haiku-4-5-20251001",
+            "context_window": 200000,
+            "compactions": 0,
+            "rate_limit_events": 1,
+            "claude_version": "2.1.174",
+            "cost_usd": 1.2443182000000002,
+            "num_turns": 95,
+            "wall_ms": 567302,
+            "node_status": "ok",
+            "audit_verdict": "review",
+            "gauntlet_sha": "5b70a2853546"
+          }
+        },
+        {
+          "trial": "cohort-v2-n2-haiku45-r1",
+          "status": "complete",
+          "heldout": {
+            "n": 80,
+            "mean": 0.1967,
+            "median": 0.196,
+            "min": 0.027,
+            "max": 0.4,
+            "clears": 0,
+            "clear_rate": 0.0,
+            "clear_rate_wilson95": [
+              0.0,
+              0.0458
+            ]
+          },
+          "training": {
+            "n": 13,
+            "mean": 0.2311,
+            "median": 0.255,
+            "min": 0.059,
+            "max": 0.4,
+            "clears": 0,
+            "clear_rate": 0.0,
+            "clear_rate_wilson95": [
+              0.0,
+              0.2281
+            ]
+          },
+          "conditions": {
+            "model": "claude-haiku-4-5-20251001",
+            "context_window": 200000,
+            "compactions": 0,
+            "rate_limit_events": 1,
+            "claude_version": "2.1.174",
+            "cost_usd": 1.0761497,
+            "num_turns": 76,
+            "wall_ms": 576364,
+            "node_status": "ok",
+            "audit_verdict": "review",
+            "gauntlet_sha": "5b70a2853546"
+          }
+        }
+      ],
+      "pooled_heldout": {
+        "n": 160,
+        "mean": 0.1994,
+        "median": 0.1935,
+        "min": 0.022,
+        "max": 0.401,
+        "clears": 0,
+        "clear_rate": 0.0,
+        "clear_rate_wilson95": [
+          0.0,
+          0.0234
+        ]
+      }
+    },
+    "sonnet46": {
+      "reps": [
+        {
+          "trial": "cohort-v2-n2-sonnet46-r1",
+          "status": "complete",
+          "heldout": {
+            "n": 80,
+            "mean": 0.545,
+            "median": 0.4105,
+            "min": 0.362,
+            "max": 1.4523,
+            "clears": 9,
+            "clear_rate": 0.1125,
+            "clear_rate_wilson95": [
+              0.0603,
+              0.2002
+            ],
+            "win_step": {
+              "mean": 64177,
+              "median": 62525,
+              "min": 49294,
+              "max": 83658
+            }
+          },
+          "training": {
+            "n": 13,
+            "mean": 0.5511,
+            "median": 0.416,
+            "min": 0.4,
+            "max": 1.3379,
+            "clears": 2,
+            "clear_rate": 0.1538,
+            "clear_rate_wilson95": [
+              0.0433,
+              0.4223
+            ],
+            "win_step": {
+              "mean": 65076.5,
+              "median": 65076.5,
+              "min": 59586,
+              "max": 70567
+            }
+          },
+          "conditions": {
+            "model": "claude-sonnet-4-6",
+            "context_window": 200000,
+            "compactions": 3,
+            "rate_limit_events": 3,
+            "claude_version": "2.1.174",
+            "cost_usd": 14.304256949999996,
+            "num_turns": 168,
+            "wall_ms": 9196005,
+            "node_status": "ok",
+            "audit_verdict": "review",
+            "gauntlet_sha": "5b70a2853546"
+          }
+        },
+        {
+          "trial": "cohort-v2-n2-sonnet46-r2",
+          "status": "complete",
+          "heldout": {
+            "n": 80,
+            "mean": 0.4138,
+            "median": 0.3715,
+            "min": 0.301,
+            "max": 1.6079,
+            "clears": 3,
+            "clear_rate": 0.0375,
+            "clear_rate_wilson95": [
+              0.0128,
+              0.1045
+            ],
+            "win_step": {
+              "mean": 40542.3,
+              "median": 42843,
+              "min": 35287,
+              "max": 43497
+            }
+          },
+          "training": {
+            "n": 13,
+            "mean": 0.624,
+            "median": 0.345,
+            "min": 0.296,
+            "max": 1.8195,
+            "clears": 3,
+            "clear_rate": 0.2308,
+            "clear_rate_wilson95": [
+              0.0818,
+              0.5026
+            ],
+            "win_step": {
+              "mean": 40247,
+              "median": 29300,
+              "min": 16241,
+              "max": 75200
+            }
+          },
+          "conditions": {
+            "model": "claude-sonnet-4-6",
+            "context_window": 200000,
+            "compactions": 8,
+            "rate_limit_events": 20,
+            "claude_version": "2.1.174",
+            "cost_usd": 33.29066579999999,
+            "num_turns": 410,
+            "wall_ms": 17351278,
+            "node_status": "nonzero_exit",
+            "audit_verdict": "review",
+            "gauntlet_sha": "5b70a2853546"
+          }
+        }
+      ],
+      "pooled_heldout": {
+        "n": 160,
+        "mean": 0.4794,
+        "median": 0.4025,
+        "min": 0.301,
+        "max": 1.6079,
+        "clears": 12,
+        "clear_rate": 0.075,
+        "clear_rate_wilson95": [
+          0.0434,
+          0.1265
+        ],
+        "win_step": {
+          "mean": 58268.3,
+          "median": 53105.5,
+          "min": 35287,
+          "max": 83658
+        }
+      }
+    },
+    "opus48": {
+      "reps": [
+        {
+          "trial": "cohort-v2-n2-opus48-r2",
+          "status": "complete",
+          "heldout": {
+            "n": 80,
+            "mean": 0.9382,
+            "median": 1.085,
+            "min": 0.4,
+            "max": 1.814,
+            "clears": 45,
+            "clear_rate": 0.5625,
+            "clear_rate_wilson95": [
+              0.4534,
+              0.6659
+            ],
+            "win_step": {
+              "mean": 63951.1,
+              "median": 67370,
+              "min": 16740,
+              "max": 88725
+            }
+          },
+          "training": {
+            "n": 13,
+            "mean": 1.0216,
+            "median": 1.2785,
+            "min": 0.402,
+            "max": 1.4132,
+            "clears": 7,
+            "clear_rate": 0.5385,
+            "clear_rate_wilson95": [
+              0.2914,
+              0.7679
+            ],
+            "win_step": {
+              "mean": 59957.3,
+              "median": 63440,
+              "min": 52808,
+              "max": 64939
+            }
+          },
+          "conditions": {
+            "model": "claude-opus-4-8",
+            "context_window": 1000000,
+            "compactions": 0,
+            "rate_limit_events": 6,
+            "claude_version": "2.1.174",
+            "cost_usd": 46.06638049999998,
+            "num_turns": 242,
+            "wall_ms": 10646335,
+            "node_status": "ok",
+            "audit_verdict": "review",
+            "gauntlet_sha": "5b70a2853546"
+          }
+        },
+        {
+          "trial": "cohort-v2-n2-opus48-r1",
+          "status": "complete",
+          "heldout": {
+            "n": 80,
+            "mean": 0.7302,
+            "median": 0.4525,
+            "min": 0.401,
+            "max": 1.6872,
+            "clears": 21,
+            "clear_rate": 0.2625,
+            "clear_rate_wilson95": [
+              0.1786,
+              0.3682
+            ],
+            "win_step": {
+              "mean": 67919.8,
+              "median": 71043,
+              "min": 28152,
+              "max": 88071
+            }
+          },
+          "training": {
+            "n": 13,
+            "mean": 0.676,
+            "median": 0.48,
+            "min": 0.4,
+            "max": 1.2873,
+            "clears": 3,
+            "clear_rate": 0.2308,
+            "clear_rate_wilson95": [
+              0.0818,
+              0.5026
+            ],
+            "win_step": {
+              "mean": 73893.7,
+              "median": 75746,
+              "min": 64139,
+              "max": 81796
+            }
+          },
+          "conditions": {
+            "model": "claude-opus-4-8",
+            "context_window": 1000000,
+            "compactions": 0,
+            "rate_limit_events": 13,
+            "claude_version": "2.1.174",
+            "cost_usd": 52.77541199999999,
+            "num_turns": 270,
+            "wall_ms": 13554674,
+            "node_status": "ok",
+            "audit_verdict": "review",
+            "gauntlet_sha": "5b70a2853546"
+          }
+        }
+      ],
+      "pooled_heldout": {
+        "n": 160,
+        "mean": 0.8342,
+        "median": 0.9,
+        "min": 0.4,
+        "max": 1.814,
+        "clears": 66,
+        "clear_rate": 0.4125,
+        "clear_rate_wilson95": [
+          0.3391,
+          0.49
+        ],
+        "win_step": {
+          "mean": 65213.9,
+          "median": 68040.5,
+          "min": 16740,
+          "max": 88725
+        }
+      }
+    },
+    "fable5": {
+      "reps": [
+        {
+          "trial": "cohort-v2-n2-fable5-r2",
+          "status": "no_policy",
+          "heldout": {
+            "n": 0
+          },
+          "training": {
+            "n": 0
+          },
+          "conditions": {
+            "model": "claude-fable-5",
+            "context_window": null,
+            "compactions": 0,
+            "rate_limit_events": 2,
+            "claude_version": "2.1.174",
+            "cost_usd": null,
+            "num_turns": null,
+            "wall_ms": 588077,
+            "node_status": "nonzero_exit",
+            "audit_verdict": "review",
+            "gauntlet_sha": "4c71d0225fe2"
+          }
+        },
+        {
+          "trial": "cohort-v2-n2-fable5-r1",
+          "status": "complete",
+          "heldout": {
+            "n": 80,
+            "mean": 0.8332,
+            "median": 0.597,
+            "min": 0.4,
+            "max": 1.797,
+            "clears": 30,
+            "clear_rate": 0.375,
+            "clear_rate_wilson95": [
+              0.2769,
+              0.4845
+            ],
+            "win_step": {
+              "mean": 54972.2,
+              "median": 57123.0,
+              "min": 18268,
+              "max": 83273
+            }
+          },
+          "training": {
+            "n": 13,
+            "mean": 1.0332,
+            "median": 1.1357,
+            "min": 0.401,
+            "max": 1.7438,
+            "clears": 7,
+            "clear_rate": 0.5385,
+            "clear_rate_wilson95": [
+              0.2914,
+              0.7679
+            ],
+            "win_step": {
+              "mean": 46045.3,
+              "median": 46763,
+              "min": 23057,
+              "max": 77791
+            }
+          },
+          "conditions": {
+            "model": "claude-fable-5",
+            "context_window": null,
+            "compactions": 0,
+            "rate_limit_events": 10,
+            "claude_version": "2.1.174",
+            "cost_usd": null,
+            "num_turns": null,
+            "wall_ms": 4013917,
+            "node_status": "nonzero_exit",
+            "audit_verdict": "review",
+            "gauntlet_sha": "165f20d72ee2"
+          }
+        }
+      ],
+      "pooled_heldout": {
+        "n": 80,
+        "mean": 0.8332,
+        "median": 0.597,
+        "min": 0.4,
+        "max": 1.797,
+        "clears": 30,
+        "clear_rate": 0.375,
+        "clear_rate_wilson95": [
+          0.2769,
+          0.4845
+        ],
+        "win_step": {
+          "mean": 54972.2,
+          "median": 57123.0,
+          "min": 18268,
+          "max": 83273
+        }
+      }
+    }
+  },
+  "condition_diffs": {
+    "context_window": {
+      "haiku45#0": 200000,
+      "haiku45#1": 200000,
+      "sonnet46#2": 200000,
+      "sonnet46#3": 200000,
+      "opus48#4": 1000000,
+      "opus48#5": 1000000,
+      "fable5#6": null,
+      "fable5#7": null
+    },
+    "gauntlet_sha": {
+      "haiku45#0": "5b70a2853546",
+      "haiku45#1": "5b70a2853546",
+      "sonnet46#2": "5b70a2853546",
+      "sonnet46#3": "5b70a2853546",
+      "opus48#4": "5b70a2853546",
+      "opus48#5": "5b70a2853546",
+      "fable5#6": "4c71d0225fe2",
+      "fable5#7": "165f20d72ee2"
+    }
+  },
+  "errors": {}
+}
