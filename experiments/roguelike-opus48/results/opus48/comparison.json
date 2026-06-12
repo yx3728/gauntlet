@@ -1,0 +1,351 @@
+{
+  "trial_dir": "/Users/REDACTED/gauntlet/runs/roguelike-opus48-max",
+  "node": {
+    "node": "claude-code:claude-opus-4-8/max",
+    "status": "ok",
+    "wall_ms": 10302124,
+    "policy_path": "/Users/REDACTED/gauntlet/runs/roguelike-opus48-max/workspace/policy.js",
+    "report": {
+      "best_result": {
+        "cleared": true,
+        "progress": 1.0,
+        "level": 40,
+        "wave": 3,
+        "boss_reached": true,
+        "boss_hp_destroyed": 1.0,
+        "score": 10000,
+        "survival_ms": 540000
+      },
+      "how_far": "CLEARED the game (defeated the boss / \u901a\u5173) on ~87% of seeds (61/70 across tuned+fresh seeds), typically winning around step 30k-65k of the 90k budget (median ~54k, fastest ~30k); the ~13% of losses are RNG-starved early-boss deaths at level 5-12 with little boss HP destroyed.",
+      "failure_modes": [
+        "Early-boss chip death at low level (5-9): on a bad early-upgrade roll (no magnet/shield/regen offered) the player enters the boss weak, and the dense spiral barrage grinds HP down before it can snowball into sustain.",
+        "Being herded by bullets-from-above into a wall/bottom corner and trapped at low level.",
+        "Occasional body-contact one-shot (enemy/elite/boss contact ~= instant death).",
+        "Rare: pre-boss exp is RNG-limited on some seeds, so the player arrives at the boss only ~level 5 even after collecting everything."
+      ],
+      "lessons": [
+        "Boss has ~19.4M HP across ~5 sequential layers; enemies keep spawning during the fight, so you FARM them for EXP -> levels -> upgrades -> DPS and grind the boss down. SURVIVAL is the binding constraint, not DPS \u2014 if you live, leveling gives more than enough DPS to win in time.",
+        "Collision is AXIS-ALIGNED BOX (player 24x30, bullets ~7x12), NOT circular. Bullets fall from above and hit at |dy| up to ~21px; modeling danger as a circle badly under-avoids vertical hits. Switching to box separation was the single biggest fix (raised win rate from ~60% to ~75%).",
+        "You move 40px/tick vs bullets ~4-5px/tick (~8x faster), so almost no hit is truly forced; deaths come from being trapped (wall/corner/bottom) or a wrong collision model. Dense candidate angular resolution (48 directions x 4 magnitudes) matters a lot for slipping into narrow gaps.",
+        "Special pickups are powerful and common (~20 each/game): bomb CLEARS ALL BULLETS, invincible = 5s i-frames, levelup = a free level, heart = heal/shield. Prioritizing them (but not over-chasing into traps) was the second-biggest win (~75% -> ~87%).",
+        "Renewable sustain (shield_basic repairs ~90hp/s, regen, lifesteal, overheal->growing shield \u2014 shields can stack into the thousands) converts the long fight from a chip-death race into a guaranteed grind-out win.",
+        "Magnet range is the EXP engine: it auto-collects falling EXP while you dodge, so you stay central and still level. Movement should be phase-aware: aggressive EXP-vacuuming pre-boss (calm), central hold-and-dodge under the boss.",
+        "Over-chasing pickups, extra 'caution', and stronger wall/vertical biases all REDUCED win rate (they pull you off-center into traps or stall leveling) \u2014 the tuned balance is a real optimum."
+      ],
+      "attempts_used": 90
+    },
+    "trace_path": "/Users/REDACTED/gauntlet/runs/roguelike-opus48-max/trace.jsonl",
+    "meta": {
+      "exit_code": 0,
+      "cmd": [
+        "claude",
+        "-p",
+        "--model",
+        "claude-opus-4-8",
+        "--effort",
+        "max",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "default",
+        "--allowedTools",
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "--strict-mcp-config",
+        "--disallowedTools",
+        "WebFetch",
+        "WebSearch",
+        "Task",
+        "--max-turns",
+        "2000"
+      ]
+    }
+  },
+  "audit": "review",
+  "canonical_heldout": {
+    "n_seeds": 30,
+    "clear_rate": 0.7333,
+    "clear_rate_wilson95": [
+      0.5555,
+      0.8582
+    ],
+    "clears": 22,
+    "eval_score_mean": 1.127,
+    "eval_score_median": 1.3313,
+    "done_reason_rates": {
+      "death": 0.2667,
+      "win": 0.7333
+    },
+    "progress_mean": 0.8439,
+    "win_step_mean": 55265.2,
+    "win_step_median": 56978.5,
+    "win_step_min": 29600,
+    "win_step_max": 80085,
+    "win_steps": [
+      29600,
+      31098,
+      38685,
+      43019,
+      46693,
+      46961,
+      47296,
+      51126,
+      51705,
+      54294,
+      56769,
+      57188,
+      57454,
+      57803,
+      59199,
+      61164,
+      61660,
+      65387,
+      68624,
+      72049,
+      77975,
+      80085
+    ]
+  },
+  "fixed_2000_2029": {
+    "n_seeds": 30,
+    "clear_rate": 0.7667,
+    "clear_rate_wilson95": [
+      0.5907,
+      0.8821
+    ],
+    "clears": 23,
+    "eval_score_mean": 1.1026,
+    "eval_score_median": 1.2792,
+    "done_reason_rates": {
+      "death": 0.2333,
+      "win": 0.7667
+    },
+    "progress_mean": 0.8636,
+    "win_step_mean": 61939.1,
+    "win_step_median": 58361,
+    "win_step_min": 40645,
+    "win_step_max": 88951,
+    "win_steps": [
+      40645,
+      47807,
+      48068,
+      50376,
+      51410,
+      54313,
+      54332,
+      54348,
+      54622,
+      56723,
+      56924,
+      58361,
+      60480,
+      60917,
+      62906,
+      66836,
+      69492,
+      70135,
+      76186,
+      79276,
+      79279,
+      82213,
+      88951
+    ]
+  },
+  "training": {
+    "n_seeds": 13,
+    "clear_rate": 0.7692,
+    "clear_rate_wilson95": [
+      0.4974,
+      0.9182
+    ],
+    "clears": 10,
+    "eval_score_mean": 1.1551,
+    "eval_score_median": 1.2599,
+    "done_reason_rates": {
+      "death": 0.2308,
+      "win": 0.7692
+    },
+    "progress_mean": 0.8672,
+    "win_step_mean": 56317.3,
+    "win_step_median": 51619.0,
+    "win_step_min": 30114,
+    "win_step_max": 75532,
+    "win_steps": [
+      30114,
+      45679,
+      47198,
+      49884,
+      51230,
+      52008,
+      66608,
+      71144,
+      73776,
+      75532
+    ]
+  },
+  "baselines": {
+    "greedy": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.3962,
+      "eval_score_median": 0.4,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.3962
+    },
+    "noop": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.2174,
+      "eval_score_median": 0.213,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.2174
+    },
+    "smart": {
+      "n_seeds": 30,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.1135
+      ],
+      "clears": 0,
+      "eval_score_mean": 0.397,
+      "eval_score_median": 0.4,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "progress_mean": 0.397
+    }
+  },
+  "manual_ladder_t1_policy_at_40_90k": {
+    "n_seeds": 30,
+    "clear_rate": 0.0,
+    "clear_rate_wilson95": [
+      0.0,
+      0.1135
+    ],
+    "clears": 0,
+    "eval_score_mean": 0.3425,
+    "eval_score_median": 0.35,
+    "done_reason_rates": {
+      "death": 1.0
+    },
+    "progress_mean": 0.3425
+  },
+  "manual_baseline": {
+    "policy": "trials/ladder-t1/workspace/policy.js",
+    "policy_sha256": "7cadeeb807aa20f7d4a2bb24b53838463227ba56ee8c0f96fb4937be00f6960a",
+    "dev_regime": "v1 (speed_cap=inf, ~uncapped steps)",
+    "heldout_seeds": "2000-2029 (30)",
+    "clear_rate_inf_90k": 0.2,
+    "clear_rate_inf_30k": 0.06666666666666667,
+    "win_steps_inf_90k": [
+      25129,
+      26827,
+      40198,
+      59337,
+      76138,
+      78336
+    ],
+    "clear_rate_by_cap_90k": {
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0.03,
+      "8": 0,
+      "10": 0,
+      "12": 0.03,
+      "14": 0,
+      "19": 0.07,
+      "20": 0,
+      "50": 0.07,
+      "90": 0.03,
+      "inf": 0.2
+    },
+    "at_40_90k_measured": "see manual_policy_at_40_90k.json (0/30, 100% death, progress mean 0.3425)",
+    "self_reported_clear": "~51% (self-eval at own inf dev regime, self-chosen seeds)"
+  },
+  "parity_gate": {
+    "ok": true,
+    "seeds": [
+      2000,
+      2008,
+      2017
+    ],
+    "fields": [
+      "steps",
+      "score",
+      "done_reason",
+      "progress",
+      "kills",
+      "level",
+      "wave",
+      "survived_ms"
+    ],
+    "mismatches": []
+  },
+  "diagnostic_inf_90k_fixed_seeds": {
+    "n_seeds": 30,
+    "clear_rate": 0.7667,
+    "clear_rate_wilson95": [
+      0.5907,
+      0.8821
+    ],
+    "clears": 23,
+    "eval_score_mean": 1.0998,
+    "eval_score_median": 1.2792,
+    "done_reason_rates": {
+      "death": 0.2333,
+      "win": 0.7667
+    },
+    "progress_mean": 0.8636,
+    "win_step_mean": 62273.4,
+    "win_step_median": 58361,
+    "win_step_min": 40645,
+    "win_step_max": 88951,
+    "win_steps": [
+      40645,
+      47807,
+      51410,
+      54129,
+      54313,
+      54325,
+      54332,
+      54348,
+      54402,
+      54622,
+      56924,
+      58361,
+      60480,
+      60917,
+      62906,
+      66836,
+      69492,
+      70135,
+      76186,
+      79276,
+      79279,
+      82213,
+      88951
+    ]
+  }
+}

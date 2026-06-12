@@ -1,0 +1,21 @@
+{
+  "best_result": { "cleared": true, "progress": 1.0, "level": 40, "wave": 3,
+                   "boss_reached": true, "boss_hp_destroyed": 1.0, "score": 10000, "survival_ms": 540000 },
+  "how_far": "CLEARED the game (defeated the boss / 通关) on ~87% of seeds (61/70 across tuned+fresh seeds), typically winning around step 30k-65k of the 90k budget (median ~54k, fastest ~30k); the ~13% of losses are RNG-starved early-boss deaths at level 5-12 with little boss HP destroyed.",
+  "failure_modes": [
+    "Early-boss chip death at low level (5-9): on a bad early-upgrade roll (no magnet/shield/regen offered) the player enters the boss weak, and the dense spiral barrage grinds HP down before it can snowball into sustain.",
+    "Being herded by bullets-from-above into a wall/bottom corner and trapped at low level.",
+    "Occasional body-contact one-shot (enemy/elite/boss contact ~= instant death).",
+    "Rare: pre-boss exp is RNG-limited on some seeds, so the player arrives at the boss only ~level 5 even after collecting everything."
+  ],
+  "lessons": [
+    "Boss has ~19.4M HP across ~5 sequential layers; enemies keep spawning during the fight, so you FARM them for EXP -> levels -> upgrades -> DPS and grind the boss down. SURVIVAL is the binding constraint, not DPS — if you live, leveling gives more than enough DPS to win in time.",
+    "Collision is AXIS-ALIGNED BOX (player 24x30, bullets ~7x12), NOT circular. Bullets fall from above and hit at |dy| up to ~21px; modeling danger as a circle badly under-avoids vertical hits. Switching to box separation was the single biggest fix (raised win rate from ~60% to ~75%).",
+    "You move 40px/tick vs bullets ~4-5px/tick (~8x faster), so almost no hit is truly forced; deaths come from being trapped (wall/corner/bottom) or a wrong collision model. Dense candidate angular resolution (48 directions x 4 magnitudes) matters a lot for slipping into narrow gaps.",
+    "Special pickups are powerful and common (~20 each/game): bomb CLEARS ALL BULLETS, invincible = 5s i-frames, levelup = a free level, heart = heal/shield. Prioritizing them (but not over-chasing into traps) was the second-biggest win (~75% -> ~87%).",
+    "Renewable sustain (shield_basic repairs ~90hp/s, regen, lifesteal, overheal->growing shield — shields can stack into the thousands) converts the long fight from a chip-death race into a guaranteed grind-out win.",
+    "Magnet range is the EXP engine: it auto-collects falling EXP while you dodge, so you stay central and still level. Movement should be phase-aware: aggressive EXP-vacuuming pre-boss (calm), central hold-and-dodge under the boss.",
+    "Over-chasing pickups, extra 'caution', and stronger wall/vertical biases all REDUCED win rate (they pull you off-center into traps or stall leveling) — the tuned balance is a real optimum."
+  ],
+  "attempts_used": 90
+}
