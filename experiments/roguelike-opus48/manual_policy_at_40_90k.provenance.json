@@ -1,0 +1,8 @@
+{
+  "policy": "/Users/REDACTED/ai_playtest_pipeline/trials/ladder-t1/workspace/policy.js",
+  "policy_sha256": "7cadeeb807aa20f7d4a2bb24b53838463227ba56ee8c0f96fb4937be00f6960a",
+  "command": "evalkit.score_policy(policy, range(2000,2030), task='roguelike', timeout_s=7200)",
+  "substrate": "gym/tasks/roguelike@2.0.0 (vendored template-v2 bundle, speed_cap 40 / frame_skip 1 / max_steps 90000 pinned)",
+  "date": "2026-06-11",
+  "verified": "re-run reproduces byte-for-byte (review verifier, seeds 2000/2008/2011/2024)"
+}

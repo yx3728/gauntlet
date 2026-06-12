@@ -33,20 +33,43 @@ max_steps 90 000), `trials/ladder-t1` (the manual Opus 4.8 trial), `trials/ladde
    (Step 4.3); mitigated by the secondary fixed-seed scoring for the comparison table.
 5. Dev regime context: the manual Opus trial ran under **v1 (speed_cap=∞)** and its policy was
    later swept across caps; **no Opus@40-developed trial exists** (v2 has zero trials). So the
-   faithfulness comparison is: manual Opus (∞-dev) = 20% clear @90k@∞, 0% at every finite cap
-   tested (≤20, 50, 90); this trial = Opus developed AND scored at 40/90k. We additionally score
-   the manual ladder-t1 policy through gauntlet at 40/90k (same-regime baseline) and at ∞ via the
-   vendored runner for exact-reproduction checks.
+   faithfulness comparison crosses regimes; this trial = Opus developed AND scored at 40/90k.
+   We additionally score the manual ladder-t1 policy through gauntlet at 40/90k (the same-regime
+   measured anchor) and reproduce its ∞ clears exactly via the vendored runner.
 
 None of the deltas changes what the subject is told about the game (STOP-and-flag rule satisfied:
 items 2–4 are harness-side and/or prescribed by the brief; item 5 is a property of the available
 baseline, recorded honestly here and in the report).
 
-## Comparison baseline (from `ladder-t1` / `ladder-t1-eval`)
+## Comparison baseline (from `ladder-t1` / `ladder-t1-eval`, verified against the RAW sweep data)
 
 - Held-out (30 seeds, 2000–2029): **20% clear @90k @∞** (6/30; converged — every 30k-timeout
-  resolved by 90k); 7% @30k. **0% at finite caps 2–20, 50, 90.**
-- Win timing among held-out clears: 25 129 / 26 827 steps (the 30k-budget clears) and up to
-  76 138 (90k re-run) — the "~30k suffices on train, ~90k on held-out" story.
-- Train-vs-held-out gap: self-reported ~51% clear on fresh seeds vs 20% canonical held-out.
-- Verified deterministic: clears reproduce exactly (e.g. 2008→win@25129, 2011→win@26827).
+  resolved by 90k); 7% @30k.
+- **Finite caps (90k sweep, per `speed_sweep_90k.csv` — NON-monotonic, low-rate):** 0 @2–5,
+  **3% @6**, 0 @8–10, **3% @12**, 0 @14, **7% @19**, 0 @20, **7% @50**, **3% @90**, 20% @∞.
+  **Cap 40 was never swept**; its nearest measured neighbors are 0% @20 and 7% @50 on a verified
+  non-monotonic curve (the "death valley" finding in `HUMAN_SPEED_FINDINGS.md`), so no value can
+  be interpolated — the only valid @40 anchor is our directly measured one below.
+- **Same-regime measured anchor:** the manual ladder-t1 policy scored canonically @40/90k on
+  seeds 2000–2029 = **0/30, 100% death, progress mean 0.3425**
+  (`manual_policy_at_40_90k.json`; ±1 seed = 3.3pp at n=30 — 0/30 vs 2/30 is within noise).
+- Win timing among the six ∞/90k held-out clears (steps): **25129, 26827, 40198, 59337, 76138,
+  78336** — the "~25–30k on the fast seeds, up to ~78k with the full budget" story.
+- Self-eval-vs-canonical gap: the subject's self-reported ~51% clear (measured by itself, at its
+  own ∞ dev regime, on self-chosen "held-out-style" seeds) vs 20% canonical held-out — a
+  self-evaluation-vs-canonical gap, not a clean train-vs-held-out measure.
+- Verified deterministic: clears reproduce exactly (e.g. 2008→win@25129, 2011→win@26827 —
+  reproduced byte-exactly on OUR vendored bundle pre-run).
+
+## Confounds the report must disclose
+
+1. **n = 1 session per arm** — Claude sampling is nondeterministic; at 30 seeds, ±1 seed = 3.3pp;
+   clear-rate deltas of a couple of seeds are within session variance.
+2. **Criterion-as-treatment:** the scoring-criterion addition is *expected* to change behavior
+   (win-first, speed-aware). Faithful reproduction applies to the substrate, never the behavior.
+3. **Dev-regime shift is bundled with the treatment** (v1 ∞ → v2 40/90k, prescribed by the brief):
+   at n=1, the criterion effect is not separable from the regime effect.
+4. **Backstop contingency:** if the node status is `timeout_killed` (8h/2000-turn runaway
+   backstop fired), the comparison is against a truncated development run — must be stated.
+5. Headless `claude -p` vs interactive session; held-out seed set differs (mitigated by the
+   secondary fixed-seed 2000–2029 scoring).
