@@ -409,3 +409,157 @@ records means the 40/90k regime is pinned by code version rather than echoed as 
 adapter version + bundle sha make it unambiguous, but an explicit config echo is cheaper to
 audit); trial.json-at-end doubles as a completion marker but leaves the seed draw
 memory-only during the hours it matters most (§8.2.5).
+
+---
+
+# 10. v2 + the first parallel cohort (4 models × N=2, frozen shared draw)
+
+After the v1 retrospective (§7–9), gauntlet was upgraded to **v2** (the §8 priority set, all
+implemented and committed) and used to run the **first parallel cohort**: the same big-game
+roguelike task, byte-identical substrate/prompt/criterion as v1, four Claude models, run
+concurrently through `evalkit.run_cohort`. This is the clean discrimination dataset the v1
+chain could not produce — and, unplanned, a hard robustness test (§10.4).
+
+## 10.1 The clean dataset (the capability ladder + win-speed)
+
+All scored on the **single frozen shared held-out draw (n=80)**, criterion = `win_speed`
+(identical semantics to v1's eval_score). Pooled across clean reps:
+
+| model | reps (clean) | clear rate, frozen n=80 (Wilson 95%) | criterion mean | win_step median | fixed 2000–2029 |
+|---|---|---|---|---|---|
+| **Haiku 4.5** | 2 | **0/160 = 0.0%** [0.0, 2.3] | 0.199 | — (no clears) | 0/60 = 0% |
+| **Sonnet 4.6** | 1 | **9/80 = 11.3%** [6.0, 20.0] | 0.545 | 62 525 | 3/30 = 10% |
+| **Opus 4.8** | 2 | **66/160 = 41.3%** [33.9, 49.0] | 0.834 | 68 041 | 27/60 = 45% |
+| **Fable 5** | 1 | **69/80 = 86.3%** [77.0, 92.2] | 1.460 | **40 604** | 28/30 = 93% |
+
+Per clean rep (between-session variance, visible because N≥2 where we have it):
+
+| arm | clear @ frozen n=80 | criterion | win_step med | cost | turns | compactions | ctx |
+|---|---|---|---|---|---|---|---|
+| haiku45-r1 | 0/80 | 0.197 | — | $1.08 | 76 | 0 | 200k |
+| haiku45-r2 | 0/80 | 0.202 | — | $1.24 | 95 | 0 | 200k |
+| sonnet46-r1 | 9/80 | 0.545 | 62 525 | $14.30 | 168 | 3 | 200k |
+| opus48-r1 | 21/80 (26.3%) | 0.730 | 71 043 | $52.78 | 270 | 0 | 1M |
+| opus48-r2 | 45/80 (56.3%) | 0.938 | 67 370 | $46.07 | 242 | 0 | 1M |
+| fable5 (makeup) | 69/80 (86.3%) | 1.460 | 40 604 | $87.35 | 234 | 0 | 1M |
+
+**Reading.** The ladder is monotone and the gaps are real at n=80: **Haiku 0% ≪ Sonnet 11% <
+Opus 41% < Fable 86%**, with non-overlapping Wilson intervals between every adjacent pair
+except where they're meant to touch. The **win-speed** dimension separates the top two beyond
+clear-rate: Fable not only clears most often, it wins **fastest** (median 40.6k steps vs
+Opus's ~68k) — Opus is a patient grinder, Fable is fast *and* reliable, exactly the v1
+finding now confirmed at N≥1 each on a shared exam. Frozen-draw and fixed-2000–2029 numbers
+agree within CI for every arm, so the ranking is not a seed-set artifact (the v1 E6 erratum
+class is closed — see §10.3).
+
+**Opus N=2 is the headline methodological result:** 26.3% vs 56.3% under *identical*
+conditions on *identical* seeds — a 30-point between-session swing. This is the variance N=1
+structurally cannot see, and it is the core argument for N≥3 (§10.5).
+
+## 10.2 Conditions (REQUIRED documentation — context window is confounded with tier)
+
+The cohort runner recorded per-arm conditions and emitted an explicit confound line:
+
+- **Context window is confounded with model tier:** Haiku and Sonnet ran at **200k**, Opus
+  and Fable at **1M** (the served default for each model; recorded from each trace's
+  `modelUsage.contextWindow`). This is not controllable across models — a 200k Haiku and a
+  1M Opus are different deployments — so the cohort measures **models-as-deployed, not pure
+  reasoning capability.** Stated plainly so no reader mistakes the ladder for a
+  context-controlled comparison.
+- **Compaction tracks the small-context arms:** every 1M arm ran with **0 compactions**;
+  the 200k arms compacted (Sonnet clean rep: 3; the truncated reps up to 8). Compaction is a
+  long-horizon degradation signal and a component of the "models-as-deployed" caveat —
+  the small-context arms periodically lost working memory the large-context arms never did.
+- **Cost spans 70× across the ladder** ($1.1 Haiku → $87 Fable per session); recorded per
+  arm in `trial.json` (v2 fix #3) — invisible in v1.
+
+## 10.3 v2 self-validation (the v1 errata classes are closed)
+
+Each v1 failure class, checked against this cohort's artifacts:
+
+- **E6 (per-trial draws made arms non-comparable):** CLOSED. One frozen draw (n=80), drawn
+  before any arm, verified byte-identical in all 12 `trial.json` split records; the mock
+  smoke proved it reaches every arm and that parallel same-policy arms score byte-identically.
+- **E3 (unrecorded condition asymmetry):** CLOSED. Context window, compactions, served model,
+  cost, turns are recorded per arm and the cohort emits the context-window confound
+  automatically — the asymmetry that went undisclosed in v1 is now a first-class output.
+- **E1/E2/E5 (cross-arm contamination via repo-reachable workspaces; audit blind spots):**
+  CLOSED structurally. Workspaces ran outside any git repo (verified: the default root has no
+  repo above it); results were staged only after the chain. No arm could reach another's
+  policy/results or the framework history — the contamination vector is gone by construction,
+  not by detection. (Audit verdicts this cohort are all "review", driven by the v1-known
+  benign own-scratch reads now downgraded but still logged; no real boundary crossing
+  occurred, consistent with the structural fix.)
+- **False-overfit class (probe on farmable raw score):** CLOSED. The criterion seam
+  (`win_speed`, declared by roguelike@2.1.0) drives the gap/CI computation; the probe no
+  longer flags Fable's high raw score as overfit.
+
+## 10.4 Robustness record — every interruption gauntlet survived with zero data loss
+
+This cohort was, unintentionally, the framework's hardest reliability test. **Six distinct
+adverse events hit it; gauntlet handled every one correctly and lost nothing.** This is a
+headline result in its own right — for a scientific instrument, surviving infrastructure
+chaos without corrupting or losing data is as important as the measurements.
+
+| # | event | what happened | gauntlet's handling | data outcome |
+|---|---|---|---|---|
+| 1 | **operator kill** (fable5-r2, main cohort) | killed at ~9 min, no policy yet | recorded `no_policy`, cohort continued | no loss; honest null |
+| 2 | **operator kill** (fable5-r1, main cohort) | killed at ~50 min, policy on disk | process-group SIGKILL; partial policy collected + canonically scored (30/80) | truncated artifact preserved + scored, marked not-clean |
+| 3 | **account session-limit death** (sonnet46-r2, main) | session died at the usage limit, turn 410, 8 compactions, policy on disk | collected + scored (3/80); recorded `nonzero_exit` | no loss; flagged truncated |
+| 4 | **transient API socket error** (makeup sonnet46) | "socket connection closed unexpectedly" at turn 120, policy on disk | collected + scored (0/80); recorded `nonzero_exit` | no loss; flagged truncated |
+| 5 | **Fable access withdrawn mid-session** (makeup2) | Anthropic retracted `claude-fable-5` access for all users (news-confirmed) — API: "issue with the selected model… may not exist or you may not have access"; died turn 88, partial policy | collected + scored (20/80, truncated dev); recorded `nonzero_exit` | no loss; archived, NOT counted |
+| 6 | **Fable access withdrawn mid-session** (makeup3) | same retraction, died turn 56, no policy written | recorded `no_policy`; cohort clean (no crash) | no loss; honest null |
+
+Plus the **orchestrator-crash path** was proven in the mock smoke: a node killed mid-trial
+left `trial.json{status:running}` + the frozen split on disk, and `evalkit.resume()`
+re-entered at scoring and finished byte-identically (v2 fix #5).
+
+**Why nothing was lost, by design:** deliverables-on-disk is the unit of success (a policy
+that exists gets scored regardless of how the session ended); the full stream-json trace is
+persisted continuously (every cost/condition/death-cause above was read back from it); the
+cohort runner contains per-arm failures so one dead arm never aborts the others; and the
+early `status:running` persist + `resume()` make even an orchestrator crash recoverable. The
+two Fable terminations (#5, #6) are the sharpest case: an **unannounced, irreversible,
+mid-session capability retraction by the provider** — the kind of event no eval harness can
+prevent — and gauntlet still collected and correctly classified both, lost zero artifacts,
+and kept the clean dataset uncontaminated. All twelve runs (clean + truncated + killed +
+no-policy) remain on disk under `runs/`; **nothing was ever deleted** (discipline), and
+partial/terminated runs are archived separately under
+`experiments/cohort-v2/results-partial/` and explicitly excluded from the counted dataset.
+
+## 10.5 Concurrency observations (first test of the parallel mechanism)
+
+- **Concurrency 4 worked with zero cross-arm interference.** Parallel arms ran in separate
+  processes (the global-RNG override is per-process); the mock smoke verified byte-identical
+  canonical scoring across 3 concurrent same-policy arms, and the live cohort showed no
+  cross-arm bleed (different policies → different results; the registry append is lock-guarded).
+- **No CPU boxing, as instructed — and it was fine.** Sessions are think/API-bound, not
+  CPU-bound; four concurrent multi-hour sessions co-existed without contention affecting
+  results (determinism is independent of scheduling). Throughput was bounded by the slowest
+  arm per wave, not by CPU.
+- **Determinism preserved under parallelism:** canonical scoring is a pure function of
+  (policy, seed, pinned bundle), so concurrent execution cannot perturb a score — confirmed
+  by the smoke's byte-identical parallel-arm check.
+
+## 10.6 Dataset status & the N=3 question
+
+**Clean N as it stands:** Haiku N=2, Sonnet N=1, Opus N=2, Fable N=1. The truncated/killed
+reps (Fable 30/80 @50min, Sonnet 3/80 limit-death, Sonnet 0/80 socket-death, Fable 20/80
+access-death) are archived and excluded.
+
+**The Fable column cannot be extended:** `claude-fable-5` access was withdrawn for all users
+mid-cohort (verified by a post-hoc smoke returning the access error); Fable is frozen at N=1
+(86.3%, a strong clean datapoint corroborated by v1-fable's 86.3% cross-score on the same
+draw — exact agreement).
+
+**Recommendation on N=3 (flag for decision):** The Opus N=2 swing (26→56%) shows N=2 is the
+*floor* for trustworthy per-model rates, not enough to pin them. To finish a defensible
+clean cohort: **bring Sonnet to N=2 (cheap, ~$15–25, ~2.5h — one clean rep is the gap)** and,
+budget permitting, **Opus to N=3** to bracket that 30-point swing. Haiku at N=2 is already
+conclusive (0/160). Fable is closed at N=1 by force majeure. I have NOT launched these —
+awaiting your decision; the cohort runner makes each a one-line invocation on the same frozen
+draw.
+
+**v2 framework state:** gym 129/129, evalkit 63/63 green; all §8 Tier-1+2 fixes implemented,
+unit-tested, and validated by the concurrent mock smoke and this live cohort. Total cohort
+spend (incl. truncated/killed/access-died runs): ≈ $396.
