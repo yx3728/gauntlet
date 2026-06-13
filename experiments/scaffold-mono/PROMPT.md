@@ -59,81 +59,38 @@ environment. Form a hypothesis, test it with a run, keep what works.
 
 ---
 
-# How to work: run a disciplined improvement loop
+# How to work: a cognitive method (not a recipe)
 
-The strongest way to improve a policy on a hard, long game like this is to **play four roles in your
-own head every cycle** — analyst, strategist, coder, evaluator. This is a thinking discipline, not a
-set of rules; it is the working method that wins.
+There are no answers here — only a way of thinking that tends to win on a hard, long game. Each cycle,
+play four roles in your own head: **analyst, strategist, coder, evaluator.** Manage your own files and
+context as you see fit; if there are hard-won findings you can't afford to lose as the session grows
+(e.g. an observed world-model), consider writing them down and re-reading them.
 
-**Externalize your thinking to disk.** This is a long session and your context may be automatically
-compressed as it grows — so write the things you must not lose to files and re-read them as you go:
-- `GAME_MODEL.md` — your observed world-model (below).
-- `NOTES.md` — your current selection metric, the strategy you're pursuing, **and a running list of
-  what you've already tried and how it scored**, so a plateau makes you change approach instead of
-  re-trying it.
+**Ground (analyst).** Before optimizing, work out how the world actually behaves by **observation, not
+by guessing how to win**: where each object type appears and how it moves (watch each object's `pos`
+and the **sign of its `vel`** across frames), what `move` actually does (units, clamping — see
+`speed_cap`), how your automatic fire behaves, and the objects/events you meet (INTERFACE §3.1;
+`level_up` / `boss_phase` / `game_over`). Note only what you observed.
 
-These notes are for *your own* benefit — to organize thought and preserve hard-won findings across the
-session. (You don't need to manage policy files or keep old versions; just keep `policy.js` itself at
-your best work — see "evaluate" below.)
+Then repeat:
 
-## First — GROUND yourself (analyst)
-Before optimizing, figure out **how this game's world actually works, by OBSERVATION — not how to
-win.** Write a tiny policy that prints `obs` fields (or read the metrics/objects from a run) and
-determine, citing the **actual numbers you see**:
-- **Geometry & motion** — where objects of each type appear and how they move: inspect each object's
-  `pos` and the **SIGN of its `vel`** across frames.
-- **Controls & damage** — what `move` actually does (units, clamping — see `speed_cap` in INTERFACE),
-  and how your ship's **automatic fire** behaves (determine it from the `player_bullet` objects you
-  observe and the schema).
-- **Objects & events you will encounter** — the object types in INTERFACE §3.1, and the
-  `level_up` / `boss_phase` / `game_over` events.
-
-Record this as a concise **world-model** in `GAME_MODEL.md`. Report ONLY what you observed or what
-INTERFACE states — do not assume mechanics you haven't seen.
-
-## Then — repeat this cycle until you are confident it is your best
-
-**(1) DIAGNOSE (strategist).** Citing **specific numbers** from your latest runs, name the **single
-most important reason your best policy so far still falls short of the GOAL** (clear the game — defeat
-the boss). In particular, distinguish **"not surviving far enough to reach the boss"** from
-**"reaching the boss but not damaging it."**
-
-**(2) EVOLVE & pick ONE change (strategist).** Evolve your plan to fix **THAT** weakness, **building on
-what your best policy already does well.** If your last change did **not** improve things, **change
-approach — do not restate it.** Then commit to **ONE concrete, implementable change** (what to add or
-alter, and why).
-
-**(3) IMPLEMENT on top of your best (coder).** Apply that one change by **building on your current best
-policy** — do NOT rewrite from scratch or throw away what already works unless the change truly
-requires it. Keep the policy **short and complete** (~120 lines, readable). Handle the whole schema so
-`policy()` never throws (`level_up` via `obs.pending_upgrade.options`, boss phases, `game_over`); keep
-it deterministic in `(obs, mem)`. Run it (a few seeds) and fix it until it runs cleanly **and**
-implements the change.
-
-**(4) EVALUATE — and don't regress (evaluator).** Decide a **selection metric** for judging policies
-toward the GOAL, using ONLY the env's own `reward_info` fields —
-`{boss_cleared, boss_reached, boss_hp_destroyed, progress, score, kills, survived_ms, wave, level, hp}`
-— as a lexicographic order or a weighted combination that tracks **CLEARING the game, not a local
-proxy.** Ask **which fields can be high while making no progress toward winning**, and don't reward
-those. **Re-orient the metric as the game opens up:** early on (boss never reached) it will lean on
-`progress` / `survived_ms`; the moment you actually reach or damage the boss, put
-`boss_cleared` / `boss_hp_destroyed` / `boss_reached` first. By that metric, decide: **is the latest
-change better or worse than your best so far?** If it's better, it's your new baseline to build on. If
-it's worse, **go back to the better version** and try a different change — never keep building on a
-regression. Keep `policy.js` equal to your best-known version.
-
-**(5) OBSERVE FURTHER when you break new ground (analyst).** Whenever a policy reaches **further into
-the game than any before** — into regions earlier policies never survived to observe — look at the new
-frames and **UPDATE `GAME_MODEL.md`** with the newly-visible mechanics (a boss and how it
-behaves / moves / phases, new enemy or bullet types, new hazards), citing the actual numbers. Keep the
-prior facts that still hold; add or correct only what the new region shows. Then feed that back into
-your next DIAGNOSE.
+- **Diagnose.** From the actual numbers, name the **single biggest reason** your best policy still
+  falls short of the goal — e.g. is it failing to survive far enough to reach the boss, or reaching it
+  but not damaging it?
+- **Change one thing.** Evolve your plan to fix **that** weakness, building on what already works. If
+  your last change didn't help, **change approach rather than restate it.** Commit to one concrete
+  change.
+- **Implement on your best.** Apply it on top of your current best policy — not a rewrite.
+- **Judge toward the goal.** Decide for yourself how to rank policies so the ranking tracks **clearing
+  the game**, not a local proxy that can climb while you get no closer to winning — and revise that
+  judgement as you learn what actually matters. Build on what improves; drop what regresses; keep
+  `policy.js` at your best.
+- **Look further.** When a policy survives into territory you hadn't seen, observe the new mechanics
+  there and fold them back into your next diagnosis.
 
 ## Seeds
 By default you play seed 1; practising on a few (e.g. `--seeds 1,11,23`) and judging by the multi-seed
-result helps you avoid tuning to one seed. Your final policy will also be checked on a **separate,
-held-out set of seeds you do not see**, so prefer an approach that **generalizes** rather than fitting
-the seeds you practise on.
-
-When you are confident you've done your best, make sure `policy.js` is your strongest version — it is
-the only thing scored.
+result helps you avoid tuning to one seed. Your final policy is also checked on a **separate, held-out
+set of seeds you do not see**, so prefer an approach that **generalizes** rather than fitting the
+seeds you practise on. When you're confident you've done your best, make sure `policy.js` is your
+strongest version — it is the only thing scored.

@@ -27,17 +27,24 @@ EVAL_REPORT, no role-separated files. The **cognitive content is near-verbatim**
 | `EVALUATOR` | "EVALUATE — and don't regress" (goal-tracking selection metric from `reward_info` fields; re-orient as boss becomes reachable; revert if a change regresses) |
 | append-only best-so-far blackboard | folded into the evaluate step (don't build on a regression) — but **not** as file bookkeeping (see below) |
 
-### What this version deliberately does NOT ask for (Claude Code handles it)
+### Cognitive method, not a recipe — and not a deliverables spec
 
 The original harness made the *framework* manage the blackboard: versioned policy files, an
-auto-selected best-so-far as the live base, role-separated docs. In our pipeline **Claude Code
-manages the working file and context**, and **only the final `policy.js` submitted is scored** — so
-the prompt does **not** ask the agent to save every policy version or maintain a `best_so_far.js`, and
-asks for **no deliverables** (no `report.json`). The single behavioural ask that remains from
-"best-so-far" is purely cognitive: *don't keep building on a regression; keep `policy.js` at your
-best.* On-disk notes (`GAME_MODEL.md`, `NOTES.md`) are suggested **only** as a thinking aid and to
-**preserve key findings across Claude Code's automatic context compaction** — not as artifact
-management.
+auto-selected best-so-far live base, role-separated docs, a computed selection metric. In our pipeline
+**Claude Code manages its own files and context**, and **only the final `policy.js` is scored**, so
+this prompt deliberately:
+- asks for **no deliverables** (no `report.json`) and **no file/version bookkeeping** — Claude Code
+  decides how to manage its work;
+- gives **no answers** — in particular it does **not** tell the agent *which* metric fields to weight
+  or *when* (an earlier draft spoonfed "lean on `progress` early, put `boss_*` first once you reach
+  the boss"; removed). It only states the *cognitive principle*: rank by something that tracks
+  clearing, not a proxy, and revise as you learn;
+- mentions on-disk notes (e.g. a world-model) **only** as an optional aid to survive Claude Code's
+  automatic context compaction — phrased as "consider", not required;
+- keeps the contract/robustness facts in the base task section (not repeated inside the loop).
+
+The one behavioural carry-over from "best-so-far" is purely cognitive — *build on what improves, drop
+what regresses, keep `policy.js` at your best* — with no instruction on how to store versions.
 
 ## What is held constant vs the bare-prompt cohort
 
