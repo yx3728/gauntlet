@@ -16,18 +16,28 @@ files, with the **harness enforcing** the structure:
 
 This prompt **folds those four roles (analyst / strategist / coder / evaluator) into one agent** and
 asks it to **run the loop itself**, with **no enforcement** — no harness switching roles, no computed
-EVAL_REPORT, no auto-selected best-so-far. The agent keeps its own lightweight memory on disk
-(`GAME_MODEL.md`, `NOTES.md`, `best_so_far.js`). The **cognitive content is near-verbatim** from
-`prompts_v2.py`:
+EVAL_REPORT, no role-separated files. The **cognitive content is near-verbatim** from `prompts_v2.py`:
 
 | role in v2 | lifted into PROMPT.md §"How to work" |
 |---|---|
 | `GROUNDING` (analyst) | "GROUND yourself" — observe geometry/motion via `pos` + SIGN of `vel`, controls/damage, objects/events; report only what's observed |
 | `PERCEPTION_UPDATE` | "OBSERVE FURTHER when you break new ground" — update the world-model when a policy reaches further |
 | `STRATEGIST` | "DIAGNOSE" (cite numbers; survive-to-boss vs damage-boss) + "EVOLVE & pick ONE change" (build on best; change approach if plateaued) |
-| `CODER` | "IMPLEMENT on top of the best" (build on best-so-far, full policy, ~120 lines, never throws, deterministic) |
-| `EVALUATOR` | "EVALUATE & keep the best" (goal-tracking selection metric from `reward_info` fields; re-orient as boss becomes reachable; keep best-so-far, never drift) |
-| append-only best-so-far blackboard | "Memory discipline" + maintain `best_so_far.js` |
+| `CODER` | "IMPLEMENT on top of your best" (build on the best version, ~120 lines, never throws, deterministic) |
+| `EVALUATOR` | "EVALUATE — and don't regress" (goal-tracking selection metric from `reward_info` fields; re-orient as boss becomes reachable; revert if a change regresses) |
+| append-only best-so-far blackboard | folded into the evaluate step (don't build on a regression) — but **not** as file bookkeeping (see below) |
+
+### What this version deliberately does NOT ask for (Claude Code handles it)
+
+The original harness made the *framework* manage the blackboard: versioned policy files, an
+auto-selected best-so-far as the live base, role-separated docs. In our pipeline **Claude Code
+manages the working file and context**, and **only the final `policy.js` submitted is scored** — so
+the prompt does **not** ask the agent to save every policy version or maintain a `best_so_far.js`, and
+asks for **no deliverables** (no `report.json`). The single behavioural ask that remains from
+"best-so-far" is purely cognitive: *don't keep building on a regression; keep `policy.js` at your
+best.* On-disk notes (`GAME_MODEL.md`, `NOTES.md`) are suggested **only** as a thinking aid and to
+**preserve key findings across Claude Code's automatic context compaction** — not as artifact
+management.
 
 ## What is held constant vs the bare-prompt cohort
 
