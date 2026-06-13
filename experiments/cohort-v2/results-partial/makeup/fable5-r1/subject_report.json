@@ -1,0 +1,16 @@
+{
+  "best_result": { "cleared": true, "progress": 1.0, "level": 11, "wave": 3,
+                   "boss_reached": true, "boss_hp_destroyed": 1.0, "score": 32920, "survival_ms": 171000 },
+  "how_far": "Cleared the game: 15/15 wins on the 15 practice seeds (mean win ~35k steps / ~580s) and 52/60 on 60 unseen test seeds (~87%); fastest clear 171s (10247 steps) with 100% of all boss HP destroyed in every win.",
+  "failure_modes": ["~13% of unseen-seed runs still die, mostly to void/voidCore teleport-slams (3000 dmg one-shot) when caught mid-field or inside the static-bullet lattice trap", "chip-deaths when cornered at the bottom rail by spray barrages during long weak-build first-boss fights"],
+  "lessons": [
+    "movement: receding-horizon space-time value iteration over predicted hazards (replanned every tick) beats greedy potential fields; conservative reach (24px/tick vs the 40 cap) buys slack for newly spawned bullets",
+    "no i-frames: every bullet (300-450) and body contact (900-3000) lands; the bottom rail and corners are death traps under barrages",
+    "guns fire straight up: win speed = alignment uptime below the boss; hunt from below whenever there is room, pick the firing lane with fewest add bodies (without pierce, adds absorb every shot)",
+    "the 5-stream bullet fan converges within ~250px, so hover close to safe bosses (azure/crimson) but keep 340+px from teleport-slammers (void/voidCore); unknown variants get cautious first contact, then adaptive trust",
+    "boss gauntlet length (1 vs 3 bosses) is an uncontrollable RNG draw at boss death - optimize kill speed for both branches",
+    "upgrade order: exp multipliers in the first picks snowball levels; pierce > 5-way split > fire rate > boss damage; magnet upgrades give safe passive exp; one shield = slam insurance",
+    "tuning beyond a validated local optimum is dominated by trajectory-chaos noise: every later point-fix (corner aversion, flee timers, wall clamps) tested worse on 45-90 run batches and was reverted"
+  ],
+  "attempts_used": 130
+}
