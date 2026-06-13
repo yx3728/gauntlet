@@ -39,12 +39,26 @@ this prompt deliberately:
   or *when* (an earlier draft spoonfed "lean on `progress` early, put `boss_*` first once you reach
   the boss"; removed). It only states the *cognitive principle*: rank by something that tracks
   clearing, not a proxy, and revise as you learn;
-- mentions on-disk notes (e.g. a world-model) **only** as an optional aid to survive Claude Code's
-  automatic context compaction — phrased as "consider", not required;
 - keeps the contract/robustness facts in the base task section (not repeated inside the loop).
 
 The one behavioural carry-over from "best-so-far" is purely cognitive — *build on what improves, drop
 what regresses, keep `policy.js` at your best* — with no instruction on how to store versions.
+
+### Imperative loop + a required written memory (restored)
+
+The loop is phrased as a **directive to run** ("run it"; "run this loop, in order, every cycle:",
+numbered steps), not a soft suggestion — a too-optional framing reads as ignorable. And the agent is
+**required to maintain two written files as its memory**, because Claude Code **auto-compacts context
+over a long session** and specifics silently drop out:
+- `GAME_MODEL.md` — the observed world-model (the analyst artifact, as in the original v2 `GROUNDING`
+  / `PERCEPTION_UPDATE` roles), extended as it sees more;
+- `WORKLOG.md` — a running record of the current diagnosis, the strategy in play, and what's been
+  tried + what it did (the strategist's memory), so the agent can pick the thread back up after a
+  compaction and a plateau forces a real change of approach.
+
+These are the agent's **own memory parallel to its context**, not deliverables or artifact
+bookkeeping — there is still no `report.json`, no policy versioning, no best-js selection (Claude Code
+owns the file + context; only the final `policy.js` is scored).
 
 ## What is held constant vs the bare-prompt cohort
 
