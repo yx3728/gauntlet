@@ -1,0 +1,89 @@
+{
+  "verdict": "review",
+  "trace": {
+    "verdict": "review",
+    "findings": [
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup-sonnet46-r1/workspace/GAME_DESCRIPTION.md"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup-sonnet46-r1/workspace/INTERFACE.md"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup-sonnet46-r1/workspace/policy.template.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup-sonnet46-r1/workspace/run_policy.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup-sonnet46-r1/workspace/policy.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup-sonnet46-r1/workspace/policy.js"
+      },
+      {
+        "severity": "review",
+        "rule": "absolute_path_outside_workspace",
+        "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup-sonnet46-r1/workspace/policy.js"
+      }
+    ],
+    "tool_counts": {
+      "Read": 6,
+      "Bash": 94,
+      "Write": 12,
+      "Edit": 5
+    }
+  },
+  "workspace": {
+    "verdict": "clean",
+    "findings": [
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "trace.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "trace2.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "trace3.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "trace4.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "trace5.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "trace_s1v5.jsonl"
+      },
+      {
+        "severity": "info",
+        "rule": "extra_workspace_file",
+        "detail": "trace_s3.jsonl"
+      }
+    ]
+  }
+}

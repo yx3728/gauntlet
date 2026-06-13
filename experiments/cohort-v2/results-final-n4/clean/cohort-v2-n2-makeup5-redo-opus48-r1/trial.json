@@ -1,0 +1,628 @@
+{
+  "format": "gauntlet_trial_v1",
+  "created_at": 1781370220,
+  "task": {
+    "format": "gauntlet_arena_manifest_v1",
+    "arena_mode": "overlay",
+    "task_id": "roguelike",
+    "task_name": "Roguelike Skies (manual-trial v2 regime: speed_cap 40, 90k budget)",
+    "task_version": "2.1.0",
+    "bundle_file": "env.bundle.js",
+    "bundle_sha1_12": "7ff9deac4156",
+    "max_steps_default": 90000,
+    "training_seeds": [
+      1,
+      11,
+      23,
+      42,
+      57,
+      88,
+      101,
+      137,
+      199,
+      256,
+      314,
+      451,
+      512
+    ],
+    "criterion": {
+      "kind": "win_speed",
+      "cap": 90000
+    },
+    "files": {
+      "GAME_DESCRIPTION.md": "324e441b0ae6359cd6cb06c16b464e3ea2fde7cd6d195f3a105294e238a2d045",
+      "INTERFACE.md": "0ea9b1b62e6047d56c6f3db6038a3b01fed2d77b83329e78d4d1b26769481386",
+      "env.bundle.js": "424916b286c9efbbd95957caa5f4fabcf35d3812439ba04647f66996dac54b13",
+      "expand_trace.js": "61c4fb3d66ab0732cfeec20cf1a0945d65064700aa9c31eb05cd237c00a1c5bf",
+      "play_step.js": "70dfd78a85c1f217130c547b1059e5c6aee601dcc0b4b8da6805c1e1e4fd7748",
+      "policy.template.js": "6e699f7940f1ecaa869b0b3489e615ad92bb474953ebdbdabcafa16bf06e6e9b",
+      "run_policy.js": "4e43412319100a11196e42ee4502cdba5f306d7a410efa1f855982a5df7979ce"
+    }
+  },
+  "status": "complete",
+  "node": {
+    "node": "claude-code:claude-opus-4-8/max",
+    "status": "ok",
+    "wall_ms": 11507168,
+    "policy_path": "/Users/REDACTED/gauntlet/runs/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/policy.js",
+    "report": {
+      "best_result": {
+        "cleared": true,
+        "progress": 1.0,
+        "level": 27,
+        "wave": 3,
+        "boss_reached": true,
+        "boss_hp_destroyed": 1.0,
+        "score": 152020,
+        "survival_ms": 920000
+      },
+      "how_far": "Clears the game (\u901a\u5173) \u2014 defeats the full sequence of ~19.5M-HP, 5-layer bosses. On large fresh-seed benchmarks it wins ~61-65% (mean eval ~1.14, avg win around step ~56k of 90k); most non-wins reach 75-95% progress (an 'almost win' on a late boss).",
+      "failure_modes": [
+        "Late-boss death (biggest category, ~23%): survive several bosses then get caught by a very dense late-boss bullet pattern at high progress",
+        "Early-boss death (~12%): reach the first boss underleveled/low-eHP and die in its opening barrage",
+        "Rare timeout (~4%) when DPS ramps too slowly to finish every boss within 90k steps",
+        "Boss body contact does ~2700 dmg (near-lethal) and bosses roam/dive"
+      ],
+      "lessons": [
+        "The game is a sequence of multi-layer bosses; auto-fire is straight-up only, so x-alignment with the boss is mandatory to deal damage (the boss is 120px wide, so a ~56px free-dodge band still connects)",
+        "Boss layers fall faster as you level (DPS compounds), so the whole game is gated on survival",
+        "A multi-tick trajectory ROLLOUT (does committing to this heading get me trapped/cornered?) dodges far better than a 1-tick 'hold position' danger model \u2014 it roughly doubled the win rate",
+        "Movement momentum (favor continuing your heading) cut jitter and added ~15% win rate",
+        "When surrounded, seek the FIELD CENTER (max escape room) instead of staying glued to the boss column \u2014 stops the boss from herding you into a wall",
+        "Effective HP (recharging shield + heal-overflow->max-HP snowball) lets you survive long enough to win; over-prioritizing survival, though, just causes timeouts",
+        "The boss variant depends on the action sequence (RNG), so robustness to all patterns matters more than fitting one seed; per-seed variance is huge, so evaluate changes via A/B on 120+ identical seeds"
+      ],
+      "attempts_used": 55
+    },
+    "trace_path": "/Users/REDACTED/gauntlet/runs/cohort-v2-n2-makeup5-redo-opus48-r1/trace.jsonl",
+    "meta": {
+      "exit_code": 0,
+      "cmd": [
+        "claude",
+        "-p",
+        "--model",
+        "claude-opus-4-8",
+        "--effort",
+        "max",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "default",
+        "--allowedTools",
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "--strict-mcp-config",
+        "--disallowedTools",
+        "WebFetch",
+        "WebSearch",
+        "Task",
+        "--max-turns",
+        "2000"
+      ],
+      "trace_meta": {
+        "session": {
+          "session_id": "34a09766-2570-4f3c-a29f-de4f7bc1b0ea",
+          "model": "claude-opus-4-8",
+          "tools": [
+            "AskUserQuestion",
+            "Bash",
+            "CronCreate",
+            "CronDelete",
+            "CronList",
+            "DesignSync",
+            "Edit",
+            "EnterPlanMode",
+            "EnterWorktree",
+            "ExitPlanMode",
+            "ExitWorktree",
+            "Glob",
+            "Grep",
+            "LSP",
+            "Monitor",
+            "NotebookEdit",
+            "PushNotification",
+            "Read",
+            "RemoteTrigger",
+            "ScheduleWakeup",
+            "Skill",
+            "TaskCreate",
+            "TaskGet",
+            "TaskList",
+            "TaskOutput",
+            "TaskStop",
+            "TaskUpdate",
+            "ToolSearch",
+            "Workflow",
+            "Write"
+          ],
+          "claude_code_version": "2.1.176",
+          "cwd": "/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace"
+        },
+        "session_start": "2026-06-13T13:21:55.804Z",
+        "session_end": "2026-06-13T16:33:16.307Z",
+        "result": {
+          "subtype": "success",
+          "num_turns": 296,
+          "duration_ms": 11501254,
+          "duration_api_ms": 5067597,
+          "total_cost_usd": 56.49869650000002,
+          "usage": {
+            "input_tokens": 40810,
+            "cache_creation_input_tokens": 480717,
+            "cache_read_input_tokens": 86162967,
+            "output_tokens": 336167,
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 480717,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "not_available",
+            "iterations": [
+              {
+                "input_tokens": 131,
+                "output_tokens": 926,
+                "cache_read_input_tokens": 480478,
+                "cache_creation_input_tokens": 239,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 239
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "modelUsage": {
+            "claude-haiku-4-5-20251001": {
+              "inputTokens": 1738,
+              "outputTokens": 16,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0,
+              "webSearchRequests": 0,
+              "costUSD": 0.001818,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000
+            },
+            "claude-opus-4-8": {
+              "inputTokens": 40810,
+              "outputTokens": 336167,
+              "cacheReadInputTokens": 86162967,
+              "cacheCreationInputTokens": 480717,
+              "webSearchRequests": 0,
+              "costUSD": 56.49687850000002,
+              "contextWindow": 1000000,
+              "maxOutputTokens": 64000
+            }
+          },
+          "permission_denials": [],
+          "session_id": "34a09766-2570-4f3c-a29f-de4f7bc1b0ea"
+        },
+        "total_cost_usd": 56.49869650000002,
+        "num_turns": 296,
+        "context_windows": {
+          "claude-haiku-4-5-20251001": 200000,
+          "claude-opus-4-8": 1000000
+        },
+        "compactions": [],
+        "compaction_count": 0,
+        "rate_limit_events": 4
+      }
+    }
+  },
+  "split": {
+    "training": [
+      1,
+      11,
+      23,
+      42,
+      57,
+      88,
+      101,
+      137,
+      199,
+      256,
+      314,
+      451,
+      512
+    ],
+    "heldout": [
+      23909282,
+      89683790,
+      99055528,
+      114393872,
+      120734801,
+      127511755,
+      128736927,
+      159563661,
+      211671483,
+      216294123,
+      225667921,
+      248132113,
+      267895665,
+      286929402,
+      291466058,
+      296277116,
+      346859415,
+      347138107,
+      347237370,
+      377589150,
+      421086513,
+      423743162,
+      433655565,
+      447141502,
+      454360361,
+      564358683,
+      669395028,
+      674649657,
+      677875595,
+      688369459,
+      694048034,
+      700451100,
+      717773896,
+      720469439,
+      754978692,
+      805193672,
+      841466700,
+      903566773,
+      964887657,
+      993024654,
+      1004050057,
+      1063816017,
+      1075386637,
+      1089133765,
+      1195497507,
+      1227337628,
+      1239134193,
+      1248874055,
+      1272848672,
+      1290348223,
+      1363646577,
+      1364837773,
+      1376534578,
+      1398707742,
+      1463662692,
+      1492703610,
+      1498472200,
+      1519659702,
+      1553934308,
+      1555539873,
+      1666071108,
+      1666141856,
+      1681457707,
+      1688071062,
+      1693213230,
+      1741073764,
+      1767536853,
+      1781576834,
+      1808257358,
+      1842084158,
+      1869686383,
+      1887572581,
+      1942632252,
+      1965209130,
+      2048060130,
+      2055473899,
+      2088110682,
+      2090271083,
+      2106417234,
+      2140472805
+    ]
+  },
+  "audit": {
+    "verdict": "review",
+    "trace": {
+      "verdict": "review",
+      "findings": [
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/GAME_DESCRIPTION.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/INTERFACE.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/run_policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/policy.template.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/play_step.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/expand_trace.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/manifest.json"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/explore.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/explore2.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/explore3.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/explore4.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/explore5.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/explore6.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/debug.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/debug_boss.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/explore7.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/probe.js"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/bjdsb9v2t.output"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/report.json"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/probe_level.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/eval.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/catalog.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/trace_death.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/report.json"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/eval.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/ab.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/ab.js"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/b0gfce4vt.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/be5faixhg.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/bazmr9z4w.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/b0znt04gv.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/bi1wst32a.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/bplr2i5i2.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/bkw11bk2p.output"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-n2-makeup5-redo-opus48-r1/workspace/report.json"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/brmjy0p4d.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-n2-makeup5-redo-opus48-r1-workspace/34a09766-2570-4f3c-a29f-de4f7bc1b0ea/tasks/bei4wxf0c.output"
+        }
+      ],
+      "tool_counts": {
+        "Read": 24,
+        "Bash": 190,
+        "Write": 21,
+        "Edit": 60
+      }
+    },
+    "workspace": {
+      "verdict": "clean",
+      "findings": [
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "ab.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "catalog.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "debug.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "debug_boss.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "eval.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore2.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore3.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore4.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore5.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore6.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "explore7.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "policy.best.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "probe.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "probe_level.js"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "trace_death.js"
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "started_at": "2026-06-13T13:21:52Z",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.12.12",
+    "node_version": "v24.11.1",
+    "gauntlet_sha": "ca3af3dc0289",
+    "gauntlet_dirty": true,
+    "finished_at": "2026-06-13T16:33:39Z"
+  }
+}

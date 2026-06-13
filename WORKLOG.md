@@ -304,3 +304,28 @@ experiments/cohort-v2/analyze_cohort.py (fixed-seed 2000-2029 scoring + final_co
 3) inspect audits (haiku/sonnet "review" findings unchecked); 4) report sections (cross-arm
 table + CIs, condition documentation incl. ctx-window-confounded-with-tier caveat, v2
 self-validation, concurrency observations); 5) stage results post-chain; 6) flag N=3.
+
+## 2026-06-13 — Cohort completed to N (Haiku/Sonnet 4, Opus 3, Fable 1); final REPORT.md
+
+Makeup waves brought clean reps to Haiku N=4, Sonnet N=4, Opus N=3 (4th Opus arm
+SIGTERM-killed → partial), Fable N=1 (access withdrawn — foreclosed). User stopped at
+"enough now". Wrote the publication report.
+
+- `experiments/cohort-v2/master_analysis.py` — the reproducible computational appendix:
+  recomputes the ladder, Wilson CIs, adjacent-rung two-proportion p-values, win-speed
+  distributions, conditions, baselines, v1 cross-scores, and the robustness ledger from
+  persisted artifacts; writes master_analysis.json.
+- **Ladder (frozen n=80, clean pooled):** Haiku 0/320 (0.0%) ≪ Sonnet 17/320 (5.3%) ≪
+  Opus 113/240 (47.1%) ≪ Fable 69/80 (86.3%); every adjacent gap p<1e-4, CIs disjoint;
+  reproduced on fixed 2000–2029. Win-speed: Fable median 40.6k ≪ Opus 64.5k (Fable wins
+  faster AND more often). Opus between-session variance 21/45/47 — the N≥3 argument.
+- **Robustness:** 21 sessions, 12 clean + 9 partial across 6 distinct failure modes
+  (operator kill ×2, session-limit ×3, Fable access retraction ×2, API socket ×1, SIGTERM
+  ×1) — zero artifacts lost; recorded as a primary result.
+- `REPORT.md` — publication-grade: abstract, framework, the game, methods, results I (v1
+  + errata), II (ladder + win-speed + variance + context confound), III (robustness +
+  concurrency), limitations, reproducibility appendix, conclusion.
+- Archived final clean+partial dataset (copy-only) under
+  experiments/cohort-v2/results-final-n4/ (12 clean + 9 partial trial dirs + master json +
+  frozen draw); runs/ untouched, nothing deleted.
+- Spend: clean ≈ $325, total cohort incl. recovered partials ≈ $461, v1 ≈ $158.
