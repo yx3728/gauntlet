@@ -51,3 +51,36 @@ it recover from regressions? Compare the trajectory shape to the bare arms (bare
 - After the follow-up completes: final analysis + verdict here; commit.
 
 Note: never delete runs; partials archived; results staged after each wave.
+
+## 2026-06-14 ~01:35 EDT — test run analyzed (cohort-v2-cog-test, N=1 each)
+
+Both arms node=ok, served models verified (haiku-4-5, sonnet-4-6), on the frozen n=80 draw.
+
+| arm | clear /80 | criterion | win_med | turns | compactions | cost | vs bare |
+|---|---|---|---|---|---|---|---|
+| Haiku +cog | **0/80** | 0.198 | — | 86 | 0 | $1.02 | bare reps 0,0,0,0 → **flat** |
+| Sonnet +cog | **4/80** | 0.515 | 71.9k | 442 | 10 | $40.70 | bare reps 9,5,3,0 (crit ~0.44) → **within noise** (crit edges up) |
+
+**1. Metric (N=1): no clear improvement.** Haiku flat at 0; Sonnet 4/80 sits mid of its bare 0–9
+spread (criterion 0.515 vs bare ~0.44 — a faint edge, within noise).
+
+**2. Compliance: STRONG and SUSTAINED.** Both wrote rich, factual `GAME_MODEL.md` + `WORKLOG.md`.
+Sonnet stated a ranking rule (win > progress → boss_hp_destroyed → survived_ms), ran observe→plan→
+implement→evaluate, and its WORKLOG stayed structured through **10 compactions** to the end — the
+written-memory mechanism did its job. Haiku complied too (5 WORKLOG touches) but shallower.
+
+**3. Cognition: high for Sonnet, defeatist for Haiku.** Sonnet derived the binding constraint
+itself — computed it needs ~228 dmg/step to kill the 19.3M-HP boss in budget, found its build reaches
+~173 → timeout, and diagnosed exactly why seeds 11/23 die (enemy body-collision at specific
+x-clusters). That is the M1 loop working as designed. Haiku reasoned itself into a WRONG, defeatist
+conclusion ("boss defeat impossible … baseline achieves maximum feasible progress") and converged to
+hold-position = bare.
+
+**Verdict:** the prompt is clearly *engaged* (compliance + real goal-directed cognition) but does
+**not move the weak/mid metric** — the limiter migrated to coder execution / raw difficulty, exactly
+the northstar prediction. By the pre-registered rule (strong compliance + cognitive climb = PROMISING)
+the informative next test is a model whose execution is NOT the bottleneck.
+
+**Decision → PROMISING: launch 1 Haiku + 1 Sonnet + 1 Opus** (3 concurrent, frozen draw, same prompt).
+Opus tests whether structure pays off where the agent can actually execute the diagnosed changes; the
+extra H+S add a little N on weak/mid. Total trials this investigation = 2 + 3 = 5 (≤ 7).
