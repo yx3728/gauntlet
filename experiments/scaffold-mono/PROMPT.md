@@ -59,55 +59,56 @@ environment. Form a hypothesis, test it with a run, keep what works.
 
 ---
 
-# How to work: run this improvement loop
+# How to work: observe first, then run an improvement loop
 
-This is a hard, long game, and the reliable way to win it is a disciplined loop run many times — so
-**run it**, and note which step you are on as you go. Each cycle you do the work of four roles
-yourself — **analyst, strategist, coder, evaluator.** This is a way of working, not a source of
+This is a hard, long game; the reliable way to win it is to **first understand the world, then run a
+disciplined loop many times** — so **run it**, and note which step you are on. You do the work of four
+roles yourself — **analyst, strategist, coder, evaluator.** This is a way of working, not a source of
 answers: the *how-to-win* is yours to discover.
 
 **Keep a written memory — this matters.** Over a long session your context will be **automatically
 compacted** as it grows, and specifics you were relying on can silently drop out. So maintain two
-files on disk and re-read them at the start of each cycle, treating them as your real memory:
-- `GAME_MODEL.md` — everything you have observed about how the world actually works (you extend it as
-  you see more).
-- `WORKLOG.md` — your running record: the current diagnosis, the plan you are on, and **every attempt
-  with its metrics and what you changed** — so that after a compaction you can pick the thread back
-  up, and so a plateau pushes you to change approach instead of circling.
+files on disk and re-read them as your real memory:
+- `GAME_MODEL.md` — your factual picture of how the world works.
+- `WORKLOG.md` — your running record: your current ranking rule, the latest evaluation/diagnosis, and
+  **every attempt with its metrics and what you changed** — so that after a compaction you can pick
+  the thread back up, and a plateau pushes you to change approach instead of circling.
 
-**Run this loop, in order, every cycle:**
+**First, OBSERVE (analyst) — once at the start, and again only when new regions open up, not every
+iteration.** By **observation, not by guessing how to win**, build a factual picture: where each
+object type appears and how it moves (watch each object's `pos` and the **sign of its `vel`** across
+frames), what `move` actually does (units, clamping — see `speed_cap`), how your automatic fire
+behaves, and the objects/events you meet (INTERFACE §3.1; `level_up` / `boss_phase` / `game_over`).
+Record it in `GAME_MODEL.md` — only what you actually saw, not what you assume. When one of your
+policies reaches **further into the game than any before**, observe that new region's frames (run it
+and inspect them) and fold them into your picture. Do not re-observe from scratch each turn.
 
-1. **OBSERVE (analyst).** Work out how the world actually behaves by **observation, not by guessing how
-   to win** — including any region a policy has now reached for the first time: where each object type
-   appears and how it moves (watch each object's `pos` and the **sign of its `vel`** across frames),
-   what `move` actually does (units, clamping — see `speed_cap`), how your automatic fire behaves, and
-   the objects/events you meet (INTERFACE §3.1; `level_up` / `boss_phase` / `game_over`). Record what
-   you see in `GAME_MODEL.md` — only what you actually observed, not what you assume.
+**Then run this loop, in order, every iteration:**
 
-2. **DIAGNOSE (strategist).** From the actual numbers, name the **single biggest reason** your best
-   policy so far still falls short of the goal. Write it in `WORKLOG.md`.
+1. **PLAN (strategist).** From your most recent EVALUATION (step 3 last iteration) and your world
+   picture: name the **single main reason** your best policy so far still falls short of the goal,
+   then decide a short, **ordered list of 2–4 concrete, implementable changes** to your best-so-far
+   that address it, ordered by expected impact. Keep each change simple — prefer parametric or local
+   edits; do not set yourself problems that need inventing new algorithms.
 
-3. **PLAN — an ordered 2–4 changes (strategist).** Decide a short, **ordered list of 2–4 concrete,
-   implementable changes** to your best policy so far, ordered by expected impact, that address that
-   diagnosis. Keep each change simple — prefer parametric or local edits; do not set yourself problems
-   that need inventing new algorithms.
+2. **IMPLEMENT (coder).** Write the policy that applies those changes, **building on your
+   best-so-far** — not a rewrite; keep what already works. Keep it complete and readable, multi-line —
+   you have room up to ~300 lines (do not feel constrained below ~230); never minify onto one line,
+   and if it is cut off at the output limit, continue it rather than compress to fit. Then run it and
+   read its metrics.
 
-4. **IMPLEMENT on your best (coder).** Apply those changes on top of your current best policy — not a
-   rewrite; keep what already works. Keep the policy complete and readable, multi-line — you have room
-   up to ~300 lines (do not feel constrained below ~230); never minify onto one line, and if it gets
-   cut off at the output limit, continue it rather than compress to fit.
+3. **EVALUATE (evaluator).** Assess what just happened, in two parts:
+   - **(a) how you rank attempts** — state, and update as you learn, an explicit rule that ranks your
+     attempts toward the goal (an ordering or a weighted combination of the env's own `reward_info`
+     fields; INTERFACE: do not fixate on any single metric), and apply it to keep `policy.js` at your
+     best. If a change regressed, build your next plan on the better version, not the worse one.
+   - **(b) diagnosis** — in a few concrete lines from the `reward_info`: what the latest policy
+     actually did (how far it got, where it died) and whether it beat your prior best, by which fields.
 
-5. **RUN & EVALUATE (evaluator).** Run it and read the metrics against your plan and the goal. Decide
-   whether this attempt is better than your best so far, and keep `policy.js` at your best: a winning
-   attempt outranks any non-winning one (per the scoring criterion above), and among attempts that do
-   not yet win, judge which is closest to the goal from the env's own `reward_info` fields — revising
-   that judgement as you learn what actually matters. If a change made things worse, go back to the
-   better version and try a different change rather than build on a regression. (INTERFACE: do not
-   fixate on any single metric.) Then return to step 1.
+   This evaluation is what your next PLAN reads.
 
-Keep iterating — observe, diagnose, plan, implement, evaluate — for as long as you have; do not decide
-to stop early, and there is no separate "final answer" to pick: `policy.js` itself, kept at your best,
-is the only thing scored.
+Keep iterating — PLAN, IMPLEMENT, EVALUATE — for as long as you have; do not decide to stop early, and
+there is no separate "final answer" to pick: `policy.js`, kept at your best, is the only thing scored.
 
 ## Seeds
 By default you play seed 1; practising on a few (e.g. `--seeds 1,11,23`) and judging by the multi-seed

@@ -32,14 +32,20 @@ This prompt **folds those four roles (analyst / strategist / coder / evaluator) 
 asks it to **run the loop itself**, with **no enforcement** — no harness switching roles, no computed
 EVAL_REPORT, no role-separated files. The **cognitive content is near-verbatim** from `prompts_v2.py`:
 
-| role in v2 | lifted into PROMPT.md §"How to work" |
+Structure mirrors the SPEC MONO exactly: **observe first** (once at start; re-observe only when new
+regions open up), **then the loop `1 PLAN → 2 IMPLEMENT → 3 EVALUATE`** (diagnosis is folded into
+PLAN as "the single main reason" + the **ordered 2–4 changes**; EVALUATE is two-part — a self-stated
+ranking rule + a diagnosis — and feeds the next PLAN). No standalone DIAGNOSE step, no per-iteration
+re-observation.
+
+| SPEC MONO element | lifted into PROMPT.md §"How to work" |
 |---|---|
-| `GROUNDING` (analyst) | "GROUND yourself" — observe geometry/motion via `pos` + SIGN of `vel`, controls/damage, objects/events; report only what's observed |
-| `PERCEPTION_UPDATE` | "OBSERVE FURTHER when you break new ground" — update the world-model when a policy reaches further |
-| `STRATEGIST` | "DIAGNOSE" (cite numbers; survive-to-boss vs damage-boss) + "EVOLVE & pick ONE change" (build on best; change approach if plateaued) |
-| `CODER` | "IMPLEMENT on top of your best" (build on the best version, ~120 lines, never throws, deterministic) |
-| `EVALUATOR` | "EVALUATE — and don't regress" (goal-tracking selection metric from `reward_info` fields; re-orient as boss becomes reachable; revert if a change regresses) |
-| append-only best-so-far blackboard | folded into the evaluate step (don't build on a regression) — but **not** as file bookkeeping (see below) |
+| "FIRST, OBSERVE … once, then only when new regions open up" | "First, OBSERVE — once at the start, and again only when new regions open up" |
+| frontier frames (harness auto-pushes in qwen) | translated: "when a policy reaches further than before, observe that region's frames yourself (run it and inspect)" |
+| PLAN = single main reason + ordered 2–4 changes, parametric/local, no new algorithms | step 1 PLAN, verbatim in spirit |
+| IMPLEMENT = build on best-so-far, ~300 lines (floor ~230), never minify, continue-if-cut | step 2 IMPLEMENT |
+| EVALUATE = (a) selection metric over `reward_info` + (b) diagnosis; feeds next PLAN | step 3 EVALUATE (json/harness-apply translated to "state a rule and apply it yourself") |
+| never self-stop / no final answer | closing line |
 
 ### Cognitive method, not a recipe — and not a deliverables spec
 
