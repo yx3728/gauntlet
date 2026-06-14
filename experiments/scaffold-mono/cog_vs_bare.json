@@ -1,0 +1,383 @@
+{
+  "meta": {
+    "cap": 90000,
+    "speed_cap": 40,
+    "criterion": "win_speed",
+    "frozen_heldout_n": 80,
+    "task_version": "2.1.0",
+    "design": "M0-analog (bare cohort) vs M1-analog (+cognitive 'How to work' structure)"
+  },
+  "prompt_delta": {
+    "checked": true,
+    "bare_has_report_json_deliverable": true,
+    "cog_has_report_json_deliverable": false,
+    "cog_adds_cognitive_how_to_work": true,
+    "cog_requires_GAME_MODEL_and_WORKLOG": true,
+    "note": "cog prompt drops the bare report.json deliverable and adds a multi-seed practice hint in addition to the cognitive section -- the only-delta claim is approximate"
+  },
+  "cog_arms": [
+    {
+      "name": "cohort-v2-cog-followup-haiku45-r1",
+      "model": "haiku45",
+      "state": "clean",
+      "node_status": "ok",
+      "on_frozen_draw": true,
+      "served_model": "claude-haiku-4-5-20251001",
+      "clears": 0,
+      "n": 80,
+      "clear_rate": 0.0,
+      "criterion_mean": 0.1978,
+      "compactions": 0,
+      "num_turns": 99,
+      "cost_usd": 1.1033987999999997,
+      "audit": "review",
+      "GAME_MODEL.md_bytes": 2324,
+      "WORKLOG.md_bytes": 3761,
+      "policy_lines": 17
+    },
+    {
+      "name": "cohort-v2-cog-followup2-haiku45-r1",
+      "model": "haiku45",
+      "state": "clean",
+      "node_status": "ok",
+      "on_frozen_draw": true,
+      "served_model": "claude-haiku-4-5-20251001",
+      "clears": 0,
+      "n": 80,
+      "clear_rate": 0.0,
+      "criterion_mean": 0.1978,
+      "compactions": 0,
+      "num_turns": 159,
+      "cost_usd": 1.9800752000000004,
+      "audit": "review",
+      "GAME_MODEL.md_bytes": 862,
+      "WORKLOG.md_bytes": 2314,
+      "policy_lines": 125
+    },
+    {
+      "name": "cohort-v2-cog-test-haiku45-r1",
+      "model": "haiku45",
+      "state": "clean",
+      "node_status": "ok",
+      "on_frozen_draw": true,
+      "served_model": "claude-haiku-4-5-20251001",
+      "clears": 0,
+      "n": 80,
+      "clear_rate": 0.0,
+      "criterion_mean": 0.1978,
+      "compactions": 0,
+      "num_turns": 86,
+      "cost_usd": 1.0212404,
+      "audit": "review",
+      "GAME_MODEL.md_bytes": 1859,
+      "WORKLOG.md_bytes": 3824,
+      "policy_lines": 40
+    },
+    {
+      "name": "cohort-v2-cog-followup-opus48-r1",
+      "model": "opus48",
+      "state": "clean",
+      "node_status": "ok",
+      "on_frozen_draw": true,
+      "served_model": "claude-opus-4-8",
+      "clears": 42,
+      "n": 80,
+      "clear_rate": 0.525,
+      "criterion_mean": 0.9527,
+      "compactions": 0,
+      "num_turns": 293,
+      "cost_usd": 62.72381150000001,
+      "audit": "review",
+      "GAME_MODEL.md_bytes": 9067,
+      "WORKLOG.md_bytes": 7283,
+      "policy_lines": 351
+    },
+    {
+      "name": "cohort-v2-cog-followup2-opus48-r1",
+      "model": "opus48",
+      "state": "clean",
+      "node_status": "ok",
+      "on_frozen_draw": true,
+      "served_model": "claude-opus-4-8",
+      "clears": 9,
+      "n": 80,
+      "clear_rate": 0.1125,
+      "criterion_mean": 0.5448,
+      "compactions": 0,
+      "num_turns": 255,
+      "cost_usd": 52.38359049999998,
+      "audit": "review",
+      "GAME_MODEL.md_bytes": 6675,
+      "WORKLOG.md_bytes": 10677,
+      "policy_lines": 479
+    },
+    {
+      "name": "cohort-v2-cog-followup2-opus48-r2",
+      "model": "opus48",
+      "state": "clean",
+      "node_status": "ok",
+      "on_frozen_draw": true,
+      "served_model": "claude-opus-4-8",
+      "clears": 54,
+      "n": 80,
+      "clear_rate": 0.675,
+      "criterion_mean": 1.0256,
+      "compactions": 0,
+      "num_turns": 299,
+      "cost_usd": 63.681149000000005,
+      "audit": "review",
+      "GAME_MODEL.md_bytes": 8910,
+      "WORKLOG.md_bytes": 10762,
+      "policy_lines": 325
+    },
+    {
+      "name": "cohort-v2-cog-followup-sonnet46-r1",
+      "model": "sonnet46",
+      "state": "in_flight",
+      "node_status": null,
+      "on_frozen_draw": true,
+      "served_model": null,
+      "clears": null,
+      "n": null,
+      "clear_rate": null,
+      "criterion_mean": null,
+      "compactions": null,
+      "num_turns": null,
+      "cost_usd": null,
+      "audit": null,
+      "GAME_MODEL.md_bytes": 0,
+      "WORKLOG.md_bytes": 0,
+      "policy_lines": 0
+    },
+    {
+      "name": "cohort-v2-cog-followup2-sonnet46-r1",
+      "model": "sonnet46",
+      "state": "in_flight",
+      "node_status": null,
+      "on_frozen_draw": true,
+      "served_model": null,
+      "clears": null,
+      "n": null,
+      "clear_rate": null,
+      "criterion_mean": null,
+      "compactions": null,
+      "num_turns": null,
+      "cost_usd": null,
+      "audit": null,
+      "GAME_MODEL.md_bytes": 0,
+      "WORKLOG.md_bytes": 0,
+      "policy_lines": 0
+    },
+    {
+      "name": "cohort-v2-cog-test-sonnet46-r1",
+      "model": "sonnet46",
+      "state": "clean",
+      "node_status": "ok",
+      "on_frozen_draw": true,
+      "served_model": "claude-sonnet-4-6",
+      "clears": 4,
+      "n": 80,
+      "clear_rate": 0.05,
+      "criterion_mean": 0.5152,
+      "compactions": 10,
+      "num_turns": 442,
+      "cost_usd": 40.69984719999997,
+      "audit": "flagged",
+      "GAME_MODEL.md_bytes": 2862,
+      "WORKLOG.md_bytes": 4393,
+      "policy_lines": 353
+    }
+  ],
+  "comparison": {
+    "haiku45": {
+      "bare": {
+        "clean_N": 4,
+        "clears": 0,
+        "n": 320,
+        "clear_rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.0119
+        ],
+        "criterion_mean": 0.2328,
+        "win_step_median": null
+      },
+      "cog": {
+        "clean_N": 3,
+        "in_flight_N": 0,
+        "per_rep_clears": [
+          [
+            0,
+            80
+          ],
+          [
+            0,
+            80
+          ],
+          [
+            0,
+            80
+          ]
+        ],
+        "clears": 0,
+        "n": 240,
+        "clear_rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.0158
+        ],
+        "criterion_mean": 0.1978,
+        "win_step_median": null
+      },
+      "two_prop_p_bare_vs_cog": 1.0
+    },
+    "sonnet46": {
+      "bare": {
+        "clean_N": 4,
+        "clears": 17,
+        "n": 320,
+        "clear_rate": 0.0531,
+        "wilson95": [
+          0.0334,
+          0.0834
+        ],
+        "criterion_mean": 0.4427,
+        "win_step_median": 53990
+      },
+      "cog": {
+        "clean_N": 1,
+        "in_flight_N": 2,
+        "per_rep_clears": [
+          [
+            4,
+            80
+          ]
+        ],
+        "clears": 4,
+        "n": 80,
+        "clear_rate": 0.05,
+        "wilson95": [
+          0.0196,
+          0.1216
+        ],
+        "criterion_mean": 0.5152,
+        "win_step_median": 71903.5
+      },
+      "two_prop_p_bare_vs_cog": 0.910751
+    },
+    "opus48": {
+      "bare": {
+        "clean_N": 3,
+        "clears": 113,
+        "n": 240,
+        "clear_rate": 0.4708,
+        "wilson95": [
+          0.4086,
+          0.5339
+        ],
+        "criterion_mean": 0.9148,
+        "win_step_median": 64501
+      },
+      "cog": {
+        "clean_N": 3,
+        "in_flight_N": 0,
+        "per_rep_clears": [
+          [
+            42,
+            80
+          ],
+          [
+            9,
+            80
+          ],
+          [
+            54,
+            80
+          ]
+        ],
+        "clears": 105,
+        "n": 240,
+        "clear_rate": 0.4375,
+        "wilson95": [
+          0.3762,
+          0.5008
+        ],
+        "criterion_mean": 0.8411,
+        "win_step_median": 66955
+      },
+      "two_prop_p_bare_vs_cog": 0.463324
+    }
+  },
+  "compliance": {
+    "clean_arms": 7,
+    "wrote_GAME_MODEL.md": 7,
+    "wrote_WORKLOG.md": 7,
+    "both_files_all_clean_arms": true,
+    "max_compactions_survived": 10,
+    "per_arm": [
+      {
+        "name": "cohort-v2-cog-followup-haiku45-r1",
+        "model": "haiku45",
+        "GAME_MODEL.md": true,
+        "WORKLOG.md": true,
+        "GAME_MODEL.md_bytes": 2324,
+        "WORKLOG.md_bytes": 3761,
+        "compactions": 0
+      },
+      {
+        "name": "cohort-v2-cog-followup-opus48-r1",
+        "model": "opus48",
+        "GAME_MODEL.md": true,
+        "WORKLOG.md": true,
+        "GAME_MODEL.md_bytes": 9067,
+        "WORKLOG.md_bytes": 7283,
+        "compactions": 0
+      },
+      {
+        "name": "cohort-v2-cog-followup2-haiku45-r1",
+        "model": "haiku45",
+        "GAME_MODEL.md": true,
+        "WORKLOG.md": true,
+        "GAME_MODEL.md_bytes": 862,
+        "WORKLOG.md_bytes": 2314,
+        "compactions": 0
+      },
+      {
+        "name": "cohort-v2-cog-followup2-opus48-r1",
+        "model": "opus48",
+        "GAME_MODEL.md": true,
+        "WORKLOG.md": true,
+        "GAME_MODEL.md_bytes": 6675,
+        "WORKLOG.md_bytes": 10677,
+        "compactions": 0
+      },
+      {
+        "name": "cohort-v2-cog-followup2-opus48-r2",
+        "model": "opus48",
+        "GAME_MODEL.md": true,
+        "WORKLOG.md": true,
+        "GAME_MODEL.md_bytes": 8910,
+        "WORKLOG.md_bytes": 10762,
+        "compactions": 0
+      },
+      {
+        "name": "cohort-v2-cog-test-haiku45-r1",
+        "model": "haiku45",
+        "GAME_MODEL.md": true,
+        "WORKLOG.md": true,
+        "GAME_MODEL.md_bytes": 1859,
+        "WORKLOG.md_bytes": 3824,
+        "compactions": 0
+      },
+      {
+        "name": "cohort-v2-cog-test-sonnet46-r1",
+        "model": "sonnet46",
+        "GAME_MODEL.md": true,
+        "WORKLOG.md": true,
+        "GAME_MODEL.md_bytes": 2862,
+        "WORKLOG.md_bytes": 4393,
+        "compactions": 10
+      }
+    ]
+  }
+}
