@@ -91,3 +91,34 @@ User added **2 Opus + 1 Haiku + 1 Sonnet** (concurrency 4), same frozen draw + s
 alongside the running follow-up. This brings the +cognitive arms toward **N=3 each** (Haiku/Sonnet/
 Opus) for a tighter weak/mid estimate and N=3 on the key Opus arm. Trials now 5 + 4 = 9 (the earlier
 ≤7 autonomous cap is superseded by this direct instruction).
+
+## 2026-06-14 — follow-up waves resolved; Opus +cog is a clean NULL; canonical report updated
+
+Correction to the earlier "Opus pending" note: **all 3 Opus +cog arms completed** (node ok).
+Consolidated +cognitive results (frozen n=80, clean pooled, win_speed) vs bare:
+
+| model | bare clear | +cog clear | crit bare→cog | bare-vs-cog p | clean N (bare→cog) |
+|---|---|---|---|---|---|
+| Haiku 4.5 | 0/320 (0.0%) | **0/240 (0.0%)** | 0.233→0.198 | 1.0 | 4→3 |
+| Sonnet 4.6 | 17/320 (5.3%) | **4/80 (5.0%)** | 0.443→0.515 | 0.91 | 4→1 (+2 in-flight) |
+| Opus 4.8 | 113/240 (47.1%) | **105/240 (43.8%)** (reps 42/9/54) | 0.915→0.841 | 0.46 | 3→3 |
+
+**Headline:** the cognitive scaffold is followed strongly and sustainedly (all 7 clean arms wrote
+GAME_MODEL.md + WORKLOG.md; Sonnet held the loop through 10 compactions with a correct quantitative
+boss-DPS diagnosis) but **does not move clear-rate on any tier — including Opus, where execution is
+not the bottleneck.** The key open test resolved to a clean null. This matches the northstar thesis:
+once memory/cognition is supplied, the binding constraint is coder execution / raw difficulty, not
+the absence of a thinking scaffold. (Honest-negative result.)
+
+**Confounds flagged by the report subagent (recorded for the final pass):**
+1. The +cog prompt is NOT a pure superset of the bare prompt — it also dropped the bare `report.json`
+   deliverable and added a multi-seed practice hint. Substrate/criterion/task-version are
+   byte-identical, but these prompt deltas are a (minor) confound; documented in REPORT §8.5/§9 and
+   `cog_vs_bare.py prompt_delta()`.
+2. A Sonnet-test "leak" audit hit is a false positive (held-out seed value coincidentally inside a
+   float move coord); the credential_access flag is the agent reading its own session transcript to
+   recover from compaction — neither affects the canonical score.
+
+**Still in-flight:** 2 Sonnet +cog arms (followup, followup2). When they land, re-run
+`cog_vs_bare.py` to refresh §8 (Sonnet → N=3). Canonical report committed (c424b60, merged to main).
+Total cognitive-experiment trials launched: 9.
