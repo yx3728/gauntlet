@@ -1,9 +1,23 @@
-# scaffold-mono — proposed prompt: structured-cognition, single agent, no enforcement
+# scaffold-mono — Claude trial prompt with a cognitive structure added (the "+M1" arm)
 
-`PROMPT.md` is a **proposed** prompt for running the local harness's memory-equipped **v2**
-cognitive architecture as a **single Claude Code `claude -p` session** (the "mono" form). It is for
-the **Sonnet 4.6 and Haiku 4.5** arms — the weak/mid models the local-harness pilot found most
-limited by *amnesia/drift and self-evaluation*, which structured cognition targets.
+`PROMPT.md` is the **cohort/previous-Claude-trial prompt with ONE thing changed: a cognitive
+structure ("How to work") is added.** It is the Claude analog of the local harness's **mono M1**
+(cognitive-flow) arm, aligned to `SPEC_mono_multi_northstar.md` §9 MONO (the de-leaked successor to
+the older `M1_SYSTEM`). For the **Sonnet 4.6 and Haiku 4.5** arms.
+
+## The two comparisons this prompt is built for
+
+1. **Central (within Claude): does a cognitive structure help weak/mid Claude models?**
+   `bare cohort prompt (M0-analog)` → `this prompt (M1-analog)`. **Everything except the cognitive
+   "How to work" section is identical to the previous Claude trials** — same task, substrate, goal,
+   the **same `win_speed` criterion (kept)**, same contract/robustness/seeds. The only delta is the
+   added cognitive structure, so any change in Sonnet/Haiku clear-rate is attributable to it.
+2. **Cross-substrate: does cognitive structure do the same trick at frontier as locally?**
+   Compare the Claude delta (bare → +cognitive) against the local-harness delta **M0 (goal-only)
+   → M1 (cognitive-flow)** on qwen. The cognitive structure here mirrors the **de-leaked SPEC MONO**,
+   so the apples-to-apples local arm is the SPEC-MONO run. *(The older `m1-r1` ablation used a leakier
+   M1 — a strategy-dimension list "positioning/threats/upgrades" and a "not a local proxy" metric
+   phrase — which the SPEC strips; compare against the de-leaked local M1, not that one.)*
 
 ## What it is — and how it differs from the multi-agent original
 
