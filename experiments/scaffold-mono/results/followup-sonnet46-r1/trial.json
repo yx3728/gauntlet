@@ -1,0 +1,605 @@
+{
+  "format": "gauntlet_trial_v1",
+  "created_at": 1781464627,
+  "task": {
+    "format": "gauntlet_arena_manifest_v1",
+    "arena_mode": "overlay",
+    "task_id": "roguelike",
+    "task_name": "Roguelike Skies (manual-trial v2 regime: speed_cap 40, 90k budget)",
+    "task_version": "2.1.0",
+    "bundle_file": "env.bundle.js",
+    "bundle_sha1_12": "7ff9deac4156",
+    "max_steps_default": 90000,
+    "training_seeds": [
+      1,
+      11,
+      23,
+      42,
+      57,
+      88,
+      101,
+      137,
+      199,
+      256,
+      314,
+      451,
+      512
+    ],
+    "criterion": {
+      "kind": "win_speed",
+      "cap": 90000
+    },
+    "files": {
+      "GAME_DESCRIPTION.md": "324e441b0ae6359cd6cb06c16b464e3ea2fde7cd6d195f3a105294e238a2d045",
+      "INTERFACE.md": "0ea9b1b62e6047d56c6f3db6038a3b01fed2d77b83329e78d4d1b26769481386",
+      "env.bundle.js": "424916b286c9efbbd95957caa5f4fabcf35d3812439ba04647f66996dac54b13",
+      "expand_trace.js": "61c4fb3d66ab0732cfeec20cf1a0945d65064700aa9c31eb05cd237c00a1c5bf",
+      "play_step.js": "70dfd78a85c1f217130c547b1059e5c6aee601dcc0b4b8da6805c1e1e4fd7748",
+      "policy.template.js": "6e699f7940f1ecaa869b0b3489e615ad92bb474953ebdbdabcafa16bf06e6e9b",
+      "run_policy.js": "4e43412319100a11196e42ee4502cdba5f306d7a410efa1f855982a5df7979ce"
+    }
+  },
+  "status": "complete",
+  "node": {
+    "node": "claude-code:claude-sonnet-4-6/max",
+    "status": "timeout_killed",
+    "wall_ms": 28800211,
+    "policy_path": "/Users/REDACTED/gauntlet/runs/cohort-v2-cog-followup-sonnet46-r1/workspace/policy.js",
+    "report": null,
+    "trace_path": "/Users/REDACTED/gauntlet/runs/cohort-v2-cog-followup-sonnet46-r1/trace.jsonl",
+    "meta": {
+      "exit_code": -9,
+      "cmd": [
+        "claude",
+        "-p",
+        "--model",
+        "claude-sonnet-4-6",
+        "--effort",
+        "max",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "default",
+        "--allowedTools",
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "--strict-mcp-config",
+        "--disallowedTools",
+        "WebFetch",
+        "WebSearch",
+        "Task",
+        "--max-turns",
+        "2000"
+      ],
+      "trace_meta": {
+        "session": {
+          "session_id": "fae8f6b3-8241-4391-a1ae-11af3d6b648b",
+          "model": "claude-sonnet-4-6",
+          "tools": [
+            "AskUserQuestion",
+            "Bash",
+            "CronCreate",
+            "CronDelete",
+            "CronList",
+            "DesignSync",
+            "Edit",
+            "EnterPlanMode",
+            "EnterWorktree",
+            "ExitPlanMode",
+            "ExitWorktree",
+            "Glob",
+            "Grep",
+            "LSP",
+            "Monitor",
+            "NotebookEdit",
+            "PushNotification",
+            "Read",
+            "RemoteTrigger",
+            "ScheduleWakeup",
+            "Skill",
+            "TaskCreate",
+            "TaskGet",
+            "TaskList",
+            "TaskOutput",
+            "TaskStop",
+            "TaskUpdate",
+            "ToolSearch",
+            "Workflow",
+            "Write"
+          ],
+          "claude_code_version": "2.1.177",
+          "cwd": "/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace"
+        },
+        "session_start": "2026-06-14T11:15:41.836Z",
+        "session_end": "2026-06-14T19:14:52.462Z",
+        "result": {},
+        "total_cost_usd": null,
+        "num_turns": null,
+        "context_windows": {},
+        "compactions": [
+          {
+            "trigger": "auto",
+            "pre_tokens": 167525,
+            "post_tokens": 12180
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 170137,
+            "post_tokens": 12981
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 174584,
+            "post_tokens": 13532
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 170524,
+            "post_tokens": 11808
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 168998,
+            "post_tokens": 13714
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 168389,
+            "post_tokens": 13677
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 168021,
+            "post_tokens": 14148
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 171826,
+            "post_tokens": 9256
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 167235,
+            "post_tokens": 5641
+          },
+          {
+            "trigger": "auto",
+            "pre_tokens": 167413,
+            "post_tokens": 8135
+          }
+        ],
+        "compaction_count": 10,
+        "rate_limit_events": 8
+      }
+    }
+  },
+  "split": {
+    "training": [
+      1,
+      11,
+      23,
+      42,
+      57,
+      88,
+      101,
+      137,
+      199,
+      256,
+      314,
+      451,
+      512
+    ],
+    "heldout": [
+      23909282,
+      89683790,
+      99055528,
+      114393872,
+      120734801,
+      127511755,
+      128736927,
+      159563661,
+      211671483,
+      216294123,
+      225667921,
+      248132113,
+      267895665,
+      286929402,
+      291466058,
+      296277116,
+      346859415,
+      347138107,
+      347237370,
+      377589150,
+      421086513,
+      423743162,
+      433655565,
+      447141502,
+      454360361,
+      564358683,
+      669395028,
+      674649657,
+      677875595,
+      688369459,
+      694048034,
+      700451100,
+      717773896,
+      720469439,
+      754978692,
+      805193672,
+      841466700,
+      903566773,
+      964887657,
+      993024654,
+      1004050057,
+      1063816017,
+      1075386637,
+      1089133765,
+      1195497507,
+      1227337628,
+      1239134193,
+      1248874055,
+      1272848672,
+      1290348223,
+      1363646577,
+      1364837773,
+      1376534578,
+      1398707742,
+      1463662692,
+      1492703610,
+      1498472200,
+      1519659702,
+      1553934308,
+      1555539873,
+      1666071108,
+      1666141856,
+      1681457707,
+      1688071062,
+      1693213230,
+      1741073764,
+      1767536853,
+      1781576834,
+      1808257358,
+      1842084158,
+      1869686383,
+      1887572581,
+      1942632252,
+      1965209130,
+      2048060130,
+      2055473899,
+      2088110682,
+      2090271083,
+      2106417234,
+      2140472805
+    ]
+  },
+  "audit": {
+    "verdict": "review",
+    "trace": {
+      "verdict": "review",
+      "findings": [
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/GAME_DESCRIPTION.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/INTERFACE.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/policy.template.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/run_policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Read file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Edit file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/policy.js"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/GAME_MODEL.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/WORKLOG.md"
+        },
+        {
+          "severity": "review",
+          "rule": "absolute_path_outside_workspace",
+          "detail": "Write file_path=/Users/REDACTED/.gauntlet/workspaces/cohort-v2-cog-followup-sonnet46-r1/workspace/policy_v9_exact.js"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bbemnurpk.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bhfag7s9n.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/ba163oc2i.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bgmxqecpa.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b0duxhe6z.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bxz6cnwtq.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bj13nqyjp.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bw0vfye4n.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/br0exssvl.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bwuwdphxh.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b1t9yu5kx.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bylxvp17c.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bn0f2yje3.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bld7kylf5.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bs7c4qqps.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bn0ifkbnz.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/byy3akhf2.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bmkqvm9be.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bbhn0zff7.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b3l4156wb.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b52clpj85.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bobmofokr.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b77ztdb5o.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bvw1d2z4m.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/brs8a6zsx.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/ba4bppy0y.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b1sqhrcfr.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bvg4ci5up.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/blshsb1uk.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b12qb5xzf.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bz1h1g4mx.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b83c6odor.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/brvy2jsf9.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bh483sn5c.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b9a4i1uml.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b47w0jfd2.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bj1380ss8.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bdzy5ul1z.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/b08vloar5.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bs96hxfgc.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bsw5txru1.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bfpb4pkrk.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/buehil1g3.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bbt935s5e.output"
+        },
+        {
+          "severity": "info",
+          "rule": "own_session_scratch_read",
+          "detail": "Read file_path=/private/tmp/claude-504/-Users-REDACTED--gauntlet-workspaces-cohort-v2-cog-followup-sonnet46-r1-workspace/fae8f6b3-8241-4391-a1ae-11af3d6b648b/tasks/bfz3ii32f.output"
+        }
+      ],
+      "tool_counts": {
+        "Read": 77,
+        "Bash": 527,
+        "Write": 19,
+        "Edit": 84,
+        "ToolSearch": 3,
+        "TaskOutput": 6
+      }
+    },
+    "workspace": {
+      "verdict": "clean",
+      "findings": [
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "--output"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "GAME_MODEL.md"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "WORKLOG.md"
+        },
+        {
+          "severity": "info",
+          "rule": "extra_workspace_file",
+          "detail": "policy_v9_exact.js"
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "started_at": "2026-06-14T11:15:33Z",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.12.12",
+    "node_version": "v24.11.1",
+    "gauntlet_sha": "d00e017500f7",
+    "gauntlet_dirty": false,
+    "finished_at": "2026-06-14T19:15:33Z"
+  }
+}

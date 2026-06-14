@@ -1,4 +1,4 @@
-# Gauntlet: a determinism-first framework for long-horizon LLM-agent evaluation — a four-model capability study on a bullet-hell roguelike, and an in-flight test of whether a cognitive scaffold moves the metric
+# Gauntlet: a determinism-first framework for long-horizon LLM-agent evaluation — a four-model capability study on a bullet-hell roguelike, and a test of whether a cognitive scaffold moves the metric
 
 *Canonical report. Every number is recomputed from persisted run artifacts by
 two committed appendices: `experiments/cohort-v2/master_analysis.py` (bare
@@ -6,8 +6,9 @@ cohort, §6–7, output `master_analysis.json`) and
 `experiments/scaffold-mono/cog_vs_bare.py` (the +cognitive experiment, §8,
 output `cog_vs_bare.json`). Figures below are quoted from those outputs. Repo
 state at writing: gym 129/129 + evalkit 63/63 unit tests green. **The +cognitive
-(§8) numbers are PRELIMINARY: 7 of 9 cognitive arms are clean; two Sonnet arms
-are still running** — they are marked in-flight throughout.*
+experiment (§8) is now closed: all 9 cognitive arms are terminal — 7 clean
+(Haiku ×3, Sonnet ×1, Opus ×3); the other 2 Sonnet arms ground to the 8h
+wall-clock backstop and are excluded as partials (itself a finding, §8).***
 
 ---
 
@@ -29,7 +30,7 @@ draw**, gauntlet resolves a clean, statistically separated ladder — **Haiku 0.
 1e-4) — and surfaces a second discriminating axis, **win-speed**, on which Fable
 dominates Opus (median 40.6k vs 64.5k steps) despite both clearing reliably.
 
-**Study 2 — does a cognitive scaffold help? (in-flight).** We ran the *same* arms
+**Study 2 — does a cognitive scaffold help?** We ran the *same* arms
 on the *same* frozen draw with one change — an added **"How to work" cognitive
 structure** (observe → plan → implement → evaluate, with a required written
 memory). This is the local-harness **M0 (goal-only) vs M1 (cognitive-flow)**
@@ -41,7 +42,10 @@ on any tier measured so far — **Haiku 0.0%→0.0%, Sonnet 5.3%→5.0% (N=1), O
 47.1%→43.8%** (all bare-vs-cog p ≥ 0.46). The limiter is **coder execution / raw
 task difficulty**, not the absence of cognitive structure — consistent with the
 northstar thesis that once memory/cognition is supplied the binding constraint
-migrates downstream. *(Two Sonnet +cog arms still running.)*
+migrates downstream. A cost-side finding: both Sonnet +cog follow-up arms
+**ground to the 8h wall-clock backstop** (vs bare Sonnet finishing in 2.5–3.7h)
+without payoff — the scaffold's keep-iterating discipline can induce unproductive
+long grinding in a model that cannot break the execution ceiling.
 
 **Study 1 also became a severe reliability test by accident:** **21 bare
 sessions, 9 interrupted by six distinct failure modes** — including an
@@ -425,7 +429,7 @@ arms.
 
 ---
 
-## 8. Results IV — the cognitive-scaffold experiment (M0 vs M1 analog) — PRELIMINARY
+## 8. Results IV — the cognitive-scaffold experiment (M0 vs M1 analog)
 
 **The question.** The bare cohort (§6) tells the agent *what* to do (clear the
 game, win-fast criterion) but not *how to think*. The local multi-agent harness
@@ -441,18 +445,20 @@ INVESTIGATION_WORKLOG.md). The driving hypothesis (northstar): if cognitive
 structure helps where it matters, the gain should appear most where execution is
 *not* already the bottleneck.
 
-**Status (in-flight).** 9 cognitive arms launched; **7 are clean** (Haiku ×3,
-Sonnet ×1, Opus ×3); **2 Sonnet arms are still running** at writing (top-level
-status `running`, no `heldout.json` — skipped from all pooled stats). All clean
+**Status (closed).** 9 cognitive arms launched, all now terminal; **7 are clean**
+(Haiku ×3, Sonnet ×1, Opus ×3) and pooled below. The other **2 Sonnet arms both
+ran to the 8h wall-clock backstop** (`timeout_killed`, 0/80 and 1/80) and are
+excluded as partials — see §8.3 (this is itself a finding: 2-of-3 Sonnet
+follow-ups grinding to the wall, vs bare Sonnet finishing in 2.5–3.7h). All clean
 arms scored the exact frozen n=80 draw (verified). `cog_vs_bare.json` is the
-committed appendix; rerun it when the Sonnet arms finish.
+committed appendix and reproduces these numbers.
 
 ### 8.1 The bare-vs-+cognitive table (clean, frozen n=80, pooled)
 
 | model | bare clear (clean N) | **+cog clear (clean N)** | crit mean bare→cog | bare-vs-cog p | note |
 |---|---|---|---|---|---|
 | **Haiku 4.5** | 0/320 = 0.0% (N4) | **0/240 = 0.0%** (N3) [0.0, 1.6] | 0.233 → 0.198 | **1.0** | flat — identical |
-| **Sonnet 4.6** | 17/320 = 5.3% (N4) | **4/80 = 5.0%** (N1, +2 in-flight) [2.0, 12.2] | 0.443 → 0.515 | 0.91 | within noise |
+| **Sonnet 4.6** | 17/320 = 5.3% (N4) | **4/80 = 5.0%** (N1; 2 follow-ups timed out at 8h, excluded) [2.0, 12.2] | 0.443 → 0.515 | 0.91 | within noise |
 | **Opus 4.8** | 113/240 = 47.1% (N3) | **105/240 = 43.8%** (N3) [37.6, 50.1] | 0.915 → 0.841 | 0.46 | within noise |
 
 Per-rep +cog clears /80: **Haiku** 0,0,0; **Sonnet** 4 (N=1); **Opus** 42, 9, 54.
@@ -503,7 +509,11 @@ The quality of the *thinking* separates the tiers cleanly:
   173 … CANNOT win with 173 dmg/step!" — and localized why specific seeds die
   ("enemy cluster at x=72-74 … Body avoidance too weak to override target force").
   The M1 loop worked; the code to realize the fix did not reliably land. Metric
-  flat.
+  flat — and **costly**: 2 of 3 Sonnet +cog arms ran the *full 8h backstop*
+  (`timeout_killed`, 10 and 8 compactions) to 0/80 and 1/80, where bare Sonnet
+  finished in 2.5–3.7h. The scaffold's "keep iterating, don't stop early"
+  discipline, applied by a model that diagnoses correctly but can't execute the
+  fix, turns into open-ended grinding rather than convergence.
 - **Haiku (+cog): the scaffold can lead to a confident dead-end.** Haiku complied
   (wrote both files) but reasoned itself into a *wrong, defeatist* conclusion and
   converged to the bare hold-position policy. From a Haiku +cog WORKLOG: *"Boss
@@ -543,8 +553,11 @@ single data point and it is a clean *null*: structure did not help even where
 execution was not the bottleneck — at least at N=3.
 
 **Caveats specific to this experiment (do not over-read):**
-1. **In-flight.** Two Sonnet +cog arms are still running; Sonnet +cog is N=1. The
-   Sonnet row may shift. Opus and Haiku are N=3.
+1. **Sonnet +cog is N=1 clean.** Both Sonnet follow-up arms hit the 8h backstop
+   (partials, 0/80 and 1/80) — so the Sonnet *rate* rests on one clean rep (4/80),
+   though all three Sonnet attempts (clean + partial) land ≤4/80, below the bare
+   max of 9. Opus and Haiku are N=3 clean. The forced timeouts are a real
+   cost-side effect (§8.3), not just missing data.
 2. **The prompt is not a pure superset.** Beyond the cognitive section, the +cog
    prompt **removes the bare prompt's `report.json` deliverable** and **adds a
    multi-seed practice hint**. The README's "everything else identical" is
@@ -558,7 +571,7 @@ execution was not the bottleneck — at least at N=3.
 
 ## 9. Discussion, limitations, threats to validity
 
-- **N is uneven; Fable is N=1; cognitive Sonnet is N=1 and in-flight.** Bare:
+- **N is uneven; Fable is N=1; cognitive Sonnet is N=1 clean (2 timed out).** Bare:
   Haiku/Sonnet N=4, Opus N=3, Fable N=1 (force majeure). Cognitive: Haiku/Opus
   N=3, Sonnet N=1 (+2 running). The Haiku null and the Sonnet/Opus *bare*
   separations are robust; **Fable's 86.3% and Sonnet's +cog 5.0% each rest on a
@@ -605,8 +618,9 @@ Everything in this report is recomputable from persisted artifacts, offline:
   table with Wilson CIs and two-proportion p-values, the compliance summary, and
   the prompt-delta honesty check) → **`cog_vs_bare.json`** (committed). It reads
   the bare baseline straight out of `master_analysis.json` (single source of
-  truth) and **skips in-flight arms gracefully**; rerun after the two Sonnet arms
-  finish to update §8. Run: `python3 experiments/scaffold-mono/cog_vs_bare.py`.
+  truth) and **excludes partial/timed-out arms gracefully**. The experiment is
+  closed; the script reproduces §8's numbers. Run: `python3
+  experiments/scaffold-mono/cog_vs_bare.py`.
 - **Determinism guarantee.** Re-scoring any policy on any seed set reproduces
   byte-identically (mulberry32 PRNG + pinned bundle, sha-recorded per trial); the
   cross-runner test in the gym suite proves the canonical scorer matches the
@@ -645,18 +659,19 @@ absorbing **nine session interruptions across six failure modes, including a
 mid-study provider access retraction, with zero data loss** — the
 determinism-first, canonical-scoring, deliverables-on-disk design paying off
 exactly where evals usually break. And as a controlled-ablation instrument, it
-delivers a clean **preliminary honest-negative**: a **cognitive scaffold
-(M1-analog)** is *followed strongly and sustainedly* — agents write and maintain
-a real world-model and worklog, survive 10 auto-compactions, and (at Opus) run
-the full diagnose→build→validate loop — yet **does not move the clear-rate at any
-tier measured so far** (Haiku 0.0%→0.0%, Sonnet 5.3%→5.0%, Opus 47.1%→43.8%; all
-p ≥ 0.46). The limiter is execution and raw difficulty, not the absence of
-cognitive structure — exactly where the northstar thesis predicted the constraint
-would migrate.
+delivers a clean **honest-negative**: a **cognitive scaffold (M1-analog)** is
+*followed strongly and sustainedly* — agents write and maintain a real
+world-model and worklog, survive 10 auto-compactions, and (at Opus) run the full
+diagnose→build→validate loop — yet **does not move the clear-rate at any tier**
+(Haiku 0.0%→0.0%, Sonnet 5.3%→5.0%, Opus 47.1%→43.8%; all p ≥ 0.46), and at
+Sonnet it actively **induced two full-8h grind-to-timeout runs**. The limiter is
+execution and raw difficulty, not the absence of cognitive structure — exactly
+where the northstar thesis predicted the constraint would migrate.
 
-**Immediate next step (in-flight, not yet resolved):** the two remaining **Sonnet
-+cog** arms finish the N=3 weak/mid estimate; rerun `cog_vs_bare.py` to update §8.
-A second clean Fable rep is foreclosed unless access returns. **Open questions the
+**Open questions the null raises** (Sonnet is N=1 clean — the rate could firm up
+with more clean reps, though all 3 Sonnet attempts landed ≤4/80): does the result
+hold on a task whose ceiling is *not* already near where bare Opus reaches (a
+harder regime, or a non-game coding task)? Does
 null raises:** does the result hold on a task whose ceiling is *not* already near
 where bare Opus reaches (a harder regime, or a non-game coding task)? Does
 enforced multi-agent structure (the local harness's actual M1, not the folded
@@ -669,8 +684,8 @@ observability.
 **Experiment ledger.** Bare cohort: 21 roguelike sessions (12 clean + 9
 interrupted), clean-rep spend ≈ **$325**, total incl. recovered partials ≈
 **$461**. v1 chain ≈ **$158**. Cognitive experiment: 9 sessions, **7 clean + 2
-in-flight**, clean spend ≈ **$224** (Haiku $4, Sonnet $41, Opus $179). Framework
-green: gym 129/129, evalkit 63/63.
+timed-out partials**, clean spend ≈ **$224** (Haiku $4, Sonnet $41, Opus $179).
+Framework green: gym 129/129, evalkit 63/63.
 
 ---
 

@@ -1,0 +1,461 @@
+{
+  "task_id": "roguelike",
+  "node_name": "claude-code:claude-haiku-4-5-20251001/max",
+  "status": "complete",
+  "audit_verdict": "review",
+  "criterion": {
+    "kind": "win_speed",
+    "heldout": {
+      "n": 80,
+      "mean": 0.1978,
+      "median": 0.193,
+      "min": 0.04,
+      "max": 0.4,
+      "clears": 0,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.0458
+      ]
+    },
+    "training": {
+      "n": 13,
+      "mean": 0.2609,
+      "median": 0.287,
+      "min": 0.067,
+      "max": 0.401,
+      "clears": 0,
+      "clear_rate": 0.0,
+      "clear_rate_wilson95": [
+        0.0,
+        0.2281
+      ]
+    },
+    "gap": 0.0631,
+    "baselines": {
+      "greedy": {
+        "n": 80,
+        "mean": 0.3968,
+        "median": 0.4,
+        "min": 0.307,
+        "max": 0.9,
+        "clears": 0,
+        "clear_rate": 0.0,
+        "clear_rate_wilson95": [
+          0.0,
+          0.0458
+        ]
+      },
+      "noop": {
+        "n": 80,
+        "mean": 0.1978,
+        "median": 0.193,
+        "min": 0.04,
+        "max": 0.4,
+        "clears": 0,
+        "clear_rate": 0.0,
+        "clear_rate_wilson95": [
+          0.0,
+          0.0458
+        ]
+      },
+      "smart": {
+        "n": 80,
+        "mean": 0.4189,
+        "median": 0.4,
+        "min": 0.318,
+        "max": 0.9,
+        "clears": 0,
+        "clear_rate": 0.0,
+        "clear_rate_wilson95": [
+          0.0,
+          0.0458
+        ]
+      }
+    }
+  },
+  "heldout_summary": {
+    "n": 80,
+    "boss_hp_destroyed": {
+      "mean": 0.0,
+      "median": 0.0,
+      "stdev": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "kills": {
+      "mean": 4.45,
+      "median": 3.0,
+      "stdev": 5.0619,
+      "min": 0.0,
+      "max": 41.0
+    },
+    "level": {
+      "mean": 1.55,
+      "median": 1.0,
+      "stdev": 0.65,
+      "min": 1.0,
+      "max": 4.0
+    },
+    "progress": {
+      "mean": 0.1978,
+      "median": 0.193,
+      "stdev": 0.0956,
+      "min": 0.04,
+      "max": 0.4
+    },
+    "score": {
+      "mean": 1889.5835,
+      "median": 1336.3,
+      "stdev": 1535.5536,
+      "min": 509.03,
+      "max": 8184.82
+    },
+    "steps": {
+      "mean": 2675.0,
+      "median": 2608.0,
+      "stdev": 1300.5183,
+      "min": 542.0,
+      "max": 5719.0
+    },
+    "survived_ms": {
+      "mean": 44583.3335,
+      "median": 43466.67,
+      "stdev": 21675.3052,
+      "min": 9033.33,
+      "max": 95316.67
+    },
+    "wave": {
+      "mean": 1.3125,
+      "median": 1.0,
+      "stdev": 0.4897,
+      "min": 1.0,
+      "max": 3.0
+    },
+    "boss_cleared_rate": 0.0,
+    "boss_reached_rate": 0.0125,
+    "done_reason_rates": {
+      "death": 1.0
+    },
+    "policy_error_rate": 0.0
+  },
+  "training_summary": {
+    "n": 13,
+    "boss_hp_destroyed": {
+      "mean": 0.0002,
+      "median": 0.0,
+      "stdev": 0.0005,
+      "min": 0.0,
+      "max": 0.002
+    },
+    "kills": {
+      "mean": 5.7692,
+      "median": 5.0,
+      "stdev": 4.5599,
+      "min": 1.0,
+      "max": 19.0
+    },
+    "level": {
+      "mean": 1.5385,
+      "median": 2.0,
+      "stdev": 0.4985,
+      "min": 1.0,
+      "max": 2.0
+    },
+    "progress": {
+      "mean": 0.2609,
+      "median": 0.287,
+      "stdev": 0.1164,
+      "min": 0.067,
+      "max": 0.401
+    },
+    "score": {
+      "mean": 3253.8308,
+      "median": 2967.65,
+      "stdev": 1906.0555,
+      "min": 616.37,
+      "max": 5920.0
+    },
+    "steps": {
+      "mean": 3691.9231,
+      "median": 3872.0,
+      "stdev": 1827.9307,
+      "min": 904.0,
+      "max": 7207.0
+    },
+    "survived_ms": {
+      "mean": 61532.0515,
+      "median": 64533.33,
+      "stdev": 30465.511,
+      "min": 15066.67,
+      "max": 120116.67
+    },
+    "wave": {
+      "mean": 1.9231,
+      "median": 2.0,
+      "stdev": 0.7298,
+      "min": 1.0,
+      "max": 3.0
+    },
+    "boss_cleared_rate": 0.0,
+    "boss_reached_rate": 0.2308,
+    "done_reason_rates": {
+      "death": 1.0
+    },
+    "policy_error_rate": 0.0
+  },
+  "baseline_summaries": {
+    "greedy": {
+      "n": 80,
+      "boss_hp_destroyed": {
+        "mean": 0.0027,
+        "median": 0.0,
+        "stdev": 0.0126,
+        "min": 0.0,
+        "max": 0.109
+      },
+      "kills": {
+        "mean": 37.75,
+        "median": 17.0,
+        "stdev": 163.6982,
+        "min": 8.0,
+        "max": 1488.0
+      },
+      "level": {
+        "mean": 2.9875,
+        "median": 3.0,
+        "stdev": 2.8788,
+        "min": 2.0,
+        "max": 27.0
+      },
+      "progress": {
+        "mean": 0.3968,
+        "median": 0.4,
+        "stdev": 0.062,
+        "min": 0.307,
+        "max": 0.9
+      },
+      "score": {
+        "mean": 9040.657,
+        "median": 7010.975,
+        "stdev": 17806.3037,
+        "min": 3870.53,
+        "max": 166420.0
+      },
+      "steps": {
+        "mean": 7427.075,
+        "median": 5817.0,
+        "stdev": 8875.5436,
+        "min": 4147.0,
+        "max": 70186.0
+      },
+      "survived_ms": {
+        "mean": 123784.583,
+        "median": 96950.0,
+        "stdev": 147925.7275,
+        "min": 69116.67,
+        "max": 1169766.67
+      },
+      "wave": {
+        "mean": 2.8375,
+        "median": 3.0,
+        "stdev": 0.3689,
+        "min": 2.0,
+        "max": 3.0
+      },
+      "boss_cleared_rate": 0.0,
+      "boss_reached_rate": 0.8375,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "policy_error_rate": 0.0
+    },
+    "noop": {
+      "n": 80,
+      "boss_hp_destroyed": {
+        "mean": 0.0,
+        "median": 0.0,
+        "stdev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "kills": {
+        "mean": 4.45,
+        "median": 3.0,
+        "stdev": 5.0619,
+        "min": 0.0,
+        "max": 41.0
+      },
+      "level": {
+        "mean": 1.55,
+        "median": 1.0,
+        "stdev": 0.65,
+        "min": 1.0,
+        "max": 4.0
+      },
+      "progress": {
+        "mean": 0.1978,
+        "median": 0.193,
+        "stdev": 0.0956,
+        "min": 0.04,
+        "max": 0.4
+      },
+      "score": {
+        "mean": 1889.5835,
+        "median": 1336.3,
+        "stdev": 1535.5536,
+        "min": 509.03,
+        "max": 8184.82
+      },
+      "steps": {
+        "mean": 2675.0,
+        "median": 2608.0,
+        "stdev": 1300.5183,
+        "min": 542.0,
+        "max": 5719.0
+      },
+      "survived_ms": {
+        "mean": 44583.3335,
+        "median": 43466.67,
+        "stdev": 21675.3052,
+        "min": 9033.33,
+        "max": 95316.67
+      },
+      "wave": {
+        "mean": 1.3125,
+        "median": 1.0,
+        "stdev": 0.4897,
+        "min": 1.0,
+        "max": 3.0
+      },
+      "boss_cleared_rate": 0.0,
+      "boss_reached_rate": 0.0125,
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "policy_error_rate": 0.0
+    },
+    "smart": {
+      "n": 80,
+      "boss_hp_destroyed": {
+        "mean": 0.0131,
+        "median": 0.001,
+        "stdev": 0.0623,
+        "min": 0.0,
+        "max": 0.524
+      },
+      "kills": {
+        "mean": 39.55,
+        "median": 24.5,
+        "stdev": 52.8713,
+        "min": 12.0,
+        "max": 346.0
+      },
+      "level": {
+        "mean": 3.975,
+        "median": 3.0,
+        "stdev": 3.7416,
+        "min": 2.0,
+        "max": 28.0
+      },
+      "progress": {
+        "mean": 0.4189,
+        "median": 0.4,
+        "stdev": 0.0965,
+        "min": 0.318,
+        "max": 0.9
+      },
+      "score": {
+        "mean": 9922.9435,
+        "median": 7951.625,
+        "stdev": 6549.2514,
+        "min": 5474.57,
+        "max": 40720.0
+      },
+      "steps": {
+        "mean": 11502.1625,
+        "median": 6272.0,
+        "stdev": 17804.4105,
+        "min": 4293.0,
+        "max": 90000.0
+      },
+      "survived_ms": {
+        "mean": 191702.7081,
+        "median": 104533.33,
+        "stdev": 296740.1755,
+        "min": 71550.0,
+        "max": 1500000.0
+      },
+      "wave": {
+        "mean": 2.9375,
+        "median": 3.0,
+        "stdev": 0.2421,
+        "min": 2.0,
+        "max": 3.0
+      },
+      "boss_cleared_rate": 0.0,
+      "boss_reached_rate": 0.9375,
+      "done_reason_rates": {
+        "death": 0.975,
+        "timeout": 0.025
+      },
+      "policy_error_rate": 0.0
+    }
+  },
+  "probe": {
+    "generalization_gap": {
+      "training": {
+        "n": 13,
+        "score_mean": 3253.8308,
+        "progress_mean": 0.2609
+      },
+      "heldout": {
+        "n": 80,
+        "score_mean": 1889.5835,
+        "progress_mean": 0.1978
+      },
+      "score_gap": 1364.2473,
+      "progress_gap": 0.0631,
+      "relative_score_gap": 0.4193
+    },
+    "failure_breakdown": {
+      "done_reason_rates": {
+        "death": 1.0
+      },
+      "policy_error_count": 0,
+      "progress_quartiles": {
+        "p25": 0.1158,
+        "p50": 0.193,
+        "p75": 0.3
+      },
+      "worst_seeds": [
+        {
+          "seed": 841466700,
+          "progress": 0.04,
+          "done_reason": "death"
+        },
+        {
+          "seed": 669395028,
+          "progress": 0.044,
+          "done_reason": "death"
+        },
+        {
+          "seed": 717773896,
+          "progress": 0.062,
+          "done_reason": "death"
+        }
+      ]
+    },
+    "baseline_position": {
+      "policy_score_mean": 1889.5835,
+      "baseline_score_means": {
+        "greedy": 9040.657,
+        "noop": 1889.5835,
+        "smart": 9922.9435
+      },
+      "normalized_vs_baselines": 0.0,
+      "above_noop": false,
+      "above_greedy": false
+    }
+  }
+}
