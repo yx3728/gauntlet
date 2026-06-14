@@ -43,7 +43,7 @@ re-observation.
 | "FIRST, OBSERVE … once, then only when new regions open up" | "First, OBSERVE — once at the start, and again only when new regions open up" |
 | frontier frames (harness auto-pushes in qwen) | translated: "when a policy reaches further than before, observe that region's frames yourself (run it and inspect)" |
 | PLAN = single main reason + ordered 2–4 changes, parametric/local, no new algorithms | step 1 PLAN, verbatim in spirit |
-| IMPLEMENT = build on best-so-far, ~300 lines (floor ~230), never minify, continue-if-cut | step 2 IMPLEMENT |
+| IMPLEMENT = build on best-so-far | step 2 IMPLEMENT — *length room / never-minify / continue-if-cut-off DROPPED*: those are qwen output-limit accommodations; Claude has no such limit (its realized policies already span 206–494 lines unprompted), so the cap/floor would only add noise |
 | EVALUATE = (a) selection metric over `reward_info` + (b) diagnosis; feeds next PLAN | step 3 EVALUATE (json/harness-apply translated to "state a rule and apply it yourself") |
 | never self-stop / no final answer | closing line |
 

@@ -92,10 +92,8 @@ and inspect them) and fold them into your picture. Do not re-observe from scratc
    edits; do not set yourself problems that need inventing new algorithms.
 
 2. **IMPLEMENT (coder).** Write the policy that applies those changes, **building on your
-   best-so-far** — not a rewrite; keep what already works. Keep it complete and readable, multi-line —
-   you have room up to ~300 lines (do not feel constrained below ~230); never minify onto one line,
-   and if it is cut off at the output limit, continue it rather than compress to fit. Then run it and
-   read its metrics.
+   best-so-far** — edit it, don't rewrite from scratch; keep what already works. Write it out in
+   full, as complex as the job needs. Then run it and read its metrics.
 
 3. **EVALUATE (evaluator).** Assess what just happened, in two parts:
    - **(a) how you rank attempts** — state, and update as you learn, an explicit rule that ranks your
@@ -107,8 +105,8 @@ and inspect them) and fold them into your picture. Do not re-observe from scratc
 
    This evaluation is what your next PLAN reads.
 
-Keep iterating — PLAN, IMPLEMENT, EVALUATE — for as long as you have; do not decide to stop early, and
-there is no separate "final answer" to pick: `policy.js`, kept at your best, is the only thing scored.
+Keep iterating — PLAN, IMPLEMENT, EVALUATE — and don't stop while you can still improve. There is no
+separate "final answer" to choose: `policy.js`, kept at your best, is the only thing scored.
 
 ## Seeds
 By default you play seed 1; practising on a few (e.g. `--seeds 1,11,23`) and judging by the multi-seed
