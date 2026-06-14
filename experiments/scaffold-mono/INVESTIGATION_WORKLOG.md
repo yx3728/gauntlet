@@ -122,3 +122,13 @@ the absence of a thinking scaffold. (Honest-negative result.)
 **Still in-flight:** 2 Sonnet +cog arms (followup, followup2). When they land, re-run
 `cog_vs_bare.py` to refresh §8 (Sonnet → N=3). Canonical report committed (c424b60, merged to main).
 Total cognitive-experiment trials launched: 9.
+
+## 2026-06-14 — follow-up wave done; 1 Sonnet arm still live; final refresh pending
+
+`cohort-v2-cog-followup` complete. Note: `followup-sonnet46-r1` ran to the **8h wall-clock backstop
+(timeout_killed, 0/80)** — a partial (excluded). Observation worth keeping: bare Sonnet arms finished
+in ~2.5–3.7h, but this +cog Sonnet ground the full 8h to a 0/80 — a hint the scaffold's
+keep-iterating discipline can induce unproductive long grinding on a model that can't break the
+execution ceiling. Clean cog Sonnet remains N=1 (test, 4/80); `followup2-sonnet46-r1` still running.
+**Final step (pending its completion): re-run `experiments/scaffold-mono/cog_vs_bare.py` and refresh
+REPORT §8** (Sonnet → N=2 clean, given the followup timeout). Then the cognitive experiment is closed.
