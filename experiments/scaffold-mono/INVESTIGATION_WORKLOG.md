@@ -84,3 +84,10 @@ the informative next test is a model whose execution is NOT the bottleneck.
 **Decision → PROMISING: launch 1 Haiku + 1 Sonnet + 1 Opus** (3 concurrent, frozen draw, same prompt).
 Opus tests whether structure pays off where the agent can actually execute the diagnosed changes; the
 extra H+S add a little N on weak/mid. Total trials this investigation = 2 + 3 = 5 (≤ 7).
+
+## 2026-06-14 — user-directed 2nd follow-up (beyond the autonomous 7-cap)
+
+User added **2 Opus + 1 Haiku + 1 Sonnet** (concurrency 4), same frozen draw + scaffold-mono prompt,
+alongside the running follow-up. This brings the +cognitive arms toward **N=3 each** (Haiku/Sonnet/
+Opus) for a tighter weak/mid estimate and N=3 on the key Opus arm. Trials now 5 + 4 = 9 (the earlier
+≤7 autonomous cap is superseded by this direct instruction).
