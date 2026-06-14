@@ -34,7 +34,7 @@ dominates Opus (median 40.6k vs 64.5k steps) despite both clearing reliably.
 on the *same* frozen draw with one change — an added **"How to work" cognitive
 structure** (observe → plan → implement → evaluate, with a required written
 memory). This is the local-harness **M0 (goal-only) vs M1 (cognitive-flow)**
-contrast ported to frontier Claude. The honest preliminary answer: the scaffold
+contrast ported to frontier Claude. The honest answer: the scaffold
 is **followed strongly and sustainedly** (all 7 clean arms wrote rich
 GAME_MODEL.md + WORKLOG.md; Sonnet held the loop through 10 auto-compactions and
 produced a correct quantitative diagnosis) but **does not move the clear-rate**
@@ -541,7 +541,7 @@ The quality of the *thinking* separates the tiers cleanly:
 
 ### 8.5 Interpretation and the limiting caveat
 
-The preliminary verdict: **the cognitive structure is followed, real, and
+The verdict: **the cognitive structure is followed, real, and
 load-bearing on the *process* — but it does not move the clear-rate metric at any
 tier measured so far.** This is consistent with the northstar thesis that, once
 memory and a cognitive loop are supplied, the **binding constraint migrates to
