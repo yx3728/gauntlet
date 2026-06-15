@@ -10,6 +10,7 @@ from .audit import audit, audit_trace, audit_workspace
 from .baselines import discover_baselines, run_baselines
 from .cohort import cross_score, run_cohort
 from .criterion import criterion_fn, criterion_summary, wilson95
+from .external import ingest_external_trial, canonical_substrate
 from .probe import diagnostic_probe
 from .scoring import summarize
 
@@ -23,6 +24,8 @@ __all__ = [
     "criterion_fn",
     "criterion_summary",
     "wilson95",
+    "ingest_external_trial",
+    "canonical_substrate",
     "score_policy",
     "Trial",
     "Analysis",

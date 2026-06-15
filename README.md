@@ -103,7 +103,7 @@ flowchart LR
 #    golden trajectories, runner semantics, arena build, cross-runner determinism)
 cd gym && npm install && npm test
 
-# 2. eval library — 63 tests (mock e2e, tamper test, crash+resume, audit, cohort runner)
+# 2. eval library — 69 tests (mock e2e, tamper, crash+resume, audit, cohort, external ingest)
 cd ../evalkit && python3 -m pytest -q
 ```
 
@@ -166,10 +166,13 @@ Four Claude models on the roguelike, one **frozen 80-seed held-out draw**, crite
 |---|---|---|---|
 | **Haiku 4.5** | **0.0%** (0/320) | — | 4 |
 | **Sonnet 4.6** | **5.3%** (17/320) | 54k | 4 |
+| **GPT-5.5 / xhigh** ‡ | **17.9%** (43/240) | 60k | 3 (external) |
 | **Opus 4.8** | **47.1%** (113/240) | 64.5k | 3 |
 | **Fable 5** | **86.3%** (69/80) | **40.6k** | 1† |
 
-Every adjacent rung separates at **p < 1e-4**. A second axis — **win-speed** — distinguishes the top two beyond clear-rate: *Fable wins ~37% faster than Opus despite both clearing reliably.* †Fable is N=1 by **force majeure** (provider access withdrawn mid-study).
+Every adjacent rung separates at **p < 1e-4** (Haiku ≪ Sonnet ≪ GPT-5.5 ≪ Opus ≪ Fable). A second axis — **win-speed** — distinguishes the top two beyond clear-rate: *Fable wins ~37% faster than Opus despite both clearing reliably.*
+
+> ‡ **GPT-5.5/xhigh is an *external* manual trial** (OpenAI Codex), the first non-Claude rung — developed in a different harness, then **ingested through gauntlet's canonical scorer** (`evalkit.ingest_external_trial`) after **byte-identical substrate + prompt verification (sha256)**. Gauntlet reproduced the foreign pipeline's own numbers to the digit. This is gauntlet's **cross-provider comparability** in action: any policy drops into the same ladder once the two sha gates pass. †Fable is N=1 by **force majeure** (provider access withdrawn mid-study).
 
 ### 🧪 Does a cognitive scaffold help? — a controlled honest-negative
 
@@ -200,8 +203,8 @@ gym/                       🟨 Lib1 — the environment (JavaScript, zero runti
   tests/                      zero-dep conformance + determinism suite (129)
 evalkit/                   🟦 Lib2 — eval + orchestration (Python, stdlib only)
   evalkit/agents/             the black-box node seam (MockNode · ClaudeCodeNode)
-  evalkit/eval/               run · analyze · run_cohort · cross_score · resume · criterion · audit · probe
-  tests/                      63 tests (mock e2e · tamper · crash+resume · audit)
+  evalkit/eval/               run · analyze · run_cohort · cross_score · resume · ingest_external_trial · criterion · audit · probe
+  tests/                      69 tests (mock e2e · tamper · crash+resume · audit · external ingest)
 experiments/                 reproducible study drivers + committed analysis + results
 runs/                        trial artifacts (gitignored bulk; never deleted)
 REPORT.md  DESIGN.md  SPEC_framework.md  gym/core/CONTRACT.md   ← the docs that matter

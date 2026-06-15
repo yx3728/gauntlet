@@ -28,7 +28,12 @@ it never saw**, in a **canonical environment outside the agent's reach**, under 
 draw**, gauntlet resolves a clean, statistically separated ladder — **Haiku 0.0%
 ≪ Sonnet 5.3% ≪ Opus 47.1% ≪ Fable 86.3%** clear rate (every adjacent gap p <
 1e-4) — and surfaces a second discriminating axis, **win-speed**, on which Fable
-dominates Opus (median 40.6k vs 64.5k steps) despite both clearing reliably.
+dominates Opus (median 40.6k vs 64.5k steps) despite both clearing reliably. A
+fifth rung is a cross-provider, **externally-developed** trial: **GPT-5.5/xhigh
+(OpenAI Codex), ingested and re-scored through gauntlet's canonical path** after
+byte-identical substrate+prompt verification, lands at **17.9%** — cleanly between
+Sonnet and Opus (**Haiku ≪ Sonnet ≪ GPT-5.5 ≪ Opus ≪ Fable**, all adjacent gaps
+significant).
 
 **Study 2 — does a cognitive scaffold help?** We ran the *same* arms
 on the *same* frozen draw with one change — an added **"How to work" cognitive
@@ -314,6 +319,7 @@ on rerun.)
 |---|---|---|---|---|---|
 | **Haiku 4.5** | 4 | 0, 0, 0, 0 | **0.0%** (0/320) [0.0, 1.2] | 0.233 | — |
 | **Sonnet 4.6** | 4 | 9, 5, 3, 0 | **5.3%** (17/320) [3.3, 8.3] | 0.443 | 53,990 |
+| **GPT-5.5 / xhigh** ‡ | 3 | 2, 19, 22 | **17.9%** (43/240) [13.6, 23.3] | 0.620 | 60,015 |
 | **Opus 4.8** | 3 | 47, 45, 21 | **47.1%** (113/240) [40.9, 53.4] | 0.915 | 64,501 |
 | **Fable 5** | 1† | 69 | **86.3%** (69/80) [77.0, 92.2] | 1.460 | 40,604 |
 
@@ -321,13 +327,23 @@ on rerun.)
 `claude-fable-5` was retracted mid-cohort (§7). Its single clean rep is
 corroborated exactly by the v1-Fable policy on the same draw (69/80).
 
+‡**GPT-5.5/xhigh is an *external* manual trial — the first non-Claude, non-Claude-Code
+datapoint in the ladder** — developed in a separate interactive harness (OpenAI Codex),
+then **ingested through gauntlet's canonical scoring path** (§6.3). Substrate and prompt
+were verified byte-identical to the cohort's (sha256 match on both the env bundle and the
+assembled prompt), and gauntlet's scorer reproduced the manual pipeline's own
+fixed-seed numbers exactly (2/7/9 clears on 2000–2029). N=3 here = three full manual
+sessions; it shows the **largest run-to-run variance of any arm** (2.5% → 23.8% → 27.5%
+clear across identical-config runs — a vivid reminder of why repeats matter).
+
 **Every adjacent rung is separated with non-overlapping Wilson intervals and a
 two-proportion z-test p-value:**
 
 | comparison | rates | p (two-proportion) |
 |---|---|---|
 | Haiku vs Sonnet | 0.0% vs 5.3% | **3e-5** |
-| Sonnet vs Opus | 5.3% vs 47.1% | **< 1e-12** |
+| Sonnet vs GPT-5.5 | 5.3% vs 17.9% | **< 1e-6** |
+| GPT-5.5 vs Opus | 17.9% vs 47.1% | **< 1e-12** |
 | Opus vs Fable | 47.1% vs 86.3% | **< 1e-12** |
 
 The ladder also reproduces on the independent **fixed 2000–2029** seed set
@@ -379,6 +395,46 @@ confound's mechanism is visible — only the 200k arms compact (Sonnet 3–5× p
 session, periodically losing ~90% of working memory; the 1M arms never do), and
 in the v1 chain a compaction demonstrably destroyed a deliverable. Cost spans
 **~90× across the ladder**.
+
+### 6.5 External manual trials — GPT-5.5, and the ingestion path
+
+Gauntlet can score policies it did **not** orchestrate. A *manual trial* — a
+`policy.js` developed in a different harness, by a different provider's model — is
+ingested through `evalkit.ingest_external_trial`, which (1) verifies the
+**substrate** (sha256 of the simulator bundle the policy was developed against ==
+the canonical task's pinned bundle), (2) verifies the **prompt** (sha256 of the
+instructions the external agent received == the reference bare prompt), and only
+then (3) re-scores the policy on the same seeds, in the same pinned canonical
+arena, under the same `win_speed` criterion as every cohort arm. The external
+trial dir is read-only; nothing is taken on faith.
+
+We applied this to **three GPT-5.5/xhigh runs** (OpenAI Codex, interactive), the
+first non-Claude datapoint:
+
+- **Consistency verified.** All three runs matched on both checks — env bundle
+  sha `424916b2…` and assembled-prompt sha `568abcd9…`, both byte-identical to the
+  cohort. So GPT-5.5 ran *exactly* the bare-ladder protocol (same game, same
+  prompt, same 40/90k regime), differing only in model and in being hand-run
+  rather than `claude -p`-driven.
+- **Cross-check: gauntlet's scorer reproduces the manual pipeline's own numbers
+  exactly.** On the manual fixed set 2000–2029, ingestion returns 2/7/9 clears and
+  criterion 0.559/0.728/0.682 — identical to the externally-reported
+  0.56/0.73/0.68. Determinism makes the two pipelines agree to the digit.
+- **Placement.** On the cohort's frozen n=80 draw, GPT-5.5/xhigh pools to **17.9%
+  clear (43/240), criterion 0.620** — significantly above Sonnet 4.6 (5.3%,
+  p<1e-6) and significantly below Opus 4.8 (47.1%, p<1e-12). It wins **late**
+  (win_step median ~60k, near Opus's 64.5k and well above Fable's 40.6k) — slow
+  attrition, not efficient clears.
+- **Variance.** GPT-5.5 shows the widest run-to-run spread of any arm —
+  2.5%→23.8%→27.5% clear across three identical-config runs — which is precisely
+  why N>1 and a frozen shared draw matter (§6.3): a single GPT run would have
+  placed it anywhere from "below Sonnet" to "halfway to Opus."
+
+This is also a small validation of the framework's **comparability claim**: a
+policy from an entirely different stack drops into the same ladder once the two
+sha256 gates pass, and the deterministic canonical scorer reproduces the foreign
+pipeline's numbers. Appendix: `experiments/external-gpt/ingest_gpt.py` →
+`gpt_ingest.json`.
 
 ---
 
@@ -621,6 +677,12 @@ Everything in this report is recomputable from persisted artifacts, offline:
   truth) and **excludes partial/timed-out arms gracefully**. The experiment is
   closed; the script reproduces §8's numbers. Run: `python3
   experiments/scaffold-mono/cog_vs_bare.py`.
+- **`experiments/external-gpt/ingest_gpt.py`** — ingests the three external
+  GPT-5.5 manual trials via `evalkit.ingest_external_trial` (§6.5): verifies
+  substrate + prompt sha256, then re-scores each on the frozen draw and the fixed
+  2000–2029 set → **`gpt_ingest.json`** (committed). The ingestion path itself is
+  unit-tested (`evalkit/tests/test_external.py`: match, substrate-mismatch,
+  prompt-mismatch, missing-policy).
 - **Determinism guarantee.** Re-scoring any policy on any seed set reproduces
   byte-identically (mulberry32 PRNG + pinned bundle, sha-recorded per trial); the
   cross-runner test in the gym suite proves the canonical scorer matches the
