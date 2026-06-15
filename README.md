@@ -6,7 +6,7 @@
 
 *An agent is a **black box** that writes a **policy**. Gauntlet scores that policy on **held-out instances it never saw**, in a **canonical environment it cannot reach** — then tells you **why** it failed, not just how much it scored.*
 
-![tests](https://img.shields.io/badge/gym-129%2F129%20✓-2ea44f) ![tests](https://img.shields.io/badge/evalkit-63%2F63%20✓-2ea44f) ![node](https://img.shields.io/badge/node-≥18-339933?logo=node.js&logoColor=white) ![python](https://img.shields.io/badge/python-≥3.10-3776ab?logo=python&logoColor=white) ![deps](https://img.shields.io/badge/runtime%20deps-0-blue) ![license](https://img.shields.io/badge/license-MIT-lightgrey)
+![tests](https://img.shields.io/badge/gym-129%2F129%20✓-2ea44f) ![tests](https://img.shields.io/badge/evalkit-69%2F69%20✓-2ea44f) ![node](https://img.shields.io/badge/node-≥18-339933?logo=node.js&logoColor=white) ![python](https://img.shields.io/badge/python-≥3.10-3776ab?logo=python&logoColor=white) ![deps](https://img.shields.io/badge/runtime%20deps-0-blue) ![license](https://img.shields.io/badge/license-MIT-lightgrey)
 
 </div>
 
