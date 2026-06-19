@@ -21,7 +21,7 @@ sys.path.insert(0, str(REPO / "experiments" / "roguelike-opus48"))
 from common import build_prompt  # the canonical bare cohort prompt (sha-gated assembler)
 import evalkit
 
-PIPE = Path("/Users/REDACTED/ai_playtest_pipeline/trials")
+PIPE = Path.home() / "ai_playtest_pipeline" / "trials"
 RUNS = {
     "r1": PIPE / "roguelike-gptcodex-max",
     "r2": PIPE / "roguelike-gptcodex-max-r2",
